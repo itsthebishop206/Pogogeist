@@ -67,7 +67,7 @@
     00000016 E0r00            [12]   67 	ldh	(_LCDC_REG + 0), a
                                      68 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:20: while(1) {        
     00000018                         69 00102$:
-                                     70 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: int16_t ghostySpeedX = joypadMgr();
+                                     70 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: joypadMgr();
     00000018 CDr00r00         [24]   71 	call	_joypadMgr
                                      72 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:24: wait_vbl_done();
     0000001B CDr00r00         [24]   73 	call	_wait_vbl_done

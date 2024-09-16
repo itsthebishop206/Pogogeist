@@ -12,11 +12,12 @@ Symbol Table
     ___current_metasprite                                           ******** GX
     ___move_metasprite                                              ******** GX
     ___move_metasprite_flipx                                        ******** GX
+    _fractionX                                                      ******** GX
     _ghostyMS                                                       ******** GX
+    _ghostySpeedX                                                   ******** GX
     _ghostyX                                                        ******** GX
     _ghostyY                                                        ******** GX
     _joypad                                                         ******** GX
-    _joypadCurrent                                                  ******** GX
   0 _joypadMgr                                                      00000000 GR
     _pcFacing                                                       ******** GX
 
@@ -26,7 +27,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       D9   flags    0
+   0 _CODE                                      size       EB   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

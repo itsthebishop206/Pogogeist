@@ -18,7 +18,7 @@ void main(void)
 
     // Loop forever
     while(1) {        
-
+        
         joypadMgr();
 		// Done processing, yield CPU and wait for start of next frame
         wait_vbl_done();

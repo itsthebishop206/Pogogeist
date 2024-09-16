@@ -41,168 +41,187 @@
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:8: int8_t joypadMgr(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:10: void joypadMgr(void){
 ;	---------------------------------
 ; Function joypadMgr
 ; ---------------------------------
 _joypadMgr::
-	dec	sp
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:10: joypadCurrent = joypad();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:13: joypadCurrent = joypad();
 	call	_joypad
-	ld	(#_joypadCurrent),a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:11: int8_t isMoving = 0;
-	ldhl	sp,	#0
-	ld	(hl), #0x00
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:34: if(joypadCurrent & J_LEFT){
-	ld	a, (#_joypadCurrent)
-	bit	1, a
+	ld	c, a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:14: ghostySpeedX = 0;
+	xor	a, a
+	ld	hl, #_ghostySpeedX
+	ld	(hl+), a
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:32: if(joypadCurrent & J_LEFT){
+	bit	1, c
 	jr	Z, 00104$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:36: isMoving = -1;
-	ldhl	sp,	#0
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:34: ghostySpeedX = -1 << PIXEL_SHIFT;
+	ld	hl, #_ghostySpeedX
+	xor	a, a
+	ld	(hl+), a
 	ld	(hl), #0xff
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:38: if(pcFacing==1){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:35: if(pcFacing==1){
 	ld	a, (#_pcFacing)
 	dec	a
-	jr	NZ, 00102$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:39: move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
-	ld	hl, #_ghostyY
-	ld	c, (hl)
-	ld	hl, #_ghostyX
-	ld	e, (hl)
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:200: __current_metasprite = metasprite;
-	ld	hl, #___current_metasprite
-	ld	a, #<(_ghostyMS)
-	ld	(hl+), a
-	ld	(hl), #>(_ghostyMS)
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:201: __current_base_tile = base_tile;
-	ld	hl, #___current_base_tile
-	ld	(hl), #0x00
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:202: __current_base_prop = base_prop;
-	ld	hl, #___current_base_prop
-	ld	(hl), #0x00
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:203: return __move_metasprite_flipx(base_sprite, (y << 8) | (uint8_t)(x - 8u));
-	ld	b, c
-	ld	a, e
-	add	a, #0xf8
-	ld	e, a
-	ld	d, b
-	xor	a, a
-	call	___move_metasprite_flipx
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:40: pcFacing = 0;
+	jr	NZ, 00104$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:36: pcFacing = 0;
 	ld	hl, #_pcFacing
 	ld	(hl), #0x00
-00102$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:43: ghostyX = ghostyX - 2;
-	ld	hl, #_ghostyX
+00104$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:40: if(joypadCurrent & J_RIGHT){
+	bit	0, c
+	jr	Z, 00108$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:42: ghostySpeedX = 1 << PIXEL_SHIFT;
+	ld	hl, #_ghostySpeedX
+	xor	a, a
+	ld	(hl+), a
+	ld	(hl), #0x01
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:43: if(pcFacing==0){
+	ld	hl, #_pcFacing
+	ld	a, (hl)
+	or	a, a
+	jr	NZ, 00108$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:44: pcFacing = 1;
+	ld	(hl), #0x01
+00108$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:48: fractionX += ghostySpeedX;
+	ld	a, (#_fractionX)
+	ld	hl, #_ghostySpeedX
+	add	a, (hl)
+	ld	hl, #_fractionX
+	ld	(hl+), a
+	ld	a, (hl)
+	ld	hl, #_ghostySpeedX + 1
+	adc	a, (hl)
+	ld	(#_fractionX + 1),a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:50: while(fractionX >= (1<<PIXEL_SHIFT)){
+00109$:
+	ld	hl, #_fractionX
 	ld	a, (hl+)
 	ld	c, a
+	ld	b, (hl)
+	ld	a, b
+	xor	a, #0x80
+	sub	a, #0x81
+	jr	C, 00112$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:51: ghostyX += 1;
+	ld	hl, #_ghostyX
+	ld	a, (hl+)
+	ld	e, a
 	ld	a, (hl-)
-	ld	b, a
-	dec	bc
-	dec	bc
-	ld	a, c
+	ld	d, a
+	inc	de
+	ld	a, e
 	ld	(hl+), a
+	ld	(hl), d
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:52: fractionX -= (1<<PIXEL_SHIFT);
+	ld	a,b
+	dec	a
+	ld	hl, #_fractionX
+	ld	(hl), c
+	inc	hl
+	ld	(hl), a
+	jr	00109$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:55: while(fractionX <= -(1<<PIXEL_SHIFT)){
+00112$:
+	ld	hl, #_fractionX
+	ld	a, (hl+)
+	ld	b, a
+	ld	c, (hl)
+	ld	e, c
+	ld	d, #0xff
+	xor	a, a
+	cp	a, b
+	ld	a, #0xff
+	sbc	a, c
+	bit	7, e
+	jr	Z, 00197$
+	bit	7, d
+	jr	NZ, 00198$
+	cp	a, a
+	jr	00198$
+00197$:
+	bit	7, d
+	jr	Z, 00198$
+	scf
+00198$:
+	jr	C, 00114$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:56: ghostyX -=1;
+	ld	hl, #_ghostyX
+	ld	a, (hl+)
+	ld	e, a
+	ld	a, (hl-)
+	ld	d, a
+	dec	de
+	ld	a, e
+	ld	(hl+), a
+	ld	(hl), d
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:57: fractionX += (1<<PIXEL_SHIFT);
+	ld	a, c
+	inc	a
+	ld	hl, #_fractionX
 	ld	(hl), b
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:44: move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
+	inc	hl
+	ld	(hl), a
+	jr	00112$
+00114$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:61: if(pcFacing==1){
+	ld	a, (#_pcFacing)
+	dec	a
+	jr	NZ, 00116$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:62: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
 	ld	hl, #_ghostyY
 	ld	c, (hl)
 	ld	hl, #_ghostyX
 	ld	e, (hl)
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:200: __current_metasprite = metasprite;
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:160: __current_metasprite = metasprite;
 	ld	hl, #___current_metasprite
 	ld	a, #<(_ghostyMS)
 	ld	(hl+), a
 	ld	(hl), #>(_ghostyMS)
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:201: __current_base_tile = base_tile;
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:161: __current_base_tile = base_tile;
 	ld	hl, #___current_base_tile
 	ld	(hl), #0x00
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:202: __current_base_prop = base_prop;
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:162: __current_base_prop = base_prop;
 	ld	hl, #___current_base_prop
 	ld	(hl), #0x00
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:203: return __move_metasprite_flipx(base_sprite, (y << 8) | (uint8_t)(x - 8u));
-	ld	b, c
-	ld	a, e
-	add	a, #0xf8
-	ld	e, a
-	ld	d, b
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:163: return __move_metasprite(base_sprite, (y << 8) | (uint8_t)x);
+	ld	d, c
 	xor	a, a
-	call	___move_metasprite_flipx
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:44: move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
-00104$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:48: if(joypadCurrent & J_RIGHT){
-	ld	a, (#_joypadCurrent)
-	rrca
-	jr	NC, 00108$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:50: isMoving = 1;
-	ldhl	sp,	#0
-	ld	(hl), #0x01
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:52: if(pcFacing==0){
+	call	___move_metasprite
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:62: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+00116$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:65: if(pcFacing==0){
 	ld	a, (#_pcFacing)
 	or	a, a
-	jr	NZ, 00106$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:53: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+	ret	NZ
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:66: move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
 	ld	hl, #_ghostyY
 	ld	c, (hl)
 	ld	hl, #_ghostyX
-	ld	e, (hl)
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:160: __current_metasprite = metasprite;
+	ld	b, (hl)
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:200: __current_metasprite = metasprite;
 	ld	hl, #___current_metasprite
 	ld	a, #<(_ghostyMS)
 	ld	(hl+), a
 	ld	(hl), #>(_ghostyMS)
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:161: __current_base_tile = base_tile;
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:201: __current_base_tile = base_tile;
 	ld	hl, #___current_base_tile
 	ld	(hl), #0x00
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:162: __current_base_prop = base_prop;
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:202: __current_base_prop = base_prop;
 	ld	hl, #___current_base_prop
 	ld	(hl), #0x00
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:163: return __move_metasprite(base_sprite, (y << 8) | (uint8_t)x);
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:203: return __move_metasprite_flipx(base_sprite, (y << 8) | (uint8_t)(x - 8u));
 	ld	d, c
+	ld	a, b
+	add	a, #0xf8
+	ld	e, a
 	xor	a, a
-	call	___move_metasprite
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:54: pcFacing = 1;
-	ld	hl, #_pcFacing
-	ld	(hl), #0x01
-00106$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:57: ghostyX = ghostyX + 2;
-	ld	hl, #_ghostyX
-	ld	a, (hl+)
-	ld	c, a
-	ld	a, (hl-)
-	ld	b, a
-	inc	bc
-	inc	bc
-	ld	a, c
-	ld	(hl+), a
-	ld	(hl), b
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:58: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
-	ld	hl, #_ghostyY
-	ld	c, (hl)
-	ld	hl, #_ghostyX
-	ld	e, (hl)
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:160: __current_metasprite = metasprite;
-	ld	hl, #___current_metasprite
-	ld	a, #<(_ghostyMS)
-	ld	(hl+), a
-	ld	(hl), #>(_ghostyMS)
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:161: __current_base_tile = base_tile;
-	ld	hl, #___current_base_tile
-	ld	(hl), #0x00
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:162: __current_base_prop = base_prop;
-	ld	hl, #___current_base_prop
-	ld	(hl), #0x00
-;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:163: return __move_metasprite(base_sprite, (y << 8) | (uint8_t)x);
-	ld	d, c
-	xor	a, a
-	call	___move_metasprite
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:58: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
-00108$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:61: return isMoving;
-	ldhl	sp,	#0
-	ld	a, (hl)
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:63: }
-	inc	sp
-	ret
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:66: move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:68: }
+	jp	___move_metasprite_flipx
 	.area _CODE
 	.area _INITIALIZER
 	.area _CABS (ABS)

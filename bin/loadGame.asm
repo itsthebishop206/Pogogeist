@@ -13,11 +13,13 @@
 	.globl _set_sprite_data
 	.globl _set_bkg_tiles
 	.globl _set_bkg_data
+	.globl _fractionX
 	.globl _ghostyY
 	.globl _ghostyX
 	.globl _pcFacing
 	.globl _joypadCurrent
 	.globl _spriteSize
+	.globl _ghostySpeedX
 	.globl _setBkgd
 	.globl _setGhosty
 ;--------------------------------------------------------
@@ -27,6 +29,8 @@
 ; ram data
 ;--------------------------------------------------------
 	.area _DATA
+_ghostySpeedX::
+	.ds 2
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
@@ -40,6 +44,8 @@ _pcFacing::
 _ghostyX::
 	.ds 2
 _ghostyY::
+	.ds 2
+_fractionX::
 	.ds 2
 ;--------------------------------------------------------
 ; absolute external ram data
@@ -61,19 +67,19 @@ _ghostyY::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:16: void setBkgd(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:17: void setBkgd(void){
 ;	---------------------------------
 ; Function setBkgd
 ; ---------------------------------
 _setBkgd::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:18: set_bkg_data(0, bkgd_TILE_COUNT, bkgd_tiles);    
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:19: set_bkg_data(0, bkgd_TILE_COUNT, bkgd_tiles);    
 	ld	de, #_bkgd_tiles
 	push	de
 	ld	hl, #0x300
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:19: set_bkg_palette(0,1,bkgd_palettes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:20: set_bkg_palette(0,1,bkgd_palettes);
 	ld	de, #_bkgd_palettes
 	push	de
 	xor	a, a
@@ -81,7 +87,7 @@ _setBkgd::
 	push	af
 	call	_set_bkg_palette
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:21: set_bkg_tiles(0, 0, 32, 18, bkgd_map_attributes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:22: set_bkg_tiles(0, 0, 32, 18, bkgd_map_attributes);
 	ld	bc, #_bkgd_map+0
 	push	bc
 	ld	hl, #0x1220
@@ -91,7 +97,7 @@ _setBkgd::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:23: set_bkg_tiles(0,0,32,18,bkgd_map);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:24: set_bkg_tiles(0,0,32,18,bkgd_map);
 	push	bc
 	ld	hl, #0x1220
 	push	hl
@@ -100,21 +106,21 @@ _setBkgd::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:24: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:25: }
 	ret
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:26: void setGhosty(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:27: void setGhosty(void){
 ;	---------------------------------
 ; Function setGhosty
 ; ---------------------------------
 _setGhosty::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:30: set_sprite_data(0, 4, ghostyTiles);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:29: set_sprite_data(0, 4, ghostyTiles);
 	ld	de, #_ghostyTiles
 	push	de
 	ld	hl, #0x400
 	push	hl
 	call	_set_sprite_data
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:31: set_sprite_palette(0,1,ghosty_palettes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:30: set_sprite_palette(0,1,ghosty_palettes);
 	ld	de, #_ghosty_palettes
 	push	de
 	xor	a, a
@@ -122,7 +128,11 @@ _setGhosty::
 	push	af
 	call	_set_sprite_palette
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:32: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:31: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+	ld	hl, #_ghostyY
+	ld	c, (hl)
+	ld	hl, #_ghostyX
+	ld	e, (hl)
 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:160: __current_metasprite = metasprite;
 	ld	hl, #___current_metasprite
 	ld	a, #<(_ghostyMS)
@@ -135,13 +145,13 @@ _setGhosty::
 	ld	hl, #___current_base_prop
 	ld	(hl), #0x00
 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:163: return __move_metasprite(base_sprite, (y << 8) | (uint8_t)x);
-	ld	de, #0x5050
+	ld	d, c
 	xor	a, a
 	call	___move_metasprite
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:34: OBP0_REG=DMG_PALETTE(DMG_WHITE, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_BLACK);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:33: OBP0_REG=DMG_PALETTE(DMG_WHITE, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_BLACK);
 	ld	a, #0xd8
 	ldh	(_OBP0_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:35: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:34: }
 	ret
 	.area _CODE
 	.area _INITIALIZER
@@ -155,4 +165,6 @@ __xinit__ghostyX:
 	.dw #0x0050
 __xinit__ghostyY:
 	.dw #0x0050
+__xinit__fractionX:
+	.dw #0x0000
 	.area _CABS (ABS)

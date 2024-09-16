@@ -67,7 +67,7 @@ _main::
 	ldh	(_LCDC_REG + 0), a
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:20: while(1) {        
 00102$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: int16_t ghostySpeedX = joypadMgr();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: joypadMgr();
 	call	_joypadMgr
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:24: wait_vbl_done();
 	call	_wait_vbl_done

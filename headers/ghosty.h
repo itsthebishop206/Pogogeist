@@ -5,8 +5,6 @@
 #define ghostyTilesBank 0
 
 extern unsigned char ghostyTiles[];
-extern uint16_t ghostyX, ghostyY, ghostyDrawX, ghostyDrawY;
-extern int16_t ghostySpeedX, ghostySpeedY;
-
+extern int16_t ghostyX, ghostyY, ghostySpeedX, ghostySpeedY, fractionX, fractionY;
 extern const metasprite_t ghostyMS[];
 /* End of GHOSTY.H */

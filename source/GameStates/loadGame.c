@@ -8,10 +8,10 @@
 
 UBYTE spriteSize = 8;
 
-uint8_t joypadCurrent = 0;
 uint8_t pcFacing = 1;
-uint16_t ghostyX = 80;
-uint16_t ghostyY = 80;
+int16_t ghostyX = 80;
+int16_t ghostyY = 80;
+int16_t ghostySpeedX, fractionX = 0;
 
 void setBkgd(void){
 
@@ -25,8 +25,6 @@ void setBkgd(void){
 
 void setGhosty(void){
 
-    uint16_t ghostyX = 80;
-    uint16_t ghostyY = 80;
     set_sprite_data(0, 4, ghostyTiles);
     set_sprite_palette(0,1,ghosty_palettes);
     move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
