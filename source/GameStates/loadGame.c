@@ -11,7 +11,8 @@ UBYTE spriteSize = 8;
 uint8_t pcFacing = 1;
 int16_t ghostyX = 80;
 int16_t ghostyY = 80;
-int16_t ghostySpeedX, fractionX = 0;
+int16_t ghostySpeedX, ghostySpeedY, fractionX = 0;
+//int16_t ghostySpeedY = 1;
 
 void setBkgd(void){
 
@@ -30,4 +31,11 @@ void setGhosty(void){
     move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
     // This adjusts the DMG color palette
     OBP0_REG=DMG_PALETTE(DMG_WHITE, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_BLACK);
+}
+
+void applyGravity(void){
+    
+    if(ghostyY<131){
+        ghostyY += 1;
+    }
 }

@@ -8,6 +8,7 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
+	.globl _applyGravity
 	.globl _set_sprite_palette
 	.globl _set_bkg_palette
 	.globl _set_sprite_data
@@ -17,8 +18,8 @@
 	.globl _ghostyY
 	.globl _ghostyX
 	.globl _pcFacing
-	.globl _joypadCurrent
 	.globl _spriteSize
+	.globl _ghostySpeedY
 	.globl _ghostySpeedX
 	.globl _setBkgd
 	.globl _setGhosty
@@ -31,13 +32,13 @@
 	.area _DATA
 _ghostySpeedX::
 	.ds 2
+_ghostySpeedY::
+	.ds 2
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
 	.area _INITIALIZED
 _spriteSize::
-	.ds 1
-_joypadCurrent::
 	.ds 1
 _pcFacing::
 	.ds 1
@@ -153,12 +154,36 @@ _setGhosty::
 	ldh	(_OBP0_REG + 0), a
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:34: }
 	ret
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:36: void applyGravity(void){
+;	---------------------------------
+; Function applyGravity
+; ---------------------------------
+_applyGravity::
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:38: if(ghostyY<131){
+	ld	hl, #_ghostyY
+	ld	a, (hl+)
+	ld	c, a
+	ld	b, (hl)
+	ld	a, c
+	sub	a, #0x83
+	ld	a, b
+	rla
+	ccf
+	rra
+	sbc	a, #0x80
+	ret	NC
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:39: ghostyY += 1;
+	dec	hl
+	inc	bc
+	ld	a, c
+	ld	(hl+), a
+	ld	(hl), b
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:41: }
+	ret
 	.area _CODE
 	.area _INITIALIZER
 __xinit__spriteSize:
 	.db #0x08	; 8
-__xinit__joypadCurrent:
-	.db #0x00	; 0
 __xinit__pcFacing:
 	.db #0x01	; 1
 __xinit__ghostyX:
