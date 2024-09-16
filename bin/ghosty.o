@@ -1,0 +1,40 @@
+XL4
+H 9 areas 3 global symbols
+M ghosty
+O -msm83
+S .__.ABS. Def00000000
+A _CODE size 14 flags 0 addr 0
+S _ghostyMS Def00000000
+A _DATA size 0 flags 0 addr 0
+A _INITIALIZED size 40 flags 0 addr 0
+S _ghostyTiles Def00000000
+A _DABS size 0 flags 8 addr 0
+A _HOME size 0 flags 0 addr 0
+A _GSINIT size 0 flags 0 addr 0
+A _GSFINAL size 0 flags 0 addr 0
+A _INITIALIZER size 40 flags 0 addr 0
+A _CABS size 0 flags 8 addr 0
+T 00 00 00 00
+R 00 00 02 00
+T 00 00 00 00
+R 00 00 02 00
+T 00 00 00 00
+R 00 00 00 00
+T 00 00 00 00 F8 F8 00 00 00 08 01 00 08 F8 02 00
+R 00 00 00 00
+T 0C 00 00 00 00 08 03 00 80 00 00 00
+R 00 00 00 00
+T 00 00 00 00
+R 00 00 07 00
+T 00 00 00 00 00 01 01 02 03 04 07 08 0F 10 0F 10
+R 00 00 07 00
+T 0C 00 00 00 0F 10 0F 10 00 E0 E0 10 F0 08 F8 04
+R 00 00 07 00
+T 18 00 00 00 FE 00 FE 62 FE F6 FE F6 0F 10 0F 10
+R 00 00 07 00
+T 24 00 00 00 0F 10 1F 20 3F C0 0F 70 00 1F 00 00
+R 00 00 07 00
+T 30 00 00 00 FE 62 FE 00 FE 00 FC 02 E0 1C 00 E0
+R 00 00 07 00
+T 3C 00 00 00 00 00 00 00
+R 00 00 07 00
