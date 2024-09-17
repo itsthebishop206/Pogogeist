@@ -1,13 +1,13 @@
 #include <gb/gb.h>
 #include <bkgd.h>
-#include <ghosty.h>
 #include <loadGame.h>
 #include <palette.h>
 #include <stdint.h>
 #include <gb/metasprites.h>
+#include <ghosty.h>
+#include <bone.h>
 
 UBYTE spriteSize = 8;
-#define SCROLL_SPD_MAX 1
 
 void setBkgd(void){
 
@@ -27,6 +27,35 @@ void setGhosty(void){
     OBP0_REG=DMG_PALETTE(DMG_BLACK, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_WHITE);
 }
 
-void bkgScroll(void){
-    scroll_bkg(1,0);
+void setBone(void){
+  
+  set_sprite_data(4,2,boneTile);
+  set_sprite_prop(4,0x00);
+  move_metasprite_ex(boneMS,4,0,4,120,120);
+}
+
+void gameFirstLoad(void){
+    
+    NR52_REG = 0x80;
+    NR50_REG = 0x77; 
+    NR51_REG = 0xFF;
+
+    SHOW_BKG;
+    SHOW_SPRITES;
+    DISPLAY_ON;
+
+    STAT_REG |= 0x40;
+    LYC_REG=0;
+    disable_interrupts;
+    add_LCD(bkgInterrupts);
+    set_interrupts(LCD_IFLAG | VBL_IFLAG);
+    enable_interrupts;
+
+    set_sprite_palette(0,1,ghosty_palettes);
+    set_bkg_palette(0,1,bkgd_palettes);
+    setBkgd();
+    setGhosty();
+    setBone();
+
+
 }

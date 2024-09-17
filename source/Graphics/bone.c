@@ -7,12 +7,15 @@
 #define OFFSCREEN_RIGHT 154
 #define OFFSCREEN_LEFT -20
 #define FRAME_PER_SPAWN 5
-#define FRAME_PER_MOVE 3
+#define FRAME_PER_MOVE 2
+#define MAX_BONE 6
 
 uint8_t frameMoveCount = 0;
 uint8_t frameSpawnCount = 0;
 uint8_t boneX = 150;
 uint8_t boneY = 120;
+
+metasprite_t* boneTable[MAX_BONE];
 
 unsigned char boneTile[] =
 {
@@ -28,13 +31,6 @@ const metasprite_t boneMS[] = {
     {.dy=8, .dx=0, .dtile=1, .props=0},    // Mirrored tile
     METASPR_TERM
 };
-
-void setBone(void){
-  
-  set_sprite_data(4,2,boneTile);
-  set_sprite_prop(4,0x00);
-  move_metasprite_ex(boneMS,4,0,4,120,120);
-}
 
 void throwBone(void){
   

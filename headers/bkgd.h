@@ -24,5 +24,7 @@ extern const unsigned char bkgd_map[576];
 BANKREF_EXTERN(bkgd)
 
 extern const uint8_t bkgd_tiles[48];
+void scrollBkg(void);
+void bkgInterrupts(void);
 
 #endif

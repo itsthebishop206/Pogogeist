@@ -6,26 +6,17 @@
 #include <joypad.h>
 #include <bone.h>
 #include <palette.h>
-
-#define floorY 21;
+#include <bkgd.h>
 
 void main(void)
 {
-
-    set_sprite_palette(0,1,ghosty_palettes);
-    setBkgd();
-    setGhosty();
-    setBone();
-
-    SHOW_BKG;
-    SHOW_SPRITES;
-    DISPLAY_ON;
+    gameFirstLoad();
 
     // Loop forever
     while(1) {        
         
         joypadMgr();
-        bkgScroll();
+        scrollBkg();
         throwBone();
         // Done processing, yield CPU and wait for start of next frame
         wait_vbl_done();

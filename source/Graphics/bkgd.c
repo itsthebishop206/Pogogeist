@@ -7,7 +7,38 @@
 #include <gbdk/metasprites.h>
 #include <palette.h>
 
-//BANKREF(bkgd)
+uint8_t bkgScrollCount = 0;
+uint8_t floorScroll = 0;
+uint8_t skyScroll = 0;
+
+void scrollBkg(void){
+
+	bkgScrollCount++;
+	floorScroll++;
+	
+	if(bkgScrollCount >= 8){
+
+		skyScroll++;
+		bkgScrollCount = 0;
+	}
+}
+
+void bkgInterrupts(void){
+
+	if(LYC_REG == 0){
+
+		LYC_REG = 120;
+		move_bkg(skyScroll,0);
+
+		//SHOW_SPRITES;
+		// May have to do some "show/hide_sprites" tomfoolery to keep things from overlapping
+
+	} else if(LYC_REG == 120){
+
+		LYC_REG = 0;
+		move_bkg(floorScroll,0);
+	}
+}
 
 const uint8_t bkgd_tiles[96] = {
 	0x00,0x00,0x40,0x40,

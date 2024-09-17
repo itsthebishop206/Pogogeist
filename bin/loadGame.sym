@@ -7,27 +7,41 @@ Symbol Table
     .__.ABS.                                                    =   00000000 G
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
+    _LCDC_REG                                                       ******** GX
+    _LYC_REG                                                        ******** GX
+    _NR50_REG                                                       ******** GX
+    _NR51_REG                                                       ******** GX
+    _NR52_REG                                                       ******** GX
     _OBP0_REG                                                       ******** GX
-    _SCX_REG                                                        ******** GX
+    _STAT_REG                                                       ******** GX
     ___current_base_prop                                            ******** GX
     ___current_base_tile                                            ******** GX
     ___current_metasprite                                           ******** GX
     ___move_metasprite                                              ******** GX
   7 __xinit__spriteSize                                             00000000 R
-  0 _bkgScroll                                                      00000068 GR
+    _add_LCD                                                        ******** GX
+    _bkgInterrupts                                                  ******** GX
     _bkgd_map                                                       ******** GX
     _bkgd_palettes                                                  ******** GX
     _bkgd_tiles                                                     ******** GX
+    _boneMS                                                         ******** GX
+    _boneTile                                                       ******** GX
+  0 _gameFirstLoad                                                  00000094 GR
     _ghostyMS                                                       ******** GX
     _ghostyTiles                                                    ******** GX
     _ghostyX                                                        ******** GX
     _ghostyY                                                        ******** GX
+    _ghosty_palettes                                                ******** GX
   0 _setBkgd                                                        00000000 GR
+  0 _setBone                                                        00000068 GR
   0 _setGhosty                                                      00000037 GR
     _set_bkg_data                                                   ******** GX
     _set_bkg_palette                                                ******** GX
     _set_bkg_tiles                                                  ******** GX
+    _set_interrupts                                                 ******** GX
     _set_sprite_data                                                ******** GX
+    _set_sprite_palette                                             ******** GX
+    _shadow_OAM                                                     ******** GX
   2 _spriteSize                                                     00000000 GR
 
 
@@ -36,7 +50,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       6E   flags    0
+   0 _CODE                                      size       EB   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        1   flags    0
    3 _DABS                                      size        0   flags    8
