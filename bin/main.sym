@@ -8,20 +8,23 @@ Symbol Table
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
     _LCDC_REG                                                       ******** GX
-    _SCX_REG                                                        ******** GX
+    _bkgScroll                                                      ******** GX
+    _ghosty_palettes                                                ******** GX
     _joypadMgr                                                      ******** GX
   0 _main                                                           00000000 GR
     _setBkgd                                                        ******** GX
+    _setBone                                                        ******** GX
     _setGhosty                                                      ******** GX
+    _set_sprite_palette                                             ******** GX
+    _throwBone                                                      ******** GX
     _wait_vbl_done                                                  ******** GX
-
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       25   flags    0
+   0 _CODE                                      size       35   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

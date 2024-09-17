@@ -1,0 +1,204 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.4.1 #14650 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module bone
+                                      6 	.optsdcc -msm83
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _set_sprite_data
+                                     12 	.globl _boneTile
+                                     13 	.globl _boneY
+                                     14 	.globl _boneX
+                                     15 	.globl _frameSpawnCount
+                                     16 	.globl _frameMoveCount
+                                     17 	.globl _boneMS
+                                     18 	.globl _setBone
+                                     19 	.globl _throwBone
+                                     20 ;--------------------------------------------------------
+                                     21 ; special function registers
+                                     22 ;--------------------------------------------------------
+                                     23 ;--------------------------------------------------------
+                                     24 ; ram data
+                                     25 ;--------------------------------------------------------
+                                     26 	.area _DATA
+                                     27 ;--------------------------------------------------------
+                                     28 ; ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area _INITIALIZED
+    00000000                         31 _frameMoveCount::
+    00000000                         32 	.ds 1
+    00000001                         33 _frameSpawnCount::
+    00000001                         34 	.ds 1
+    00000002                         35 _boneX::
+    00000002                         36 	.ds 1
+    00000003                         37 _boneY::
+    00000003                         38 	.ds 1
+    00000004                         39 _boneTile::
+    00000004                         40 	.ds 32
+                                     41 ;--------------------------------------------------------
+                                     42 ; absolute external ram data
+                                     43 ;--------------------------------------------------------
+                                     44 	.area _DABS (ABS)
+                                     45 ;--------------------------------------------------------
+                                     46 ; global & static initialisations
+                                     47 ;--------------------------------------------------------
+                                     48 	.area _HOME
+                                     49 	.area _GSINIT
+                                     50 	.area _GSFINAL
+                                     51 	.area _GSINIT
+                                     52 ;--------------------------------------------------------
+                                     53 ; Home
+                                     54 ;--------------------------------------------------------
+                                     55 	.area _HOME
+                                     56 	.area _HOME
+                                     57 ;--------------------------------------------------------
+                                     58 ; code
+                                     59 ;--------------------------------------------------------
+                                     60 	.area _CODE
+                                     61 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:32: void setBone(void){
+                                     62 ;	---------------------------------
+                                     63 ; Function setBone
+                                     64 ; ---------------------------------
+    00000000                         65 _setBone::
+                                     66 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:34: set_sprite_data(4,2,boneTile);
+    00000000 11r04r00         [12]   67 	ld	de, #_boneTile
+    00000003 D5               [16]   68 	push	de
+    00000004 21 04 02         [12]   69 	ld	hl, #0x204
+    00000007 E5               [16]   70 	push	hl
+    00000008 CDr00r00         [24]   71 	call	_set_sprite_data
+    0000000B E8 04            [16]   72 	add	sp, #4
+                                     73 ;c:\users\wsajj\gbdev\gbdk\include\gb\gb.h:1934: shadow_OAM[nb].prop=prop;
+    0000000D 21r13r00         [12]   74 	ld	hl, #(_shadow_OAM + 19)
+    00000010 36 00            [12]   75 	ld	(hl), #0x00
+                                     76 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:36: move_metasprite_ex(boneMS,4,0,4,120,120);
+                                     77 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:160: __current_metasprite = metasprite;
+    00000012 21r00r00         [12]   78 	ld	hl, #___current_metasprite
+    00000015 3Er2C            [ 8]   79 	ld	a, #<(_boneMS)
+    00000017 22               [ 8]   80 	ld	(hl+), a
+    00000018 36s00            [12]   81 	ld	(hl), #>(_boneMS)
+                                     82 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:161: __current_base_tile = base_tile;
+    0000001A 21r00r00         [12]   83 	ld	hl, #___current_base_tile
+    0000001D 36 04            [12]   84 	ld	(hl), #0x04
+                                     85 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:162: __current_base_prop = base_prop;
+    0000001F 21r00r00         [12]   86 	ld	hl, #___current_base_prop
+    00000022 36 00            [12]   87 	ld	(hl), #0x00
+                                     88 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:163: return __move_metasprite(base_sprite, (y << 8) | (uint8_t)x);
+    00000024 11 78 78         [12]   89 	ld	de, #0x7878
+    00000027 3E 04            [ 8]   90 	ld	a, #0x04
+                                     91 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:36: move_metasprite_ex(boneMS,4,0,4,120,120);
+                                     92 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:37: }
+    00000029 C3r00r00         [16]   93 	jp	___move_metasprite
+    0000002C                         94 _boneMS:
+    0000002C 00                      95 	.db #0x00	;  0
+    0000002D 00                      96 	.db #0x00	;  0
+    0000002E 00                      97 	.db #0x00	; 0
+    0000002F 00                      98 	.db #0x00	; 0
+    00000030 08                      99 	.db #0x08	;  8
+    00000031 00                     100 	.db #0x00	;  0
+    00000032 01                     101 	.db #0x01	; 1
+    00000033 00                     102 	.db #0x00	; 0
+    00000034 80                     103 	.db #0x80	; -128
+    00000035 00                     104 	.db #0x00	;  0
+    00000036 00                     105 	.db #0x00	; 0
+    00000037 00                     106 	.db #0x00	; 0
+                                    107 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:39: void throwBone(void){
+                                    108 ;	---------------------------------
+                                    109 ; Function throwBone
+                                    110 ; ---------------------------------
+    00000038                        111 _throwBone::
+                                    112 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:41: frameMoveCount++;
+    00000038 21r00r00         [12]  113 	ld	hl, #_frameMoveCount
+    0000003B 34               [12]  114 	inc	(hl)
+                                    115 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:42: frameSpawnCount++;
+    0000003C 21r01r00         [12]  116 	ld	hl, #_frameSpawnCount
+    0000003F 34               [12]  117 	inc	(hl)
+                                    118 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:44: if(frameSpawnCount > FRAME_PER_SPAWN){
+    00000040 3E 05            [ 8]  119 	ld	a, #0x05
+    00000042 96               [ 8]  120 	sub	a, (hl)
+    00000043 30 02            [12]  121 	jr	NC, 00102$
+                                    122 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:46: frameSpawnCount = 0;
+    00000045 36 00            [12]  123 	ld	(hl), #0x00
+    00000047                        124 00102$:
+                                    125 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:49: if(frameMoveCount > FRAME_PER_MOVE){
+    00000047 3E 03            [ 8]  126 	ld	a, #0x03
+    00000049 21r00r00         [12]  127 	ld	hl, #_frameMoveCount
+    0000004C 96               [ 8]  128 	sub	a, (hl)
+    0000004D 30 09            [12]  129 	jr	NC, 00104$
+                                    130 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:51: boneX--;
+    0000004F 21r02r00         [12]  131 	ld	hl, #_boneX
+    00000052 35               [12]  132 	dec	(hl)
+                                    133 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:52: frameMoveCount = 0;
+    00000053 21r00r00         [12]  134 	ld	hl, #_frameMoveCount
+    00000056 36 00            [12]  135 	ld	(hl), #0x00
+    00000058                        136 00104$:
+                                    137 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:56: move_metasprite_ex(boneMS,4,0,4,boneX,boneY);
+    00000058 21r03r00         [12]  138 	ld	hl, #_boneY
+    0000005B 4E               [ 8]  139 	ld	c, (hl)
+    0000005C 21r02r00         [12]  140 	ld	hl, #_boneX
+    0000005F 5E               [ 8]  141 	ld	e, (hl)
+                                    142 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:160: __current_metasprite = metasprite;
+    00000060 21r00r00         [12]  143 	ld	hl, #___current_metasprite
+    00000063 3Er2C            [ 8]  144 	ld	a, #<(_boneMS)
+    00000065 22               [ 8]  145 	ld	(hl+), a
+    00000066 36s00            [12]  146 	ld	(hl), #>(_boneMS)
+                                    147 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:161: __current_base_tile = base_tile;
+    00000068 21r00r00         [12]  148 	ld	hl, #___current_base_tile
+    0000006B 36 04            [12]  149 	ld	(hl), #0x04
+                                    150 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:162: __current_base_prop = base_prop;
+    0000006D 21r00r00         [12]  151 	ld	hl, #___current_base_prop
+    00000070 36 00            [12]  152 	ld	(hl), #0x00
+                                    153 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:163: return __move_metasprite(base_sprite, (y << 8) | (uint8_t)x);
+    00000072 41               [ 4]  154 	ld	b, c
+    00000073 AF               [ 4]  155 	xor	a, a
+    00000074 50               [ 4]  156 	ld	d, b
+    00000075 3E 04            [ 8]  157 	ld	a, #0x04
+                                    158 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:56: move_metasprite_ex(boneMS,4,0,4,boneX,boneY);
+                                    159 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:58: }
+    00000077 C3r00r00         [16]  160 	jp	___move_metasprite
+                                    161 	.area _CODE
+                                    162 	.area _INITIALIZER
+    00000000                        163 __xinit__frameMoveCount:
+    00000000 00                     164 	.db #0x00	; 0
+    00000001                        165 __xinit__frameSpawnCount:
+    00000001 00                     166 	.db #0x00	; 0
+    00000002                        167 __xinit__boneX:
+    00000002 96                     168 	.db #0x96	; 150
+    00000003                        169 __xinit__boneY:
+    00000003 78                     170 	.db #0x78	; 120	'x'
+    00000004                        171 __xinit__boneTile:
+    00000004 00                     172 	.db #0x00	; 0
+    00000005 66                     173 	.db #0x66	; 102	'f'
+    00000006 66                     174 	.db #0x66	; 102	'f'
+    00000007 FF                     175 	.db #0xff	; 255
+    00000008 7E                     176 	.db #0x7e	; 126
+    00000009 FF                     177 	.db #0xff	; 255
+    0000000A 18                     178 	.db #0x18	; 24
+    0000000B 7E                     179 	.db #0x7e	; 126
+    0000000C 00                     180 	.db #0x00	; 0
+    0000000D 18                     181 	.db #0x18	; 24
+    0000000E 18                     182 	.db #0x18	; 24
+    0000000F 3C                     183 	.db #0x3c	; 60
+    00000010 18                     184 	.db #0x18	; 24
+    00000011 3C                     185 	.db #0x3c	; 60
+    00000012 18                     186 	.db #0x18	; 24
+    00000013 3C                     187 	.db #0x3c	; 60
+    00000014 18                     188 	.db #0x18	; 24
+    00000015 3C                     189 	.db #0x3c	; 60
+    00000016 18                     190 	.db #0x18	; 24
+    00000017 3C                     191 	.db #0x3c	; 60
+    00000018 18                     192 	.db #0x18	; 24
+    00000019 3C                     193 	.db #0x3c	; 60
+    0000001A 00                     194 	.db #0x00	; 0
+    0000001B 18                     195 	.db #0x18	; 24
+    0000001C 18                     196 	.db #0x18	; 24
+    0000001D 7E                     197 	.db #0x7e	; 126
+    0000001E 7E                     198 	.db #0x7e	; 126
+    0000001F FF                     199 	.db #0xff	; 255
+    00000020 66                     200 	.db #0x66	; 102	'f'
+    00000021 FF                     201 	.db #0xff	; 255
+    00000022 00                     202 	.db #0x00	; 0
+    00000023 66                     203 	.db #0x66	; 102	'f'
+                                    204 	.area _CABS (ABS)

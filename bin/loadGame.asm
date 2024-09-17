@@ -8,7 +8,6 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _set_sprite_palette
 	.globl _set_bkg_palette
 	.globl _set_sprite_data
 	.globl _set_bkg_tiles
@@ -16,6 +15,7 @@
 	.globl _spriteSize
 	.globl _setBkgd
 	.globl _setGhosty
+	.globl _bkgScroll
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -49,19 +49,19 @@ _spriteSize::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:11: void setBkgd(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:12: void setBkgd(void){
 ;	---------------------------------
 ; Function setBkgd
 ; ---------------------------------
 _setBkgd::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:13: set_bkg_data(0, bkgd_TILE_COUNT, bkgd_tiles);    
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:14: set_bkg_data(0, bkgd_TILE_COUNT, bkgd_tiles);    
 	ld	de, #_bkgd_tiles
 	push	de
 	ld	hl, #0x600
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:14: set_bkg_palette(0,1,bkgd_palettes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:15: set_bkg_palette(0,1,bkgd_palettes);
 	ld	de, #_bkgd_palettes
 	push	de
 	xor	a, a
@@ -69,7 +69,7 @@ _setBkgd::
 	push	af
 	call	_set_bkg_palette
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:16: set_bkg_tiles(0, 0, 32, 18, bkgd_map_attributes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:17: set_bkg_tiles(0, 0, 32, 18, bkgd_map_attributes);
 	ld	bc, #_bkgd_map+0
 	push	bc
 	ld	hl, #0x1220
@@ -79,7 +79,7 @@ _setBkgd::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:18: set_bkg_tiles(0,0,32,18,bkgd_map);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:19: set_bkg_tiles(0,0,32,18,bkgd_map);
 	push	bc
 	ld	hl, #0x1220
 	push	hl
@@ -88,27 +88,19 @@ _setBkgd::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:19: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:20: }
 	ret
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:21: void setGhosty(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:22: void setGhosty(void){
 ;	---------------------------------
 ; Function setGhosty
 ; ---------------------------------
 _setGhosty::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:23: set_sprite_data(0, 4, ghostyTiles);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:24: set_sprite_data(0, 4, ghostyTiles);
 	ld	de, #_ghostyTiles
 	push	de
 	ld	hl, #0x400
 	push	hl
 	call	_set_sprite_data
-	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:24: set_sprite_palette(0,1,ghosty_palettes);
-	ld	de, #_ghosty_palettes
-	push	de
-	xor	a, a
-	inc	a
-	push	af
-	call	_set_sprite_palette
 	add	sp, #4
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:25: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
 	ld	hl, #_ghostyY
@@ -134,6 +126,18 @@ _setGhosty::
 	ld	a, #0x1b
 	ldh	(_OBP0_REG + 0), a
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:28: }
+	ret
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:30: void bkgScroll(void){
+;	---------------------------------
+; Function bkgScroll
+; ---------------------------------
+_bkgScroll::
+;c:\users\wsajj\gbdev\gbdk\include\gb\gb.h:1463: SCX_REG+=x, SCY_REG+=y;
+	ldh	a, (_SCX_REG + 0)
+	inc	a
+	ldh	(_SCX_REG + 0), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:31: scroll_bkg(1,0);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:32: }
 	ret
 	.area _CODE
 	.area _INITIALIZER

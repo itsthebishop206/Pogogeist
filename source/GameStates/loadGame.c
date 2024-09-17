@@ -7,6 +7,7 @@
 #include <gb/metasprites.h>
 
 UBYTE spriteSize = 8;
+#define SCROLL_SPD_MAX 1
 
 void setBkgd(void){
 
@@ -21,12 +22,11 @@ void setBkgd(void){
 void setGhosty(void){
 
     set_sprite_data(0, 4, ghostyTiles);
-    set_sprite_palette(0,1,ghosty_palettes);
     move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
     // This adjusts the DMG color palette
     OBP0_REG=DMG_PALETTE(DMG_BLACK, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_WHITE);
 }
 
-void bkgdScroll(void){
+void bkgScroll(void){
     scroll_bkg(1,0);
 }
