@@ -9,6 +9,14 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _joypad
+	.globl _gravity
+	.globl _ghostyY
+	.globl _ghostyX
+	.globl _pcFacing
+	.globl _ghostySpeedY
+	.globl _fractionY
+	.globl _fractionX
+	.globl _ghostySpeedX
 	.globl _joypadMgr
 ;--------------------------------------------------------
 ; special function registers
@@ -17,10 +25,26 @@
 ; ram data
 ;--------------------------------------------------------
 	.area _DATA
+_ghostySpeedX::
+	.ds 2
+_fractionX::
+	.ds 2
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
 	.area _INITIALIZED
+_fractionY::
+	.ds 2
+_ghostySpeedY::
+	.ds 2
+_pcFacing::
+	.ds 1
+_ghostyX::
+	.ds 2
+_ghostyY::
+	.ds 2
+_gravity::
+	.ds 2
 ;--------------------------------------------------------
 ; absolute external ram data
 ;--------------------------------------------------------
@@ -41,52 +65,253 @@
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:10: void joypadMgr(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:19: void joypadMgr(void){
 ;	---------------------------------
 ; Function joypadMgr
 ; ---------------------------------
 _joypadMgr::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:13: joypadCurrent = joypad();
+	add	sp, #-5
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:22: joypadCurrent = joypad();
 	call	_joypad
+	ldhl	sp,	#0
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:24: if(ghostyY < FLOOR){
+	ld	hl, #_ghostyY
+	ld	a, (hl+)
 	ld	c, a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:14: ghostySpeedX = 0;
+	ld	b, (hl)
+	ld	a, c
+	sub	a, #0x84
+	ld	a, b
+	rla
+	ccf
+	rra
+	sbc	a, #0x80
+	jr	NC, 00104$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:28: ghostySpeedY += (gravity += counter);
+	ld	hl, #_gravity
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	inc	de
+	ldhl	sp,	#3
+	ld	a, e
+	ld	(hl+), a
+	ld	(hl), d
+	ld	hl, #_gravity
+	ld	a, e
+	ld	(hl+), a
+	ld	(hl), d
+	ld	hl, #_ghostySpeedY
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	ldhl	sp,	#3
+	ld	a,	(hl+)
+	ld	h, (hl)
+	ld	l, a
+	add	hl, de
+	ld	e, l
+	ld	d, h
+	ld	hl, #_ghostySpeedY
+	ld	a, e
+	ld	(hl+), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:30: if(ghostySpeedY > MAX_SPD){
+	ld	a, d
+	ld	(hl-), a
+	ld	l, (hl)
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	a, (_ghostySpeedY + 1)
+	ld	h, a
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	e, h
+	ld	d, #0x07
+	ld	a, #0xf8
+	cp	a, l
+	ld	a, #0x07
+	sbc	a, h
+	bit	7, e
+	jr	Z, 00302$
+	bit	7, d
+	jr	NZ, 00303$
+	cp	a, a
+	jr	00303$
+00302$:
+	bit	7, d
+	jr	Z, 00303$
+	scf
+00303$:
+	jr	NC, 00104$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:31: ghostySpeedY = MAX_SPD;
+	ld	hl, #_ghostySpeedY
+	ld	a, #0xf8
+	ld	(hl+), a
+	ld	(hl), #0x07
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:32: counter = 0;
+00104$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:41: if(joypadCurrent & J_B){
+	push	hl
+	ldhl	sp,	#2
+	bit	5, (hl)
+	pop	hl
+	jr	Z, 00106$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:42: ghostyY -= 4;
+	ld	a, c
+	add	a, #0xfc
+	ld	c, a
+	ld	a, b
+	adc	a, #0xff
+	ld	hl, #_ghostyY
+	ld	(hl), c
+	inc	hl
+	ld	(hl), a
+00106$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:57: ghostySpeedX -= SPD_CHANGE_X;
+	ld	hl, #_ghostySpeedX
+	ld	a, (hl+)
+	ld	c, a
+	ld	b, (hl)
+	ld	a, c
+	add	a, #0xf8
+	ld	e, a
+	ld	a, b
+	adc	a, #0xff
+	ldhl	sp,	#1
+	ld	(hl), e
+	inc	hl
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:54: if(joypadCurrent & J_LEFT){
+	push	hl
+	dec	hl
+	dec	hl
+	bit	1, (hl)
+	pop	hl
+	jr	Z, 00124$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:57: ghostySpeedX -= SPD_CHANGE_X;
+	ldhl	sp,	#1
+	ld	a, (hl)
+	ld	(#_ghostySpeedX),a
+	ldhl	sp,	#2
+	ld	a, (hl)
+	ld	(#_ghostySpeedX + 1),a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:59: if(pcFacing==1){
+	ld	a, (#_pcFacing)
+	dec	a
+	jp	NZ,00125$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:60: pcFacing = 0;
+	ld	hl, #_pcFacing
+	ld	(hl), #0x00
+	jp	00125$
+00124$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:65: ghostySpeedX += SPD_CHANGE_X;
+	ld	hl, #0x0008
+	add	hl, bc
+	ld	e, l
+	ld	a, h
+	ldhl	sp,	#3
+	ld	(hl), e
+	inc	hl
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:63: } else if(joypadCurrent & J_RIGHT){
+	push	hl
+	ldhl	sp,	#2
+	bit	0, (hl)
+	pop	hl
+	jr	Z, 00121$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:65: ghostySpeedX += SPD_CHANGE_X;
+	ldhl	sp,	#3
+	ld	a, (hl)
+	ld	(#_ghostySpeedX),a
+	ldhl	sp,	#4
+	ld	a, (hl)
+	ld	(#_ghostySpeedX + 1),a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:67: if(pcFacing==0){
+	ld	hl, #_pcFacing
+	ld	a, (hl)
+	or	a, a
+	jr	NZ, 00125$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:68: pcFacing = 1;
+	ld	(hl), #0x01
+	jr	00125$
+00121$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:71: if(ghostySpeedX > 0){
+	ld	e, b
+	xor	a, a
+	ld	d, a
+	cp	a, c
+	sbc	a, b
+	bit	7, e
+	jr	Z, 00309$
+	bit	7, d
+	jr	NZ, 00310$
+	cp	a, a
+	jr	00310$
+00309$:
+	bit	7, d
+	jr	Z, 00310$
+	scf
+00310$:
+	jr	NC, 00118$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:73: ghostySpeedX -= SPD_CHANGE_X;
+	ldhl	sp,	#1
+	ld	a, (hl)
+	ld	(#_ghostySpeedX),a
+	ldhl	sp,	#2
+	ld	a, (hl)
+	ld	hl, #_ghostySpeedX + 1
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:75: if(ghostySpeedX < 0){
+	ld	(hl-), a
+	ld	a, (hl+)
+	bit	7, (hl)
+	jr	Z, 00125$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:76: ghostySpeedX = 0;
+	dec	hl
+	xor	a, a
+	ld	(hl+), a
+	ld	(hl), a
+	jr	00125$
+00118$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:78: } else if(ghostySpeedX < 0){
+	bit	7, b
+	jr	Z, 00125$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:80: ghostySpeedX += SPD_CHANGE_X;
+	ldhl	sp,	#3
+	ld	a, (hl)
+	ld	(#_ghostySpeedX),a
+	ldhl	sp,	#4
+	ld	a, (hl)
+	ld	hl, #_ghostySpeedX + 1
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:82: if (ghostySpeedX > 0){
+	ld	(hl-), a
+	ld	a, (hl+)
+	ld	c, a
+	ld	b, (hl)
+	ld	e, b
+	xor	a, a
+	ld	d, a
+	cp	a, c
+	sbc	a, b
+	bit	7, e
+	jr	Z, 00311$
+	bit	7, d
+	jr	NZ, 00312$
+	cp	a, a
+	jr	00312$
+00311$:
+	bit	7, d
+	jr	Z, 00312$
+	scf
+00312$:
+	jr	NC, 00125$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:83: ghostySpeedX = 0;
 	xor	a, a
 	ld	hl, #_ghostySpeedX
 	ld	(hl+), a
 	ld	(hl), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:32: if(joypadCurrent & J_LEFT){
-	bit	1, c
-	jr	Z, 00104$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:34: ghostySpeedX = -1 << PIXEL_SHIFT;
-	ld	hl, #_ghostySpeedX
-	xor	a, a
-	ld	(hl+), a
-	ld	(hl), #0xff
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:35: if(pcFacing==1){
-	ld	a, (#_pcFacing)
-	dec	a
-	jr	NZ, 00104$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:36: pcFacing = 0;
-	ld	hl, #_pcFacing
-	ld	(hl), #0x00
-00104$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:40: if(joypadCurrent & J_RIGHT){
-	bit	0, c
-	jr	Z, 00108$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:42: ghostySpeedX = 1 << PIXEL_SHIFT;
-	ld	hl, #_ghostySpeedX
-	xor	a, a
-	ld	(hl+), a
-	ld	(hl), #0x01
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:43: if(pcFacing==0){
-	ld	hl, #_pcFacing
-	ld	a, (hl)
-	or	a, a
-	jr	NZ, 00108$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:44: pcFacing = 1;
-	ld	(hl), #0x01
-00108$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:48: fractionX += ghostySpeedX;
+00125$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:88: fractionX += ghostySpeedX;
 	ld	a, (#_fractionX)
 	ld	hl, #_ghostySpeedX
 	add	a, (hl)
@@ -96,82 +321,259 @@ _joypadMgr::
 	ld	hl, #_ghostySpeedX + 1
 	adc	a, (hl)
 	ld	(#_fractionX + 1),a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:50: while(fractionX >= (1<<PIXEL_SHIFT)){
-00109$:
-	ld	hl, #_fractionX
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:89: fractionY += ghostySpeedY;
+	ld	a, (#_fractionY)
+	ld	hl, #_ghostySpeedY
+	add	a, (hl)
+	ld	hl, #_fractionY
+	ld	(hl+), a
+	ld	a, (hl)
+	ld	hl, #_ghostySpeedY + 1
+	adc	a, (hl)
+	ld	(#_fractionY + 1),a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:91: while(fractionX >= (1<<PIXEL_SHIFT)){
+00126$:
+	ld	a, (#_fractionX)
+	ldhl	sp,	#3
+	ld	(hl), a
+	ld	a, (#_fractionX + 1)
+	ldhl	sp,	#4
+	ld	(hl-), a
 	ld	a, (hl+)
-	ld	c, a
-	ld	b, (hl)
-	ld	a, b
-	xor	a, #0x80
-	sub	a, #0x81
-	jr	C, 00112$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:51: ghostyX += 1;
+	sub	a, #0x00
+	ld	a, (hl)
+	sbc	a, #0x01
+	ld	d, (hl)
+	ld	a, #0x01
+	bit	7,a
+	jr	Z, 00313$
+	bit	7, d
+	jr	NZ, 00314$
+	cp	a, a
+	jr	00314$
+00313$:
+	bit	7, d
+	jr	Z, 00314$
+	scf
+00314$:
+	jr	C, 00129$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:92: ghostyX += 1;
 	ld	hl, #_ghostyX
 	ld	a, (hl+)
-	ld	e, a
+	ld	c, a
 	ld	a, (hl-)
-	ld	d, a
-	inc	de
-	ld	a, e
+	ld	b, a
+	inc	bc
+	ld	a, c
 	ld	(hl+), a
-	ld	(hl), d
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:52: fractionX -= (1<<PIXEL_SHIFT);
-	ld	a,b
-	dec	a
+	ld	(hl), b
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:93: fractionX -= (1<<PIXEL_SHIFT);
+	ldhl	sp,#3
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	ld	hl, #0x0100
+	ld	a, e
+	sub	a, l
+	ld	e, a
+	ld	a, d
+	sbc	a, h
+	ld	c, e
 	ld	hl, #_fractionX
 	ld	(hl), c
 	inc	hl
 	ld	(hl), a
-	jr	00109$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:55: while(fractionX <= -(1<<PIXEL_SHIFT)){
-00112$:
-	ld	hl, #_fractionX
-	ld	a, (hl+)
-	ld	b, a
-	ld	c, (hl)
-	ld	e, c
-	ld	d, #0xff
+	jr	00126$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:96: while(fractionX <= -(1<<PIXEL_SHIFT)){
+00129$:
+	ld	a, (#_fractionX)
+	ldhl	sp,	#3
+	ld	(hl), a
+	ld	a, (#_fractionX + 1)
+	ldhl	sp,	#4
+	ld	(hl-), a
 	xor	a, a
-	cp	a, b
+	sub	a, (hl)
+	inc	hl
 	ld	a, #0xff
-	sbc	a, c
-	bit	7, e
-	jr	Z, 00197$
+	sbc	a, (hl)
+	ld	a, #0xff
+	ld	d, a
+	bit	7, (hl)
+	jr	Z, 00315$
 	bit	7, d
-	jr	NZ, 00198$
+	jr	NZ, 00316$
 	cp	a, a
-	jr	00198$
-00197$:
+	jr	00316$
+00315$:
 	bit	7, d
-	jr	Z, 00198$
+	jr	Z, 00316$
 	scf
-00198$:
-	jr	C, 00114$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:56: ghostyX -=1;
+00316$:
+	jr	C, 00132$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:97: ghostyX -=1;
 	ld	hl, #_ghostyX
 	ld	a, (hl+)
-	ld	e, a
+	ld	c, a
 	ld	a, (hl-)
-	ld	d, a
-	dec	de
-	ld	a, e
-	ld	(hl+), a
-	ld	(hl), d
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:57: fractionX += (1<<PIXEL_SHIFT);
+	ld	b, a
+	dec	bc
 	ld	a, c
-	inc	a
-	ld	hl, #_fractionX
+	ld	(hl+), a
 	ld	(hl), b
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:98: fractionX += (1<<PIXEL_SHIFT);
+	ldhl	sp,#3
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	ld	hl, #0x0100
+	add	hl, de
+	ld	c, l
+	ld	a, h
+	ld	hl, #_fractionX
+	ld	(hl), c
 	inc	hl
 	ld	(hl), a
-	jr	00112$
-00114$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:61: if(pcFacing==1){
+	jr	00129$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:101: while(fractionY >= (1<<PIXEL_SHIFT)){
+00132$:
+	ld	a, (#_fractionY)
+	ldhl	sp,	#3
+	ld	(hl), a
+	ld	a, (#_fractionY + 1)
+	ldhl	sp,	#4
+	ld	(hl-), a
+	ld	a, (hl+)
+	sub	a, #0x00
+	ld	a, (hl)
+	sbc	a, #0x01
+	ld	d, (hl)
+	ld	a, #0x01
+	bit	7,a
+	jr	Z, 00317$
+	bit	7, d
+	jr	NZ, 00318$
+	cp	a, a
+	jr	00318$
+00317$:
+	bit	7, d
+	jr	Z, 00318$
+	scf
+00318$:
+	jr	C, 00135$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:102: ghostyY += 1;
+	ld	hl, #_ghostyY
+	ld	a, (hl+)
+	ld	c, a
+	ld	a, (hl-)
+	ld	b, a
+	inc	bc
+	ld	a, c
+	ld	(hl+), a
+	ld	(hl), b
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:103: fractionY -= (1<<PIXEL_SHIFT);
+	ldhl	sp,#3
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	ld	hl, #0x0100
+	ld	a, e
+	sub	a, l
+	ld	e, a
+	ld	a, d
+	sbc	a, h
+	ld	c, e
+	ld	hl, #_fractionY
+	ld	(hl), c
+	inc	hl
+	ld	(hl), a
+	jr	00132$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:106: while(fractionY <= -(1<<PIXEL_SHIFT)){
+00135$:
+	ld	a, (#_fractionY)
+	ldhl	sp,	#3
+	ld	(hl), a
+	ld	a, (#_fractionY + 1)
+	ldhl	sp,	#4
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:24: if(ghostyY < FLOOR){
+	ld	hl, #_ghostyY
+	ld	a, (hl+)
+	ld	c, a
+	ld	b, (hl)
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:106: while(fractionY <= -(1<<PIXEL_SHIFT)){
+	ldhl	sp,	#3
+	xor	a, a
+	sub	a, (hl)
+	inc	hl
+	ld	a, #0xff
+	sbc	a, (hl)
+	ld	a, #0xff
+	ld	d, a
+	bit	7, (hl)
+	jr	Z, 00319$
+	bit	7, d
+	jr	NZ, 00320$
+	cp	a, a
+	jr	00320$
+00319$:
+	bit	7, d
+	jr	Z, 00320$
+	scf
+00320$:
+	jr	C, 00137$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:107: ghostyY -=1;
+	dec	bc
+	ld	hl, #_ghostyY
+	ld	a, c
+	ld	(hl+), a
+	ld	(hl), b
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:108: fractionY += (1<<PIXEL_SHIFT);
+	ldhl	sp,#3
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	ld	hl, #0x0100
+	add	hl, de
+	ld	c, l
+	ld	a, h
+	ld	hl, #_fractionY
+	ld	(hl), c
+	inc	hl
+	ld	(hl), a
+	jr	00135$
+00137$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:111: if(ghostyY > FLOOR){
+	ld	e, b
+	ld	d, #0x00
+	ld	a, #0x84
+	cp	a, c
+	ld	a, #0x00
+	sbc	a, b
+	bit	7, e
+	jr	Z, 00321$
+	bit	7, d
+	jr	NZ, 00322$
+	cp	a, a
+	jr	00322$
+00321$:
+	bit	7, d
+	jr	Z, 00322$
+	scf
+00322$:
+	jr	NC, 00139$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:112: ghostyY = FLOOR;
+	ld	hl, #_ghostyY
+	ld	a, #0x84
+	ld	(hl+), a
+	xor	a, a
+	ld	(hl), a
+00139$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:115: if(pcFacing==1){
 	ld	a, (#_pcFacing)
 	dec	a
-	jr	NZ, 00116$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:62: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+	jr	NZ, 00141$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:116: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
 	ld	hl, #_ghostyY
 	ld	c, (hl)
 	ld	hl, #_ghostyX
@@ -191,13 +593,13 @@ _joypadMgr::
 	ld	d, c
 	xor	a, a
 	call	___move_metasprite
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:62: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
-00116$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:65: if(pcFacing==0){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:116: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+00141$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:119: if(pcFacing==0){
 	ld	a, (#_pcFacing)
 	or	a, a
-	ret	NZ
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:66: move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
+	jr	NZ, 00146$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:120: move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
 	ld	hl, #_ghostyY
 	ld	c, (hl)
 	ld	hl, #_ghostyX
@@ -219,9 +621,24 @@ _joypadMgr::
 	add	a, #0xf8
 	ld	e, a
 	xor	a, a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:66: move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:68: }
-	jp	___move_metasprite_flipx
+	call	___move_metasprite_flipx
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:120: move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
+00146$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\joypadMgmt.c:122: }
+	add	sp, #5
+	ret
 	.area _CODE
 	.area _INITIALIZER
+__xinit__fractionY:
+	.dw #0x0000
+__xinit__ghostySpeedY:
+	.dw #0x0001
+__xinit__pcFacing:
+	.db #0x01	; 1
+__xinit__ghostyX:
+	.dw #0x0050
+__xinit__ghostyY:
+	.dw #0x0050
+__xinit__gravity:
+	.dw #0x0001
 	.area _CABS (ABS)

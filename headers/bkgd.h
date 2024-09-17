@@ -13,7 +13,7 @@
 #define bkgd_TILE_H 8
 #define bkgd_WIDTH 256
 #define bkgd_HEIGHT 144
-#define bkgd_TILE_COUNT 3
+#define bkgd_TILE_COUNT 6
 #define bkgd_PALETTE_COUNT 1
 #define bkgd_COLORS_PER_PALETTE 4
 #define bkgd_TOTAL_COLORS 4

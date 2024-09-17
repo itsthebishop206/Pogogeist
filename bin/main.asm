@@ -9,7 +9,6 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _main
-	.globl _applyGravity
 	.globl _joypadMgr
 	.globl _setGhosty
 	.globl _setBkgd
@@ -68,13 +67,15 @@ _main::
 	ldh	(_LCDC_REG + 0), a
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:20: while(1) {        
 00102$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: applyGravity();
-	call	_applyGravity
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:23: joypadMgr();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: joypadMgr();
 	call	_joypadMgr
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:27: wait_vbl_done();
+;c:\users\wsajj\gbdev\gbdk\include\gb\gb.h:1463: SCX_REG+=x, SCY_REG+=y;
+	ldh	a, (_SCX_REG + 0)
+	inc	a
+	ldh	(_SCX_REG + 0), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:26: wait_vbl_done();
 	call	_wait_vbl_done
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:29: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:28: }
 	jr	00102$
 	.area _CODE
 	.area _INITIALIZER

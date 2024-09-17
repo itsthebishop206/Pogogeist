@@ -43,10 +43,10 @@
 	.area _CODE
 	.area _CODE
 _bkgd_palettes:
-	.dw #0x62af
-	.dw #0x3568
 	.dw #0x0000
 	.dw #0x7fff
+	.dw #0x62af
+	.dw #0x3568
 _ghosty_palettes:
 	.dw #0x7fff
 	.dw #0x3568

@@ -8,7 +8,7 @@ Symbol Table
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
     _LCDC_REG                                                       ******** GX
-    _applyGravity                                                   ******** GX
+    _SCX_REG                                                        ******** GX
     _joypadMgr                                                      ******** GX
   0 _main                                                           00000000 GR
     _setBkgd                                                        ******** GX
@@ -21,7 +21,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       23   flags    0
+   0 _CODE                                      size       25   flags    0
    1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8

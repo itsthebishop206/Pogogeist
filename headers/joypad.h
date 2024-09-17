@@ -1,6 +1,5 @@
 #include <stdint.h>
 
-extern uint8_t pcFacing, gravity;
-extern uint16_t joypadCurrent;
+extern uint8_t pcFacing;
+extern uint8_t joypadCurrent, joypadPast;
 extern void joypadMgr(void);
-extern void applyGravity(void);

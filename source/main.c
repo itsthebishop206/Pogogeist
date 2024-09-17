@@ -19,10 +19,8 @@ void main(void)
     // Loop forever
     while(1) {        
         
-        applyGravity();
         joypadMgr();
-        
-        
+        bkgdScroll();
         // Done processing, yield CPU and wait for start of next frame
         wait_vbl_done();
     }

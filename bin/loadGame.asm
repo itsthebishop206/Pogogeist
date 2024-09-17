@@ -8,19 +8,12 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _applyGravity
 	.globl _set_sprite_palette
 	.globl _set_bkg_palette
 	.globl _set_sprite_data
 	.globl _set_bkg_tiles
 	.globl _set_bkg_data
-	.globl _fractionX
-	.globl _ghostyY
-	.globl _ghostyX
-	.globl _pcFacing
 	.globl _spriteSize
-	.globl _ghostySpeedY
-	.globl _ghostySpeedX
 	.globl _setBkgd
 	.globl _setGhosty
 ;--------------------------------------------------------
@@ -30,24 +23,12 @@
 ; ram data
 ;--------------------------------------------------------
 	.area _DATA
-_ghostySpeedX::
-	.ds 2
-_ghostySpeedY::
-	.ds 2
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
 	.area _INITIALIZED
 _spriteSize::
 	.ds 1
-_pcFacing::
-	.ds 1
-_ghostyX::
-	.ds 2
-_ghostyY::
-	.ds 2
-_fractionX::
-	.ds 2
 ;--------------------------------------------------------
 ; absolute external ram data
 ;--------------------------------------------------------
@@ -68,19 +49,19 @@ _fractionX::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:17: void setBkgd(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:11: void setBkgd(void){
 ;	---------------------------------
 ; Function setBkgd
 ; ---------------------------------
 _setBkgd::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:19: set_bkg_data(0, bkgd_TILE_COUNT, bkgd_tiles);    
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:13: set_bkg_data(0, bkgd_TILE_COUNT, bkgd_tiles);    
 	ld	de, #_bkgd_tiles
 	push	de
-	ld	hl, #0x300
+	ld	hl, #0x600
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:20: set_bkg_palette(0,1,bkgd_palettes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:14: set_bkg_palette(0,1,bkgd_palettes);
 	ld	de, #_bkgd_palettes
 	push	de
 	xor	a, a
@@ -88,7 +69,7 @@ _setBkgd::
 	push	af
 	call	_set_bkg_palette
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:22: set_bkg_tiles(0, 0, 32, 18, bkgd_map_attributes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:16: set_bkg_tiles(0, 0, 32, 18, bkgd_map_attributes);
 	ld	bc, #_bkgd_map+0
 	push	bc
 	ld	hl, #0x1220
@@ -98,7 +79,7 @@ _setBkgd::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:24: set_bkg_tiles(0,0,32,18,bkgd_map);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:18: set_bkg_tiles(0,0,32,18,bkgd_map);
 	push	bc
 	ld	hl, #0x1220
 	push	hl
@@ -107,21 +88,21 @@ _setBkgd::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:25: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:19: }
 	ret
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:27: void setGhosty(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:21: void setGhosty(void){
 ;	---------------------------------
 ; Function setGhosty
 ; ---------------------------------
 _setGhosty::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:29: set_sprite_data(0, 4, ghostyTiles);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:23: set_sprite_data(0, 4, ghostyTiles);
 	ld	de, #_ghostyTiles
 	push	de
 	ld	hl, #0x400
 	push	hl
 	call	_set_sprite_data
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:30: set_sprite_palette(0,1,ghosty_palettes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:24: set_sprite_palette(0,1,ghosty_palettes);
 	ld	de, #_ghosty_palettes
 	push	de
 	xor	a, a
@@ -129,7 +110,7 @@ _setGhosty::
 	push	af
 	call	_set_sprite_palette
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:31: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:25: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
 	ld	hl, #_ghostyY
 	ld	c, (hl)
 	ld	hl, #_ghostyX
@@ -149,47 +130,13 @@ _setGhosty::
 	ld	d, c
 	xor	a, a
 	call	___move_metasprite
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:33: OBP0_REG=DMG_PALETTE(DMG_WHITE, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_BLACK);
-	ld	a, #0xd8
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:27: OBP0_REG=DMG_PALETTE(DMG_BLACK, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_WHITE);
+	ld	a, #0x1b
 	ldh	(_OBP0_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:34: }
-	ret
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:36: void applyGravity(void){
-;	---------------------------------
-; Function applyGravity
-; ---------------------------------
-_applyGravity::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:38: if(ghostyY<131){
-	ld	hl, #_ghostyY
-	ld	a, (hl+)
-	ld	c, a
-	ld	b, (hl)
-	ld	a, c
-	sub	a, #0x83
-	ld	a, b
-	rla
-	ccf
-	rra
-	sbc	a, #0x80
-	ret	NC
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:39: ghostyY += 1;
-	dec	hl
-	inc	bc
-	ld	a, c
-	ld	(hl+), a
-	ld	(hl), b
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:41: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:28: }
 	ret
 	.area _CODE
 	.area _INITIALIZER
 __xinit__spriteSize:
 	.db #0x08	; 8
-__xinit__pcFacing:
-	.db #0x01	; 1
-__xinit__ghostyX:
-	.dw #0x0050
-__xinit__ghostyY:
-	.dw #0x0050
-__xinit__fractionX:
-	.dw #0x0000
 	.area _CABS (ABS)
