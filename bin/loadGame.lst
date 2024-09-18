@@ -8,246 +8,260 @@
                                       8 ;--------------------------------------------------------
                                       9 ; Public variables in this module
                                      10 ;--------------------------------------------------------
-                                     11 	.globl _initrand
-                                     12 	.globl _bkgInterrupts
-                                     13 	.globl _set_sprite_palette
-                                     14 	.globl _set_bkg_palette
-                                     15 	.globl _set_sprite_data
-                                     16 	.globl _set_bkg_tiles
-                                     17 	.globl _set_bkg_data
-                                     18 	.globl _vsync
-                                     19 	.globl _set_interrupts
-                                     20 	.globl _add_LCD
-                                     21 	.globl _spriteSize
-                                     22 	.globl _setBkgd
-                                     23 	.globl _setGhosty
-                                     24 	.globl _setBone
-                                     25 	.globl _smallDelay
-                                     26 	.globl _gameFirstLoad
-                                     27 ;--------------------------------------------------------
-                                     28 ; special function registers
+                                     11 	.globl _printf
+                                     12 	.globl _initrand
+                                     13 	.globl _bkgInterrupts
+                                     14 	.globl _set_sprite_palette
+                                     15 	.globl _set_bkg_palette
+                                     16 	.globl _set_sprite_data
+                                     17 	.globl _set_bkg_tiles
+                                     18 	.globl _set_bkg_data
+                                     19 	.globl _vsync
+                                     20 	.globl _set_interrupts
+                                     21 	.globl _waitpad
+                                     22 	.globl _add_LCD
+                                     23 	.globl _spriteSize
+                                     24 	.globl _setBkgd
+                                     25 	.globl _setGhosty
+                                     26 	.globl _setBone
+                                     27 	.globl _smallDelay
+                                     28 	.globl _gameFirstLoad
                                      29 ;--------------------------------------------------------
-                                     30 ;--------------------------------------------------------
-                                     31 ; ram data
+                                     30 ; special function registers
+                                     31 ;--------------------------------------------------------
                                      32 ;--------------------------------------------------------
-                                     33 	.area _DATA
+                                     33 ; ram data
                                      34 ;--------------------------------------------------------
-                                     35 ; ram data
+                                     35 	.area _DATA
                                      36 ;--------------------------------------------------------
-                                     37 	.area _INITIALIZED
-    00000000                         38 _spriteSize::
-    00000000                         39 	.ds 1
-                                     40 ;--------------------------------------------------------
-                                     41 ; absolute external ram data
+                                     37 ; ram data
+                                     38 ;--------------------------------------------------------
+                                     39 	.area _INITIALIZED
+    00000000                         40 _spriteSize::
+    00000000                         41 	.ds 1
                                      42 ;--------------------------------------------------------
-                                     43 	.area _DABS (ABS)
+                                     43 ; absolute external ram data
                                      44 ;--------------------------------------------------------
-                                     45 ; global & static initialisations
+                                     45 	.area _DABS (ABS)
                                      46 ;--------------------------------------------------------
-                                     47 	.area _HOME
-                                     48 	.area _GSINIT
-                                     49 	.area _GSFINAL
+                                     47 ; global & static initialisations
+                                     48 ;--------------------------------------------------------
+                                     49 	.area _HOME
                                      50 	.area _GSINIT
-                                     51 ;--------------------------------------------------------
-                                     52 ; Home
+                                     51 	.area _GSFINAL
+                                     52 	.area _GSINIT
                                      53 ;--------------------------------------------------------
-                                     54 	.area _HOME
-                                     55 	.area _HOME
-                                     56 ;--------------------------------------------------------
-                                     57 ; code
+                                     54 ; Home
+                                     55 ;--------------------------------------------------------
+                                     56 	.area _HOME
+                                     57 	.area _HOME
                                      58 ;--------------------------------------------------------
-                                     59 	.area _CODE
-                                     60 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:15: void setBkgd(void){
-                                     61 ;	---------------------------------
-                                     62 ; Function setBkgd
-                                     63 ; ---------------------------------
-    00000000                         64 _setBkgd::
-                                     65 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:17: set_bkg_data(0, bkgd_TILE_COUNT, bkgd_tiles);    
-    00000000 11r00r00         [12]   66 	ld	de, #_bkgd_tiles
-    00000003 D5               [16]   67 	push	de
-    00000004 21 00 06         [12]   68 	ld	hl, #0x600
-    00000007 E5               [16]   69 	push	hl
-    00000008 CDr00r00         [24]   70 	call	_set_bkg_data
-    0000000B E8 04            [16]   71 	add	sp, #4
-                                     72 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:18: set_bkg_palette(0,1,bkgd_palettes);
-    0000000D 11r00r00         [12]   73 	ld	de, #_bkgd_palettes
-    00000010 D5               [16]   74 	push	de
-    00000011 AF               [ 4]   75 	xor	a, a
-    00000012 3C               [ 4]   76 	inc	a
-    00000013 F5               [16]   77 	push	af
-    00000014 CDr00r00         [24]   78 	call	_set_bkg_palette
-    00000017 E8 04            [16]   79 	add	sp, #4
-                                     80 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:20: set_bkg_tiles(0, 0, 32, 18, bkgd_map_attributes);
-    00000019 01r00r00         [12]   81 	ld	bc, #_bkgd_map+0
-    0000001C C5               [16]   82 	push	bc
-    0000001D 21 20 12         [12]   83 	ld	hl, #0x1220
-    00000020 E5               [16]   84 	push	hl
-    00000021 AF               [ 4]   85 	xor	a, a
-    00000022 0F               [ 4]   86 	rrca
-    00000023 F5               [16]   87 	push	af
-    00000024 CDr00r00         [24]   88 	call	_set_bkg_tiles
-    00000027 E8 06            [16]   89 	add	sp, #6
-                                     90 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:22: set_bkg_tiles(0,0,32,18,bkgd_map);
-    00000029 C5               [16]   91 	push	bc
-    0000002A 21 20 12         [12]   92 	ld	hl, #0x1220
-    0000002D E5               [16]   93 	push	hl
-    0000002E AF               [ 4]   94 	xor	a, a
-    0000002F 0F               [ 4]   95 	rrca
-    00000030 F5               [16]   96 	push	af
-    00000031 CDr00r00         [24]   97 	call	_set_bkg_tiles
-    00000034 E8 06            [16]   98 	add	sp, #6
-                                     99 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:23: }
-    00000036 C9               [16]  100 	ret
-                                    101 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:25: void setGhosty(void){
-                                    102 ;	---------------------------------
-                                    103 ; Function setGhosty
-                                    104 ; ---------------------------------
-    00000037                        105 _setGhosty::
-                                    106 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:27: set_sprite_data(0, 4, ghostyTiles);
-    00000037 11r00r00         [12]  107 	ld	de, #_ghostyTiles
-    0000003A D5               [16]  108 	push	de
-    0000003B 21 00 04         [12]  109 	ld	hl, #0x400
-    0000003E E5               [16]  110 	push	hl
-    0000003F CDr00r00         [24]  111 	call	_set_sprite_data
-    00000042 E8 04            [16]  112 	add	sp, #4
-                                    113 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:28: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
-    00000044 21r00r00         [12]  114 	ld	hl, #_ghostyY
-    00000047 4E               [ 8]  115 	ld	c, (hl)
-    00000048 21r00r00         [12]  116 	ld	hl, #_ghostyX
-    0000004B 5E               [ 8]  117 	ld	e, (hl)
-                                    118 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:160: __current_metasprite = metasprite;
-    0000004C 21r00r00         [12]  119 	ld	hl, #___current_metasprite
-    0000004F 3Er00            [ 8]  120 	ld	a, #<(_ghostyMS)
-    00000051 22               [ 8]  121 	ld	(hl+), a
-    00000052 36s00            [12]  122 	ld	(hl), #>(_ghostyMS)
-                                    123 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:161: __current_base_tile = base_tile;
-    00000054 21r00r00         [12]  124 	ld	hl, #___current_base_tile
-    00000057 36 00            [12]  125 	ld	(hl), #0x00
-                                    126 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:162: __current_base_prop = base_prop;
-    00000059 21r00r00         [12]  127 	ld	hl, #___current_base_prop
-    0000005C 36 00            [12]  128 	ld	(hl), #0x00
-                                    129 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:163: return __move_metasprite(base_sprite, (y << 8) | (uint8_t)x);
-    0000005E 51               [ 4]  130 	ld	d, c
-    0000005F AF               [ 4]  131 	xor	a, a
-    00000060 CDr00r00         [24]  132 	call	___move_metasprite
-                                    133 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:30: OBP0_REG=DMG_PALETTE(DMG_BLACK, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_WHITE);
-    00000063 3E 1B            [ 8]  134 	ld	a, #0x1b
-    00000065 E0r00            [12]  135 	ldh	(_OBP0_REG + 0), a
-                                    136 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:31: }
-    00000067 C9               [16]  137 	ret
-                                    138 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:33: void setBone(void){
-                                    139 ;	---------------------------------
-                                    140 ; Function setBone
-                                    141 ; ---------------------------------
-    00000068                        142 _setBone::
-                                    143 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:35: set_sprite_data(4,2,boneTile);
-    00000068 11r00r00         [12]  144 	ld	de, #_boneTile
-    0000006B D5               [16]  145 	push	de
-    0000006C 21 04 02         [12]  146 	ld	hl, #0x204
-    0000006F E5               [16]  147 	push	hl
-    00000070 CDr00r00         [24]  148 	call	_set_sprite_data
-    00000073 E8 04            [16]  149 	add	sp, #4
-                                    150 ;c:\users\wsajj\gbdev\gbdk\include\gb\gb.h:1934: shadow_OAM[nb].prop=prop;
-    00000075 21r13r00         [12]  151 	ld	hl, #(_shadow_OAM + 19)
-    00000078 36 00            [12]  152 	ld	(hl), #0x00
-                                    153 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:36: set_sprite_prop(4,0x00);
-                                    154 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:37: }
-    0000007A C9               [16]  155 	ret
-                                    156 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:39: void smallDelay(uint8_t numloops){
-                                    157 ;	---------------------------------
-                                    158 ; Function smallDelay
-                                    159 ; ---------------------------------
-    0000007B                        160 _smallDelay::
-    0000007B 4F               [ 4]  161 	ld	c, a
-                                    162 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:42: for(i = 0; i < numloops; i++){
-    0000007C 06 00            [ 8]  163 	ld	b, #0x00
-    0000007E                        164 00103$:
-    0000007E 78               [ 4]  165 	ld	a, b
-    0000007F 91               [ 4]  166 	sub	a, c
-    00000080 D0               [20]  167 	ret	NC
-                                    168 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:43: vsync();
-    00000081 CDr00r00         [24]  169 	call	_vsync
-                                    170 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:42: for(i = 0; i < numloops; i++){
-    00000084 04               [ 4]  171 	inc	b
-                                    172 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:45: }
-    00000085 18 F7            [12]  173 	jr	00103$
-                                    174 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:48: void gameFirstLoad(void){
-                                    175 ;	---------------------------------
-                                    176 ; Function gameFirstLoad
-                                    177 ; ---------------------------------
-    00000087                        178 _gameFirstLoad::
-                                    179 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:50: NR52_REG = 0x80;
-    00000087 3E 80            [ 8]  180 	ld	a, #0x80
-    00000089 E0r00            [12]  181 	ldh	(_NR52_REG + 0), a
-                                    182 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:51: NR50_REG = 0x77; 
-    0000008B 3E 77            [ 8]  183 	ld	a, #0x77
-    0000008D E0r00            [12]  184 	ldh	(_NR50_REG + 0), a
-                                    185 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:52: NR51_REG = 0xFF;
-    0000008F 3E FF            [ 8]  186 	ld	a, #0xff
-    00000091 E0r00            [12]  187 	ldh	(_NR51_REG + 0), a
-                                    188 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:54: SHOW_BKG;
-    00000093 F0r00            [12]  189 	ldh	a, (_LCDC_REG + 0)
-    00000095 F6 01            [ 8]  190 	or	a, #0x01
-    00000097 E0r00            [12]  191 	ldh	(_LCDC_REG + 0), a
-                                    192 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:55: SHOW_SPRITES;
-    00000099 F0r00            [12]  193 	ldh	a, (_LCDC_REG + 0)
-    0000009B F6 02            [ 8]  194 	or	a, #0x02
-    0000009D E0r00            [12]  195 	ldh	(_LCDC_REG + 0), a
-                                    196 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:56: DISPLAY_ON;
-    0000009F F0r00            [12]  197 	ldh	a, (_LCDC_REG + 0)
-    000000A1 F6 80            [ 8]  198 	or	a, #0x80
-    000000A3 E0r00            [12]  199 	ldh	(_LCDC_REG + 0), a
-                                    200 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:58: uint16_t seed = LY_REG;
-    000000A5 F0r00            [12]  201 	ldh	a, (_LY_REG + 0)
-    000000A7 4F               [ 4]  202 	ld	c, a
-                                    203 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:59: seed |= (uint16_t)DIV_REG << 8;
-    000000A8 F0r00            [12]  204 	ldh	a, (_DIV_REG + 0)
-    000000AA 47               [ 4]  205 	ld	b, a
-                                    206 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:60: initrand(seed);
-    000000AB C5               [16]  207 	push	bc
-    000000AC CDr00r00         [24]  208 	call	_initrand
-    000000AF E1               [12]  209 	pop	hl
-                                    210 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:62: STAT_REG |= 0x40;
-    000000B0 F0r00            [12]  211 	ldh	a, (_STAT_REG + 0)
-    000000B2 F6 40            [ 8]  212 	or	a, #0x40
-    000000B4 E0r00            [12]  213 	ldh	(_STAT_REG + 0), a
-                                    214 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:63: LYC_REG=0;
-    000000B6 AF               [ 4]  215 	xor	a, a
-    000000B7 E0r00            [12]  216 	ldh	(_LYC_REG + 0), a
-                                    217 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:65: add_LCD(bkgInterrupts);
-    000000B9 11r00r00         [12]  218 	ld	de, #_bkgInterrupts
-    000000BC CDr00r00         [24]  219 	call	_add_LCD
-                                    220 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:66: set_interrupts(LCD_IFLAG | VBL_IFLAG);
-    000000BF 3E 03            [ 8]  221 	ld	a, #0x03
-    000000C1 CDr00r00         [24]  222 	call	_set_interrupts
-                                    223 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:69: set_sprite_palette(0,1,ghosty_palettes);
-    000000C4 11r00r00         [12]  224 	ld	de, #_ghosty_palettes
-    000000C7 D5               [16]  225 	push	de
-    000000C8 AF               [ 4]  226 	xor	a, a
-    000000C9 3C               [ 4]  227 	inc	a
-    000000CA F5               [16]  228 	push	af
-    000000CB CDr00r00         [24]  229 	call	_set_sprite_palette
-    000000CE E8 04            [16]  230 	add	sp, #4
-                                    231 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:70: set_bkg_palette(0,1,bkgd_palettes);
-    000000D0 11r00r00         [12]  232 	ld	de, #_bkgd_palettes
-    000000D3 D5               [16]  233 	push	de
-    000000D4 3E 01            [ 8]  234 	ld	a, #0x01
-    000000D6 F5               [16]  235 	push	af
-    000000D7 33               [ 8]  236 	inc	sp
-    000000D8 AF               [ 4]  237 	xor	a, a
-    000000D9 F5               [16]  238 	push	af
-    000000DA 33               [ 8]  239 	inc	sp
-    000000DB CDr00r00         [24]  240 	call	_set_bkg_palette
-    000000DE E8 04            [16]  241 	add	sp, #4
-                                    242 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:71: setBkgd();
-    000000E0 CDr00r00         [24]  243 	call	_setBkgd
-                                    244 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:72: setGhosty();
-    000000E3 CDr37r00         [24]  245 	call	_setGhosty
-                                    246 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:73: setBone();
-                                    247 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:74: }
-    000000E6 C3r68r00         [16]  248 	jp	_setBone
-                                    249 	.area _CODE
-                                    250 	.area _INITIALIZER
-    00000000                        251 __xinit__spriteSize:
-    00000000 08                     252 	.db #0x08	; 8
-                                    253 	.area _CABS (ABS)
+                                     59 ; code
+                                     60 ;--------------------------------------------------------
+                                     61 	.area _CODE
+                                     62 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:15: void setBkgd(void){
+                                     63 ;	---------------------------------
+                                     64 ; Function setBkgd
+                                     65 ; ---------------------------------
+    00000000                         66 _setBkgd::
+                                     67 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:17: set_bkg_data(0, bkgd_TILE_COUNT, bkgd_tiles);    
+    00000000 11r00r00         [12]   68 	ld	de, #_bkgd_tiles
+    00000003 D5               [16]   69 	push	de
+    00000004 21 00 06         [12]   70 	ld	hl, #0x600
+    00000007 E5               [16]   71 	push	hl
+    00000008 CDr00r00         [24]   72 	call	_set_bkg_data
+    0000000B E8 04            [16]   73 	add	sp, #4
+                                     74 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:18: set_bkg_palette(0,1,bkgd_palettes);
+    0000000D 11r00r00         [12]   75 	ld	de, #_bkgd_palettes
+    00000010 D5               [16]   76 	push	de
+    00000011 AF               [ 4]   77 	xor	a, a
+    00000012 3C               [ 4]   78 	inc	a
+    00000013 F5               [16]   79 	push	af
+    00000014 CDr00r00         [24]   80 	call	_set_bkg_palette
+    00000017 E8 04            [16]   81 	add	sp, #4
+                                     82 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:20: set_bkg_tiles(0, 0, 32, 18, bkgd_map_attributes);
+    00000019 01r00r00         [12]   83 	ld	bc, #_bkgd_map+0
+    0000001C C5               [16]   84 	push	bc
+    0000001D 21 20 12         [12]   85 	ld	hl, #0x1220
+    00000020 E5               [16]   86 	push	hl
+    00000021 AF               [ 4]   87 	xor	a, a
+    00000022 0F               [ 4]   88 	rrca
+    00000023 F5               [16]   89 	push	af
+    00000024 CDr00r00         [24]   90 	call	_set_bkg_tiles
+    00000027 E8 06            [16]   91 	add	sp, #6
+                                     92 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:22: set_bkg_tiles(0,0,32,18,bkgd_map);
+    00000029 C5               [16]   93 	push	bc
+    0000002A 21 20 12         [12]   94 	ld	hl, #0x1220
+    0000002D E5               [16]   95 	push	hl
+    0000002E AF               [ 4]   96 	xor	a, a
+    0000002F 0F               [ 4]   97 	rrca
+    00000030 F5               [16]   98 	push	af
+    00000031 CDr00r00         [24]   99 	call	_set_bkg_tiles
+    00000034 E8 06            [16]  100 	add	sp, #6
+                                    101 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:23: }
+    00000036 C9               [16]  102 	ret
+                                    103 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:25: void setGhosty(void){
+                                    104 ;	---------------------------------
+                                    105 ; Function setGhosty
+                                    106 ; ---------------------------------
+    00000037                        107 _setGhosty::
+                                    108 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:27: set_sprite_data(0, 4, ghostyTiles);
+    00000037 11r00r00         [12]  109 	ld	de, #_ghostyTiles
+    0000003A D5               [16]  110 	push	de
+    0000003B 21 00 04         [12]  111 	ld	hl, #0x400
+    0000003E E5               [16]  112 	push	hl
+    0000003F CDr00r00         [24]  113 	call	_set_sprite_data
+    00000042 E8 04            [16]  114 	add	sp, #4
+                                    115 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:28: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+    00000044 21r00r00         [12]  116 	ld	hl, #_ghostyY
+    00000047 4E               [ 8]  117 	ld	c, (hl)
+    00000048 21r00r00         [12]  118 	ld	hl, #_ghostyX
+    0000004B 5E               [ 8]  119 	ld	e, (hl)
+                                    120 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:160: __current_metasprite = metasprite;
+    0000004C 21r00r00         [12]  121 	ld	hl, #___current_metasprite
+    0000004F 3Er00            [ 8]  122 	ld	a, #<(_ghostyMS)
+    00000051 22               [ 8]  123 	ld	(hl+), a
+    00000052 36s00            [12]  124 	ld	(hl), #>(_ghostyMS)
+                                    125 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:161: __current_base_tile = base_tile;
+    00000054 21r00r00         [12]  126 	ld	hl, #___current_base_tile
+    00000057 36 00            [12]  127 	ld	(hl), #0x00
+                                    128 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:162: __current_base_prop = base_prop;
+    00000059 21r00r00         [12]  129 	ld	hl, #___current_base_prop
+    0000005C 36 00            [12]  130 	ld	(hl), #0x00
+                                    131 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:163: return __move_metasprite(base_sprite, (y << 8) | (uint8_t)x);
+    0000005E 51               [ 4]  132 	ld	d, c
+    0000005F AF               [ 4]  133 	xor	a, a
+    00000060 CDr00r00         [24]  134 	call	___move_metasprite
+                                    135 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:30: OBP0_REG=DMG_PALETTE(DMG_BLACK, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_WHITE);
+    00000063 3E 1B            [ 8]  136 	ld	a, #0x1b
+    00000065 E0r00            [12]  137 	ldh	(_OBP0_REG + 0), a
+                                    138 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:31: }
+    00000067 C9               [16]  139 	ret
+                                    140 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:33: void setBone(void){
+                                    141 ;	---------------------------------
+                                    142 ; Function setBone
+                                    143 ; ---------------------------------
+    00000068                        144 _setBone::
+                                    145 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:35: set_sprite_data(4,2,boneTile);
+    00000068 11r00r00         [12]  146 	ld	de, #_boneTile
+    0000006B D5               [16]  147 	push	de
+    0000006C 21 04 02         [12]  148 	ld	hl, #0x204
+    0000006F E5               [16]  149 	push	hl
+    00000070 CDr00r00         [24]  150 	call	_set_sprite_data
+    00000073 E8 04            [16]  151 	add	sp, #4
+                                    152 ;c:\users\wsajj\gbdev\gbdk\include\gb\gb.h:1934: shadow_OAM[nb].prop=prop;
+    00000075 21r13r00         [12]  153 	ld	hl, #(_shadow_OAM + 19)
+    00000078 36 00            [12]  154 	ld	(hl), #0x00
+                                    155 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:36: set_sprite_prop(4,0x00);
+                                    156 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:37: }
+    0000007A C9               [16]  157 	ret
+                                    158 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:39: void smallDelay(uint8_t numloops){
+                                    159 ;	---------------------------------
+                                    160 ; Function smallDelay
+                                    161 ; ---------------------------------
+    0000007B                        162 _smallDelay::
+    0000007B 4F               [ 4]  163 	ld	c, a
+                                    164 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:42: for(i = 0; i < numloops; i++){
+    0000007C 06 00            [ 8]  165 	ld	b, #0x00
+    0000007E                        166 00103$:
+    0000007E 78               [ 4]  167 	ld	a, b
+    0000007F 91               [ 4]  168 	sub	a, c
+    00000080 D0               [20]  169 	ret	NC
+                                    170 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:43: vsync();
+    00000081 CDr00r00         [24]  171 	call	_vsync
+                                    172 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:42: for(i = 0; i < numloops; i++){
+    00000084 04               [ 4]  173 	inc	b
+                                    174 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:45: }
+    00000085 18 F7            [12]  175 	jr	00103$
+                                    176 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:48: void gameFirstLoad(void){
+                                    177 ;	---------------------------------
+                                    178 ; Function gameFirstLoad
+                                    179 ; ---------------------------------
+    00000087                        180 _gameFirstLoad::
+                                    181 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:50: NR52_REG = 0x80;
+    00000087 3E 80            [ 8]  182 	ld	a, #0x80
+    00000089 E0r00            [12]  183 	ldh	(_NR52_REG + 0), a
+                                    184 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:51: NR50_REG = 0x77; 
+    0000008B 3E 77            [ 8]  185 	ld	a, #0x77
+    0000008D E0r00            [12]  186 	ldh	(_NR50_REG + 0), a
+                                    187 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:52: NR51_REG = 0xFF;
+    0000008F 3E FF            [ 8]  188 	ld	a, #0xff
+    00000091 E0r00            [12]  189 	ldh	(_NR51_REG + 0), a
+                                    190 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:54: SHOW_BKG;
+    00000093 F0r00            [12]  191 	ldh	a, (_LCDC_REG + 0)
+    00000095 F6 01            [ 8]  192 	or	a, #0x01
+    00000097 E0r00            [12]  193 	ldh	(_LCDC_REG + 0), a
+                                    194 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:55: SHOW_SPRITES;
+    00000099 F0r00            [12]  195 	ldh	a, (_LCDC_REG + 0)
+    0000009B F6 02            [ 8]  196 	or	a, #0x02
+    0000009D E0r00            [12]  197 	ldh	(_LCDC_REG + 0), a
+                                    198 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:56: DISPLAY_ON;
+    0000009F F0r00            [12]  199 	ldh	a, (_LCDC_REG + 0)
+    000000A1 F6 80            [ 8]  200 	or	a, #0x80
+    000000A3 E0r00            [12]  201 	ldh	(_LCDC_REG + 0), a
+                                    202 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:58: printf("PRESS START!");
+    000000A5 11rF6r00         [12]  203 	ld	de, #___str_0
+    000000A8 D5               [16]  204 	push	de
+    000000A9 CDr00r00         [24]  205 	call	_printf
+    000000AC E1               [12]  206 	pop	hl
+                                    207 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:59: waitpad(J_START);
+    000000AD 3E 80            [ 8]  208 	ld	a, #0x80
+    000000AF CDr00r00         [24]  209 	call	_waitpad
+                                    210 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:60: uint16_t seed = LY_REG;
+    000000B2 F0r00            [12]  211 	ldh	a, (_LY_REG + 0)
+    000000B4 4F               [ 4]  212 	ld	c, a
+                                    213 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:61: seed |= (uint16_t)DIV_REG << 8;
+    000000B5 F0r00            [12]  214 	ldh	a, (_DIV_REG + 0)
+    000000B7 47               [ 4]  215 	ld	b, a
+                                    216 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:62: initrand(seed);
+    000000B8 C5               [16]  217 	push	bc
+    000000B9 CDr00r00         [24]  218 	call	_initrand
+    000000BC E1               [12]  219 	pop	hl
+                                    220 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:64: STAT_REG |= 0x40;
+    000000BD F0r00            [12]  221 	ldh	a, (_STAT_REG + 0)
+    000000BF F6 40            [ 8]  222 	or	a, #0x40
+    000000C1 E0r00            [12]  223 	ldh	(_STAT_REG + 0), a
+                                    224 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:65: LYC_REG=0;
+    000000C3 AF               [ 4]  225 	xor	a, a
+    000000C4 E0r00            [12]  226 	ldh	(_LYC_REG + 0), a
+                                    227 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:67: add_LCD(bkgInterrupts);
+    000000C6 11r00r00         [12]  228 	ld	de, #_bkgInterrupts
+    000000C9 CDr00r00         [24]  229 	call	_add_LCD
+                                    230 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:68: set_interrupts(LCD_IFLAG | VBL_IFLAG);
+    000000CC 3E 03            [ 8]  231 	ld	a, #0x03
+    000000CE CDr00r00         [24]  232 	call	_set_interrupts
+                                    233 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:71: set_sprite_palette(0,1,ghosty_palettes);
+    000000D1 11r00r00         [12]  234 	ld	de, #_ghosty_palettes
+    000000D4 D5               [16]  235 	push	de
+    000000D5 AF               [ 4]  236 	xor	a, a
+    000000D6 3C               [ 4]  237 	inc	a
+    000000D7 F5               [16]  238 	push	af
+    000000D8 CDr00r00         [24]  239 	call	_set_sprite_palette
+    000000DB E8 04            [16]  240 	add	sp, #4
+                                    241 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:72: set_bkg_palette(0,1,bkgd_palettes);
+    000000DD 11r00r00         [12]  242 	ld	de, #_bkgd_palettes
+    000000E0 D5               [16]  243 	push	de
+    000000E1 3E 01            [ 8]  244 	ld	a, #0x01
+    000000E3 F5               [16]  245 	push	af
+    000000E4 33               [ 8]  246 	inc	sp
+    000000E5 AF               [ 4]  247 	xor	a, a
+    000000E6 F5               [16]  248 	push	af
+    000000E7 33               [ 8]  249 	inc	sp
+    000000E8 CDr00r00         [24]  250 	call	_set_bkg_palette
+    000000EB E8 04            [16]  251 	add	sp, #4
+                                    252 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:73: setBkgd();
+    000000ED CDr00r00         [24]  253 	call	_setBkgd
+                                    254 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:74: setGhosty();
+    000000F0 CDr37r00         [24]  255 	call	_setGhosty
+                                    256 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:75: setBone();
+                                    257 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:76: }
+    000000F3 C3r68r00         [16]  258 	jp	_setBone
+    000000F6                        259 ___str_0:
+    000000F6 50 52 45 53 53 20 53   260 	.ascii "PRESS START!"
+             54 41 52 54 21
+    00000102 00                     261 	.db 0x00
+                                    262 	.area _CODE
+                                    263 	.area _INITIALIZER
+    00000000                        264 __xinit__spriteSize:
+    00000000 08                     265 	.db #0x08	; 8
+                                    266 	.area _CABS (ABS)

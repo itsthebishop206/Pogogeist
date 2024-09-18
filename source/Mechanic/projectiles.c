@@ -12,6 +12,8 @@
 #define FRAME_PER_MOVE 2
 #define MAX_BONE 6
 
+#pragma disable_warning 115
+
 #pragma region notes
 // I NEED AN ARRAY OF PROJECTILE STRUCTURES THAT INCLUDES:
 // projectile X and Y values
@@ -63,8 +65,8 @@ void initBoneTable(void){
 }
 #pragma endregion
 
-//i need a program that will choose between 2 x coordinates and 4 y coordinates
+
 uint8_t choose4(void){
         uint8_t r = ((uint8_t)rand()) % (uint8_t)4;
-        printf("%u",r);
+        return r;
 }

@@ -8,7 +8,6 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _printf
 	.globl _rand
 	.globl _pSpd
 	.globl _pSpawn
@@ -58,18 +57,18 @@ _pSpd::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:50: void initBoneTable(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:52: void initBoneTable(void){
 ;	---------------------------------
 ; Function initBoneTable
 ; ---------------------------------
 _initBoneTable::
 	ld	c, #0x00
 00103$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:54: for(uint8_t b; b < MAX_BONE; b++){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:56: for(uint8_t b; b < MAX_BONE; b++){
 	ld	a, c
 	sub	a, #0x06
 	ret	NC
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:56: bones[b].metasprite = boneMS;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:58: bones[b].metasprite = boneMS;
 	ld	b, #0x00
 	ld	l, c
 	ld	h, b
@@ -87,7 +86,7 @@ _initBoneTable::
 	ld	a, #<(_boneMS)
 	ld	(hl+), a
 	ld	(hl), #>(_boneMS)
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:57: bones[b].active = 1;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:59: bones[b].active = 1;
 	ld	l, e
 ;	spillPairReg hl
 ;	spillPairReg hl
@@ -98,43 +97,33 @@ _initBoneTable::
 	inc	hl
 	inc	hl
 	ld	(hl), #0x01
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:58: bones[b].x = pXValue;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:60: bones[b].x = pXValue;
 	ld	a, (#_pXValue)
 	ld	(de), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:59: bones[b].x = pYValue;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:61: bones[b].x = pYValue;
 	ld	a, (#_pYValue)
 	ld	(de), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:60: bones[b].speed = pSpd;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:62: bones[b].speed = pSpd;
 	inc	de
 	inc	de
 	ld	a, (#_pSpd)
 	ld	(de), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:54: for(uint8_t b; b < MAX_BONE; b++){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:56: for(uint8_t b; b < MAX_BONE; b++){
 	inc	c
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:63: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:65: }
 	jr	00103$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:67: uint8_t choose4(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:69: uint8_t choose4(void){
 ;	---------------------------------
 ; Function choose4
 ; ---------------------------------
 _choose4::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:68: uint8_t r = ((uint8_t)rand()) % (uint8_t)4;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:70: uint8_t r = ((uint8_t)rand()) % (uint8_t)4;
 	call	_rand
 	ld	a, e
 	and	a, #0x03
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:69: printf("%u",r);
-	ld	c, a
-	ld	b, #0x00
-	push	bc
-	ld	de, #___str_0
-	push	de
-	call	_printf
-	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:70: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:71: return r;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:72: }
 	ret
-___str_0:
-	.ascii "%u"
-	.db 0x00
 	.area _CODE
 	.area _INITIALIZER
 __xinit__pXValue:

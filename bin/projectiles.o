@@ -1,12 +1,11 @@
 XL4
-H 9 areas B global symbols
+H 9 areas A global symbols
 M projectiles
 O -msm83
 S _rand Ref00000000
 S .__.ABS. Def00000000
 S _boneMS Ref00000000
-S _printf Ref00000000
-A _CODE size 4D flags 0 addr 0
+A _CODE size 3D flags 0 addr 0
 S _choose4 Def00000036
 S _initBoneTable Def00000000
 A _DATA size 24 flags 0 addr 0
@@ -62,14 +61,8 @@ T 32 00 00 00 12 0C 18 CC
 R 00 00 00 00
 T 36 00 00 00
 R 00 00 00 00
-T 36 00 00 00 CD 00 00 7B E6 03 4F 06 00 C5 11
+T 36 00 00 00 CD 00 00 7B E6 03 C9
 R 00 00 00 00 02 05 00 00
-T 41 00 00 00 4A 00 D5 CD 00 00 E8 04 C9
-R 00 00 00 00 00 04 00 00 02 08 03 00
-T 4A 00 00 00
-R 00 00 00 00
-T 4A 00 00 00 25 75 00
-R 00 00 00 00
 T 00 00 00 00
 R 00 00 07 00
 T 00 00 00 00 00

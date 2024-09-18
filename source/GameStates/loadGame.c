@@ -55,6 +55,7 @@ void gameFirstLoad(void){
     SHOW_SPRITES;
     DISPLAY_ON;
 
+    waitpad(J_START);
     uint16_t seed = LY_REG;
     seed |= (uint16_t)DIV_REG << 8;
     initrand(seed);

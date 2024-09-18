@@ -11,6 +11,7 @@ mkdir dist
 SET GBDK_HOME=C:/users/wsajj/GBdev/gbdk
 
 SET LCC_COMPILE_BASE=%GBDK_HOME%\bin\lcc -Iheaders -Wa-l -Wl-m -Wl-j -DUSE_SFR_FOR_REG
+
 SET LCC_COMPILE=%LCC_COMPILE_BASE% -c -o
 
 :: Required to concatenate the "COMPILE_OBJECT_FILES" via a for loop
