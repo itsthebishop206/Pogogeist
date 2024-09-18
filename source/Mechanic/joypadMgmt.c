@@ -5,8 +5,8 @@
 #include <gb/metasprites.h>
 #include <loadGame.h>
 
-#define PIXEL_SHIFT 8
-#define SPD_CHANGE_X 8
+#define PIXEL_SHIFT 8 // bit shift amount
+#define SPD_CHANGE_X 8 // in 16.8 fixed point, this becomes 0.03 pixels/frame after all the math
 #define FLOOR 132
 #define MAX_SPD 2040
 
@@ -53,7 +53,6 @@ void joypadMgr(void){
 
     if(joypadCurrent & J_LEFT){
         
-        //ghostySpeedX = -128;
         ghostySpeedX -= SPD_CHANGE_X;
 
         if(pcFacing==1){
@@ -85,14 +84,14 @@ void joypadMgr(void){
         }
     }
 
-    fractionX += ghostySpeedX;
+    fractionX += ghostySpeedX; // adds speed (which we have as 8 or -8) to the fractional value each frame. we are gaining "8" speed a frame, which becomes 0.03 pixels per frame
     fractionY += ghostySpeedY;
 
-    while(fractionX >= (1<<PIXEL_SHIFT)){
+    while(fractionX >= (1<<PIXEL_SHIFT)){ // shifting the bits left by 8 multiplies by 2^8 (256), so as long as fractionX is greater than or equal to 256, move ghosty by one pixel
         ghostyX += 1;
-        fractionX -= (1<<PIXEL_SHIFT);
-    } 
-
+        fractionX -= (1<<PIXEL_SHIFT); // subtracts 256, which resets the fractional part to 0
+    }// however, ghostySpeed has been accumulating this entire time!! so eventually when you add speed to fraction it is greater than 256 which results in movement that is faster than one pixel per frame
+    // as of writing this i do not have a max speed set for X so it just increases infinitely. dont forget to do that
     while(fractionX <= -(1<<PIXEL_SHIFT)){
         ghostyX -=1;
         fractionX += (1<<PIXEL_SHIFT);
