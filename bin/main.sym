@@ -11,7 +11,7 @@ Symbol Table
     _joypadMgr                                                      ******** GX
   0 _main                                                           00000000 GR
     _scrollBkg                                                      ******** GX
-    _wait_vbl_done                                                  ******** GX
+    _vsync                                                          ******** GX
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]

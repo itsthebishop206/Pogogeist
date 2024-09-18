@@ -12,7 +12,7 @@
 	.globl _scrollBkg
 	.globl _joypadMgr
 	.globl _gameFirstLoad
-	.globl _wait_vbl_done
+	.globl _vsync
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -51,15 +51,15 @@
 _main::
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:13: gameFirstLoad();
 	call	_gameFirstLoad
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:16: while(1) {        
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:15: while(1) {        
 00102$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:18: joypadMgr();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:17: joypadMgr();
 	call	_joypadMgr
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:19: scrollBkg();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:18: scrollBkg();
 	call	_scrollBkg
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:21: wait_vbl_done();
-	call	_wait_vbl_done
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:23: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:20: vsync();
+	call	_vsync
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: }
 	jr	00102$
 	.area _CODE
 	.area _INITIALIZER

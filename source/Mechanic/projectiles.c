@@ -3,6 +3,10 @@
 #include <gb/metasprites.h>
 #include <bone.h>
 #include <projectile.h>
+#include <loadGame.h>
+#include <rand.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define FRAME_PER_SPAWN 5
 #define FRAME_PER_MOVE 2
@@ -21,6 +25,8 @@
 // then i need to fill the array with Projectiles
 #pragma endregion
 
+#pragma region variables
+
 uint8_t pXValue = 0;
 uint8_t pYValue = 0;
 uint8_t pSpawn = 0;
@@ -37,7 +43,10 @@ typedef struct{ // typedef lets you define your own identifiers. i am defining "
 } Projectile;
 
 Projectile bones[MAX_BONE];
+#pragma endregion
 
+#pragma region initBoneTable()
+// INITIALIZE BONE TABLE...
 void initBoneTable(void){
 
     // for loops repeat code a set number of times
@@ -52,4 +61,10 @@ void initBoneTable(void){
 
     }
 }
+#pragma endregion
 
+//i need a program that will choose between 2 x coordinates and 4 y coordinates
+uint8_t choose4(void){
+        uint8_t r = ((uint8_t)rand()) % (uint8_t)4;
+        printf("%u",r);
+}

@@ -12,7 +12,7 @@
                                      12 	.globl _scrollBkg
                                      13 	.globl _joypadMgr
                                      14 	.globl _gameFirstLoad
-                                     15 	.globl _wait_vbl_done
+                                     15 	.globl _vsync
                                      16 ;--------------------------------------------------------
                                      17 ; special function registers
                                      18 ;--------------------------------------------------------
@@ -51,15 +51,15 @@
     00000000                         51 _main::
                                      52 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:13: gameFirstLoad();
     00000000 CDr00r00         [24]   53 	call	_gameFirstLoad
-                                     54 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:16: while(1) {        
+                                     54 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:15: while(1) {        
     00000003                         55 00102$:
-                                     56 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:18: joypadMgr();
+                                     56 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:17: joypadMgr();
     00000003 CDr00r00         [24]   57 	call	_joypadMgr
-                                     58 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:19: scrollBkg();
+                                     58 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:18: scrollBkg();
     00000006 CDr00r00         [24]   59 	call	_scrollBkg
-                                     60 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:21: wait_vbl_done();
-    00000009 CDr00r00         [24]   61 	call	_wait_vbl_done
-                                     62 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:23: }
+                                     60 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:20: vsync();
+    00000009 CDr00r00         [24]   61 	call	_vsync
+                                     62 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: }
     0000000C 18 F5            [12]   63 	jr	00102$
                                      64 	.area _CODE
                                      65 	.area _INITIALIZER

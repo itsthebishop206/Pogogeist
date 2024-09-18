@@ -6,6 +6,9 @@
 #include <gb/metasprites.h>
 #include <ghosty.h>
 #include <bone.h>
+#include <rand.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 UBYTE spriteSize = 8;
 
@@ -33,6 +36,15 @@ void setBone(void){
   set_sprite_prop(4,0x00);
 }
 
+void smallDelay(uint8_t numloops){
+
+    uint8_t i;
+    for(i = 0; i < numloops; i++){
+        vsync();
+    }
+}
+
+
 void gameFirstLoad(void){
     
     NR52_REG = 0x80;
@@ -42,6 +54,10 @@ void gameFirstLoad(void){
     SHOW_BKG;
     SHOW_SPRITES;
     DISPLAY_ON;
+
+    uint16_t seed = LY_REG;
+    seed |= (uint16_t)DIV_REG << 8;
+    initrand(seed);
 
     STAT_REG |= 0x40;
     LYC_REG=0;
@@ -55,6 +71,4 @@ void gameFirstLoad(void){
     setBkgd();
     setGhosty();
     setBone();
-
-
 }
