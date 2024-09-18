@@ -1,20 +1,31 @@
+#pragma disable_warning 115
 #include <stdint.h>
 #include <gb/gb.h>
 #include <joypad.h>
 #include <ghosty.h>
 #include <gb/metasprites.h>
 #include <loadGame.h>
+#include <stdlib.h>
 
+#pragma region definitions
 #define PIXEL_SHIFT 8 // bit shift amount
 #define SPD_CHANGE_X 8 // in 16.8 fixed point, this becomes 0.03 pixels/frame after all the math
 #define FLOOR 132
-#define MAX_SPD 2040
+#define MAX_SPD_DOWN 2040
+#define MAX_SPD_UP -2040
+#define MAX_SPD_LEFT -1080
+#define MAX_SPD_RHGT 1080
+#define SCREEN_LEFT_BOUND 10
+#define SCREEN_RIGHT_BOUND 160
+#define SCREEN_TOP_BOUND 10
+#define SCREEN_BOT_BOUND 134
 
 int16_t ghostySpeedX, fractionX, fractionY = 0;
 int16_t ghostySpeedY = 1;
 uint8_t pcFacing = 1;
 int16_t ghostyX = 80, ghostyY = 80;
 uint16_t gravity = 1;
+#pragma endregion
 
 void joypadMgr(void){
 
@@ -27,8 +38,8 @@ void joypadMgr(void){
         counter++;
         ghostySpeedY += (gravity += counter);
 
-        if(ghostySpeedY > MAX_SPD){
-            ghostySpeedY = MAX_SPD;
+        if(ghostySpeedY > MAX_SPD_DOWN){
+            ghostySpeedY = MAX_SPD_DOWN;
             counter = 0;
             //gravity = 1;
         }
@@ -53,15 +64,20 @@ void joypadMgr(void){
 
     if(joypadCurrent & J_LEFT){
         
-        ghostySpeedX -= SPD_CHANGE_X;
+        if(ghostySpeedX > MAX_SPD_LEFT){
+            ghostySpeedX -= SPD_CHANGE_X;
+        }
 
-        if(pcFacing==1){
+        while(pcFacing!=0){
             pcFacing = 0;
-        }        
+        }
 
     } else if(joypadCurrent & J_RIGHT){
         
-        ghostySpeedX += SPD_CHANGE_X;
+        if(ghostySpeedX < MAX_SPD_RHGT){
+
+            ghostySpeedX += SPD_CHANGE_X;
+        }
 
         if(pcFacing==0){
             pcFacing = 1;
@@ -111,11 +127,30 @@ void joypadMgr(void){
         ghostyY = FLOOR;
     }
 
-    if(pcFacing==1){
-        move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+    if(ghostyX <= SCREEN_LEFT_BOUND){
+
+        if(ghostySpeedX < 0){            
+            
+            ghostySpeedX = ghostySpeedX >> 1;
+            ghostySpeedX = - ghostySpeedX;
+        }
     }
-    
+
+    if(ghostyX >= SCREEN_RIGHT_BOUND){
+
+        if(ghostySpeedX > 0){            
+            
+            // originally, this (and above) was written as ghostySpeedX = (-(ghostySpeedX/2)), but the compiler didnt like that.
+            // turns out gbdk does bit shifting (x >> 1 = x/2) before negation, so maybe the parantheses didnt matter?
+            // could also just be that too much was going on at once. however, it only threw the warning up for the right side of the screen. odd.
+            ghostySpeedX = ghostySpeedX >> 1;
+            ghostySpeedX = - ghostySpeedX;
+        }
+    }
+
     if(pcFacing==0){
         move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
+    } else {
+        move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
     }
 }

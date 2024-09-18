@@ -8,7 +8,6 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _printf
 	.globl _initrand
 	.globl _bkgInterrupts
 	.globl _set_sprite_palette
@@ -199,38 +198,33 @@ _gameFirstLoad::
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x80
 	ldh	(_LCDC_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:58: printf("PRESS START!");
-	ld	de, #___str_0
-	push	de
-	call	_printf
-	pop	hl
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:59: waitpad(J_START);
-	ld	a, #0x80
-	call	_waitpad
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:60: uint16_t seed = LY_REG;
-	ldh	a, (_LY_REG + 0)
-	ld	c, a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:61: seed |= (uint16_t)DIV_REG << 8;
-	ldh	a, (_DIV_REG + 0)
-	ld	b, a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:62: initrand(seed);
-	push	bc
-	call	_initrand
-	pop	hl
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:64: STAT_REG |= 0x40;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:58: STAT_REG |= 0x40;
 	ldh	a, (_STAT_REG + 0)
 	or	a, #0x40
 	ldh	(_STAT_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:65: LYC_REG=0;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:59: LYC_REG=0;
 	xor	a, a
 	ldh	(_LYC_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:67: add_LCD(bkgInterrupts);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:61: add_LCD(bkgInterrupts);
 	ld	de, #_bkgInterrupts
 	call	_add_LCD
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:68: set_interrupts(LCD_IFLAG | VBL_IFLAG);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:62: set_interrupts(LCD_IFLAG | VBL_IFLAG);
 	ld	a, #0x03
 	call	_set_interrupts
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:71: set_sprite_palette(0,1,ghosty_palettes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:65: waitpad(J_START);
+	ld	a, #0x80
+	call	_waitpad
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:66: uint16_t seed = LY_REG;
+	ldh	a, (_LY_REG + 0)
+	ld	c, a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:67: seed |= (uint16_t)DIV_REG << 8;
+	ldh	a, (_DIV_REG + 0)
+	ld	b, a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:68: initrand(seed);
+	push	bc
+	call	_initrand
+	pop	hl
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:70: set_sprite_palette(0,1,ghosty_palettes);
 	ld	de, #_ghosty_palettes
 	push	de
 	xor	a, a
@@ -238,7 +232,7 @@ _gameFirstLoad::
 	push	af
 	call	_set_sprite_palette
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:72: set_bkg_palette(0,1,bkgd_palettes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:71: set_bkg_palette(0,1,bkgd_palettes);
 	ld	de, #_bkgd_palettes
 	push	de
 	ld	a, #0x01
@@ -249,16 +243,13 @@ _gameFirstLoad::
 	inc	sp
 	call	_set_bkg_palette
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:73: setBkgd();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:72: setBkgd();
 	call	_setBkgd
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:74: setGhosty();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:73: setGhosty();
 	call	_setGhosty
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:75: setBone();
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:76: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:74: setBone();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:75: }
 	jp	_setBone
-___str_0:
-	.ascii "PRESS START!"
-	.db 0x00
 	.area _CODE
 	.area _INITIALIZER
 __xinit__spriteSize:

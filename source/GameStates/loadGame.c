@@ -55,17 +55,17 @@ void gameFirstLoad(void){
     SHOW_SPRITES;
     DISPLAY_ON;
 
-    waitpad(J_START);
-    uint16_t seed = LY_REG;
-    seed |= (uint16_t)DIV_REG << 8;
-    initrand(seed);
-
     STAT_REG |= 0x40;
     LYC_REG=0;
     disable_interrupts;
     add_LCD(bkgInterrupts);
     set_interrupts(LCD_IFLAG | VBL_IFLAG);
     enable_interrupts;
+
+    waitpad(J_START);
+    uint16_t seed = LY_REG;
+    seed |= (uint16_t)DIV_REG << 8;
+    initrand(seed);
 
     set_sprite_palette(0,1,ghosty_palettes);
     set_bkg_palette(0,1,bkgd_palettes);
