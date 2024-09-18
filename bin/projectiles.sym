@@ -8,18 +8,18 @@ Symbol Table
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
   7 __xinit__boneCounter                                            00000003 R
-  7 __xinit__pSpd                                                   00000002 R
-  7 __xinit__pX                                                     00000000 R
-  7 __xinit__pY                                                     00000001 R
+  7 __xinit__prSpd                                                  00000002 R
+  7 __xinit__prX                                                    00000000 R
+  7 __xinit__prY                                                    00000001 R
   2 _boneCounter                                                    00000003 GR
     _boneMS                                                         ******** GX
   1 _bones                                                          00000000 GR
   0 _initBoneTable                                                  00000000 GR
-  2 _pSpd                                                           00000002 GR
-  2 _pX                                                             00000000 GR
-  2 _pY                                                             00000001 GR
+  2 _prSpd                                                          00000002 GR
+  2 _prX                                                            00000000 GR
+  2 _prY                                                            00000001 GR
     _rand                                                           ******** GX
-  0 _throwBone                                                      00000089 GR
+  0 _throwBone                                                      00000092 GR
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
@@ -27,7 +27,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size       8A   flags    0
+   0 _CODE                                      size       93   flags    0
    1 _DATA                                      size       24   flags    0
    2 _INITIALIZED                               size        4   flags    0
    3 _DABS                                      size        0   flags    8

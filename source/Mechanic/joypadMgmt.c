@@ -6,25 +6,28 @@
 #include <gb/metasprites.h>
 #include <loadGame.h>
 #include <stdlib.h>
+#include <playArea.h>
+#include <subPixCalc.h>
+#include <stdio.h>
 
 #pragma region definitions
-#define PIXEL_SHIFT 8 // bit shift amount
-#define SPD_CHANGE_X 8 // in 16.8 fixed point, this becomes 0.03 pixels/frame after all the math
-#define FLOOR 132
-#define MAX_SPD_DOWN 2040
-#define MAX_SPD_UP -2040
-#define MAX_SPD_LEFT -1080
-#define MAX_SPD_RHGT 1080
-#define SCREEN_LEFT_BOUND 10
-#define SCREEN_RIGHT_BOUND 160
-#define SCREEN_TOP_BOUND 10
-#define SCREEN_BOT_BOUND 134
 
-int16_t ghostySpeedX, fractionX, fractionY = 0;
-int16_t ghostySpeedY = 1;
+#define SPD_CHANGE 8 // in 16.8 fixed point, this becomes 0.03 pixels/frame after all the math
+#define MAX_SPD_DOWN 1000
+#define MAX_SPD_UP -1000
+#define MAX_SPD_LEFT -1000
+#define MAX_SPD_RIGHT 1000
+
+int16_t ghostySpeedX = 0;
+int16_t ghostySpeedY = 0;
+int16_t ghostyY = 80;
+int16_t ghostyX = 80;
 uint8_t pcFacing = 1;
-int16_t ghostyX = 80, ghostyY = 80;
 uint16_t gravity = 1;
+
+int16_t *pghostyX = &ghostyX;
+int16_t *pghostyY = &ghostyY;
+
 #pragma endregion
 
 void joypadMgr(void){
@@ -32,40 +35,47 @@ void joypadMgr(void){
     uint8_t joypadCurrent = 0;
     joypadCurrent = joypad();
 
-    if(ghostyY < FLOOR){
-        
-        uint16_t counter = 0;
-        counter++;
-        ghostySpeedY += (gravity += counter);
-
-        if(ghostySpeedY > MAX_SPD_DOWN){
-            ghostySpeedY = MAX_SPD_DOWN;
-            counter = 0;
-            //gravity = 1;
-        }
-    }
-
     if(joypadCurrent & J_A){
 
     }
     
     if(joypadCurrent & J_B){
-        ghostyY -= 4;
+        //ghostyY -= 4;
         //joypadPast = joypadCurrent;
     }
 
     if(joypadCurrent & J_UP){
-
-    }
-
-    if(joypadCurrent & J_DOWN){
-
+        
+        if(ghostySpeedY > MAX_SPD_UP){            
+            ghostySpeedY -= SPD_CHANGE;
+        }
+    } else if(joypadCurrent & J_DOWN){
+        
+        if(ghostySpeedY < MAX_SPD_DOWN){
+            ghostySpeedY += SPD_CHANGE;
+        }
+    } else {
+        if(ghostySpeedY > 0){
+            
+            ghostySpeedY -= SPD_CHANGE;
+            
+            if(ghostySpeedY < 0){
+                ghostySpeedY = 0;
+            }
+        } else if(ghostySpeedY < 0){
+            
+            ghostySpeedY += SPD_CHANGE;
+            
+            if (ghostySpeedY > 0){
+                ghostySpeedY = 0;
+            }
+        }
     }
 
     if(joypadCurrent & J_LEFT){
         
         if(ghostySpeedX > MAX_SPD_LEFT){
-            ghostySpeedX -= SPD_CHANGE_X;
+            ghostySpeedX -= SPD_CHANGE;
         }
 
         while(pcFacing!=0){
@@ -74,9 +84,9 @@ void joypadMgr(void){
 
     } else if(joypadCurrent & J_RIGHT){
         
-        if(ghostySpeedX < MAX_SPD_RHGT){
+        if(ghostySpeedX < MAX_SPD_RIGHT){
 
-            ghostySpeedX += SPD_CHANGE_X;
+            ghostySpeedX += SPD_CHANGE;
         }
 
         if(pcFacing==0){
@@ -85,14 +95,14 @@ void joypadMgr(void){
     } else {
         if(ghostySpeedX > 0){
             
-            ghostySpeedX -= SPD_CHANGE_X;
+            ghostySpeedX -= SPD_CHANGE;
             
             if(ghostySpeedX < 0){
                 ghostySpeedX = 0;
             }
         } else if(ghostySpeedX < 0){
             
-            ghostySpeedX += SPD_CHANGE_X;
+            ghostySpeedX += SPD_CHANGE;
             
             if (ghostySpeedX > 0){
                 ghostySpeedX = 0;
@@ -100,39 +110,35 @@ void joypadMgr(void){
         }
     }
 
-    fractionX += ghostySpeedX; // adds speed (which we have as 8 or -8) to the fractional value each frame. we are gaining "8" speed a frame, which becomes 0.03 pixels per frame
-    fractionY += ghostySpeedY;
+    // since this function is changing the X and Y values, we need a pointer to those values
+    // this is because standard c can only return one variable per function, so return will not be useful in this case
+    // we do not need the same for speed, because it is only using those for calculation, not changing them
+    // this is not written as subPixCalc(*pghostyX,*pghostyY,ghostySpeedX,ghostySpeedY);
+    // because the inclusion of the asterisks tells the program to dereference the pointers
+    // since we want to pass the function the pointers themselves, do not dereference them yet
+    subPixCalc(pghostyX,pghostyY,ghostySpeedX,ghostySpeedY);
 
-    while(fractionX >= (1<<PIXEL_SHIFT)){ // shifting the bits left by 8 multiplies by 2^8 (256), so as long as fractionX is greater than or equal to 256, move ghosty by one pixel
-        ghostyX += 1;
-        fractionX -= (1<<PIXEL_SHIFT); // subtracts 256, which resets the fractional part to 0
-    }// however, ghostySpeed has been accumulating this entire time!! so eventually when you add speed to fraction it is greater than 256 which results in movement that is faster than one pixel per frame
-    // as of writing this i do not have a max speed set for X so it just increases infinitely. dont forget to do that
-    while(fractionX <= -(1<<PIXEL_SHIFT)){
-        ghostyX -=1;
-        fractionX += (1<<PIXEL_SHIFT);
-    }
+    if(ghostyY <= CEILING){
+        
+        if(ghostySpeedY < 0){
 
-    while(fractionY >= (1<<PIXEL_SHIFT)){
-        ghostyY += 1;
-        fractionY -= (1<<PIXEL_SHIFT);
-    } 
-
-    while(fractionY <= -(1<<PIXEL_SHIFT)){
-        ghostyY -=1;
-        fractionY += (1<<PIXEL_SHIFT);
-    }
-
-    if(ghostyY > FLOOR){
+            ghostyY = CEILING;
+            ghostySpeedY = ghostySpeedY >> 1;
+            ghostySpeedY = -ghostySpeedY;
+        }
+    } else if (ghostyY >= FLOOR){
+        
+        ghostySpeedY = 0;
         ghostyY = FLOOR;
     }
-
+    
     if(ghostyX <= SCREEN_LEFT_BOUND){
 
         if(ghostySpeedX < 0){            
             
+            ghostyX = SCREEN_LEFT_BOUND;
             ghostySpeedX = ghostySpeedX >> 1;
-            ghostySpeedX = - ghostySpeedX;
+            ghostySpeedX = -ghostySpeedX;
         }
     }
 
@@ -143,14 +149,15 @@ void joypadMgr(void){
             // originally, this (and above) was written as ghostySpeedX = (-(ghostySpeedX/2)), but the compiler didnt like that.
             // turns out gbdk does bit shifting (x >> 1 = x/2) before negation, so maybe the parantheses didnt matter?
             // could also just be that too much was going on at once. however, it only threw the warning up for the right side of the screen. odd.
+            ghostyX = SCREEN_RIGHT_BOUND;
             ghostySpeedX = ghostySpeedX >> 1;
-            ghostySpeedX = - ghostySpeedX;
+            ghostySpeedX = -ghostySpeedX;
         }
     }
 
     if(pcFacing==0){
         move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
-    } else {
+    } else if(pcFacing==1){
         move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
     }
 }

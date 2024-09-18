@@ -25,18 +25,18 @@ Area                       Addr        Size        Decimal Bytes (Attributes)
      00000001  l__HEADER |    00000002  l__HEADER |    00000002  l__HEADER
      00000002  l__HEADER |    00000003  l__HEADER |    00000003  l__HEADER
      00000003  l__HRAM12 |    00000005  l__HEADER |    00000006  l__HEADER
-     00000007  l__HEADER |    00000008  l__HEADER |    0000000C  l__GSINIT
+     00000007  l__HEADER |    00000008  l__HEADER |    00000012  l__GSINIT
      00000030  l__HEADER |    00000047  l__DATA   |    00000060  l__HEADER
-     00000075  l__INITIA |    00000075  l__INITIA |    000000AB  l__HEADER
-     0000019C  l__HOME   |    00000200  s__CODE   |    0000094E  l__CODE  
-     00000B4E  s__HOME   |    00000CEA  s__BASE   |    00000CEA  s__CODE_0
-     00000CEA  s__INITIA |    00000CEA  s__LIT    |    00000D5F  s__GSINIT
-     00000D6B  s__GSFINA |    00002000  _rROMB0   |    00003000  _rROMB1  
+     00000079  l__INITIA |    00000079  l__INITIA |    000000AB  l__HEADER
+     0000019C  l__HOME   |    00000200  s__CODE   |    000009EE  l__CODE  
+     00000BEE  s__HOME   |    00000D8A  s__BASE   |    00000D8A  s__CODE_0
+     00000D8A  s__INITIA |    00000D8A  s__LIT    |    00000E03  s__GSINIT
+     00000E15  s__GSFINA |    00002000  _rROMB0   |    00003000  _rROMB1  
      00004000  _rRAMB    |    00008000  __VRAM    |    00008000  __VRAM800
      00008800  __VRAM880 |    00009000  __VRAM900 |    00009800  __SCRN0  
      00009C00  __SCRN1   |    0000A000  __SRAM    |    0000C000  __RAM    
      0000C000  _shadow_O |    0000C0A0  s__DATA   |    0000C0E7  s__BSS   
-     0000C0E7  s__INITIA |    0000C15C  s__HEAP   |    0000C15C  s__HEAP_E
+     0000C0E7  s__INITIA |    0000C160  s__HEAP   |    0000C160  s__HEAP_E
      0000D000  __RAMBANK |    0000E000  .STACK    |    0000FE00  __OAMRAM 
      0000FF00  _P1_REG   |    0000FF00  __IO      |    0000FF01  _SB_REG  
      0000FF02  _SC_REG   |    0000FF04  _DIV_REG  |    0000FF05  _TIMA_REG
@@ -73,20 +73,21 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_CODE                  00000200    0000094E =        2382. bytes (REL,CON)
+_CODE                  00000200    000009EE =        2542. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     00000200  _initBone |    00000289  _throwBon |    0000028A  _joypadMg
-     000005F9  _bkgd_pal |    00000601  _ghosty_p |    00000609  _ghostyMS
-     0000061D  _boneMS   |    00000629  _scrollBk |    00000641  _bkgInter
-     00000665  _bkgd_til |    000006C5  _bkgd_map |    00000905  _setBkgd 
-     0000093C  _setGhost |    0000096D  _setBone  |    00000980  _smallDel
-     0000098C  _gameFirs |    000009F3  _main     |    00000A01  _set_spri
-     00000A06  _set_bkg_ |    00000A09  .set_pale |    00000A28  _set_spri
-     00000A2D  _set_bkg_ |    00000A30  .set_pale |    00000A4C  ___move_m
-     00000A89  ___move_m |    00000A89  ___move_m |    00000ACA  ___move_m
-     00000ACA  ___move_m |    00000B0B  ___move_m |    00000B0B  ___move_m
+     00000200  _subPixCa |    000002FE  _initBone |    00000390  _throwBon
+     00000391  _joypadMg |    00000699  _bkgd_pal |    000006A1  _ghosty_p
+     000006A9  _ghostyMS |    000006BD  _boneMS   |    000006C9  _scrollBk
+     000006E1  _bkgInter |    00000705  _bkgd_til |    00000765  _bkgd_map
+     000009A5  _setBkgd  |    000009DC  _setGhost |    00000A0D  _setBone 
+     00000A20  _smallDel |    00000A2C  _gameFirs |    00000A93  _main    
+     00000AA1  _set_spri |    00000AA6  _set_bkg_ |    00000AA9  .set_pale
+     00000AC8  _set_spri |    00000ACD  _set_bkg_ |    00000AD0  .set_pale
+     00000AEC  ___move_m |    00000B29  ___move_m |    00000B29  ___move_m
+     00000B6A  ___move_m |    00000B6A  ___move_m |    00000BAB  ___move_m
+     00000BAB  ___move_m
 ASxxxx Linker V03.00/V05.40 + sdld,  page 4.
 Hexadecimal  [32-Bits]
 
@@ -264,25 +265,25 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_HOME                  00000B4E    0000019C =         412. bytes (REL,CON)
+_HOME                  00000BEE    0000019C =         412. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     00000B4E  .memset_s |    00000B57  .memcpy_s |    00000B74  .display_
-     00000B74  _display_ |    00000B8C  _rand     |    00000B8C  _randw   
-     00000BB7  _initrand |    00000BB9  .initrand |    00000BC2  .padup   
-     00000BC2  _waitpadu |    00000BD2  .jpad     |    00000BD2  _joypad  
-     00000BFA  _waitpad  |    00000BFB  .wait_pad |    00000C02  _set_tile
-     00000C07  _set_bkg_ |    00000C07  _set_win_ |    00000C0F  _set_spri
-     00000C6E  .add_LCD  |    00000C6E  _add_LCD  |    00000C74  .remove_L
-     00000C74  _remove_L |    00000C7A  _set_bkg_ |    00000C8E  .set_xy_w
-     00000C97  .set_xy_b |    00000CA6  .set_xy_t
+     00000BEE  .memset_s |    00000BF7  .memcpy_s |    00000C14  .display_
+     00000C14  _display_ |    00000C2C  _rand     |    00000C2C  _randw   
+     00000C57  _initrand |    00000C59  .initrand |    00000C62  .padup   
+     00000C62  _waitpadu |    00000C72  .jpad     |    00000C72  _joypad  
+     00000C9A  _waitpad  |    00000C9B  .wait_pad |    00000CA2  _set_tile
+     00000CA7  _set_bkg_ |    00000CA7  _set_win_ |    00000CAF  _set_spri
+     00000D0E  .add_LCD  |    00000D0E  _add_LCD  |    00000D14  .remove_L
+     00000D14  _remove_L |    00000D1A  _set_bkg_ |    00000D2E  .set_xy_w
+     00000D37  .set_xy_b |    00000D46  .set_xy_t
 ASxxxx Linker V03.00/V05.40 + sdld,  page 23.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_INITIALIZER           00000CEA    00000075 =         117. bytes (REL,CON)
+_INITIALIZER           00000D8A    00000079 =         121. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
@@ -291,17 +292,17 @@ Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_GSINIT                00000D5F    0000000C =          12. bytes (REL,CON)
+_GSINIT                00000E03    00000012 =          18. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     00000D5F  gsinit   
+     00000E03  gsinit   
 ASxxxx Linker V03.00/V05.40 + sdld,  page 25.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_GSFINAL               00000D6B    00000001 =           1. bytes (REL,CON)
+_GSFINAL               00000E15    00000001 =           1. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
@@ -316,24 +317,24 @@ _DATA                  0000C0A0    00000047 =          71. bytes (REL,CON)
         -----  ------            -----  ------            -----  ------    
      0000C0A0  __cpu     |    0000C0A1  __is_GBA  |    0000C0A2  .mode    
      0000C0A3  .sys_time |    0000C0A3  _sys_time |    0000C0A5  .int_0x40
-     0000C0B1  _bones    |    0000C0D5  _ghostySp |    0000C0D7  _fraction
-     0000C0D9  ___rand_s |    0000C0DB  ___curren |    0000C0DD  ___curren
-     0000C0DE  ___curren |    0000C0DF  .int_0x48
+     0000C0B5  _bones    |    0000C0D9  ___rand_s |    0000C0DB  ___curren
+     0000C0DD  ___curren |    0000C0DE  ___curren |    0000C0DF  .int_0x48
 ASxxxx Linker V03.00/V05.40 + sdld,  page 27.
 Hexadecimal  [32-Bits]
 
 Area                       Addr        Size        Decimal Bytes (Attributes)
 --------------------       ----        ----        ------- ----- ------------
-_INITIALIZED           0000C0E7    00000075 =         117. bytes (REL,CON)
+_INITIALIZED           0000C0E7    00000079 =         121. bytes (REL,CON)
 
         Value  Global            Value  Global            Value  Global    
         -----  ------            -----  ------            -----  ------    
-     0000C0E7  _pX       |    0000C0E8  _pY       |    0000C0E9  _pSpd    
-     0000C0EA  _boneCoun |    0000C0EB  _fraction |    0000C0ED  _ghostySp
-     0000C0EF  _pcFacing |    0000C0F0  _ghostyX  |    0000C0F2  _ghostyY 
-     0000C0F4  _gravity  |    0000C0F6  _ghostyTi |    0000C136  _boneTile
-     0000C156  _bkgScrol |    0000C157  _floorScr |    0000C158  _skyScrol
-     0000C159  _spriteSi |    0000C15A  ___render |    0000C15B  __map_til
+     0000C0E7  _prX      |    0000C0E8  _prY      |    0000C0E9  _prSpd   
+     0000C0EA  _boneCoun |    0000C0EB  _ghostySp |    0000C0ED  _ghostySp
+     0000C0EF  _ghostyY  |    0000C0F1  _ghostyX  |    0000C0F3  _pcFacing
+     0000C0F4  _gravity  |    0000C0F6  _pghostyX |    0000C0F8  _pghostyY
+     0000C0FA  _ghostyTi |    0000C13A  _boneTile |    0000C15A  _bkgScrol
+     0000C15B  _floorScr |    0000C15C  _skyScrol |    0000C15D  _spriteSi
+     0000C15E  ___render |    0000C15F  __map_til
 ASxxxx Linker V03.00/V05.40 + sdld,  page 28.
 Hexadecimal  [32-Bits]
 
@@ -358,6 +359,7 @@ _HEADER_LCD0           00000000    00000003 =           3. bytes (ABS,CON)
 Files Linked                              [ module(s) ]
 
 C:\users\wsajj\GBdev\gbdk\lib/gb/crt0.o   [ Runtime ]
+bin/subPixCalc.o                          [ subPixCalc ]
 bin/projectiles.o                         [ projectiles ]
 bin/joypadMgmt.o                          [ joypadMgmt ]
 bin/palette.o                             [ palette ]

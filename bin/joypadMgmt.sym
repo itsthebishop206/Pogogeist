@@ -12,23 +12,26 @@ Symbol Table
     ___current_metasprite                                           ******** GX
     ___move_metasprite                                              ******** GX
     ___move_metasprite_flipx                                        ******** GX
-  7 __xinit__fractionY                                              00000000 R
+  7 __xinit__ghostySpeedX                                           00000000 R
   7 __xinit__ghostySpeedY                                           00000002 R
-  7 __xinit__ghostyX                                                00000005 R
-  7 __xinit__ghostyY                                                00000007 R
+  7 __xinit__ghostyX                                                00000006 R
+  7 __xinit__ghostyY                                                00000004 R
   7 __xinit__gravity                                                00000009 R
-  7 __xinit__pcFacing                                               00000004 R
-  1 _fractionX                                                      00000002 GR
-  2 _fractionY                                                      00000000 GR
+  7 __xinit__pcFacing                                               00000008 R
+  7 __xinit__pghostyX                                               0000000B R
+  7 __xinit__pghostyY                                               0000000D R
     _ghostyMS                                                       ******** GX
-  1 _ghostySpeedX                                                   00000000 GR
+  2 _ghostySpeedX                                                   00000000 GR
   2 _ghostySpeedY                                                   00000002 GR
-  2 _ghostyX                                                        00000005 GR
-  2 _ghostyY                                                        00000007 GR
+  2 _ghostyX                                                        00000006 GR
+  2 _ghostyY                                                        00000004 GR
   2 _gravity                                                        00000009 GR
     _joypad                                                         ******** GX
   0 _joypadMgr                                                      00000000 GR
-  2 _pcFacing                                                       00000004 GR
+  2 _pcFacing                                                       00000008 GR
+  2 _pghostyX                                                       0000000B GR
+  2 _pghostyY                                                       0000000D GR
+    _subPixCalc                                                     ******** GX
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
@@ -36,13 +39,13 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      36F   flags    0
-   1 _DATA                                      size        4   flags    0
-   2 _INITIALIZED                               size        B   flags    0
+   0 _CODE                                      size      308   flags    0
+   1 _DATA                                      size        0   flags    0
+   2 _INITIALIZED                               size        F   flags    0
    3 _DABS                                      size        0   flags    8
    4 _HOME                                      size        0   flags    0
    5 _GSINIT                                    size        0   flags    0
    6 _GSFINAL                                   size        0   flags    0
-   7 _INITIALIZER                               size        B   flags    0
+   7 _INITIALIZER                               size        F   flags    0
    8 _CABS                                      size        0   flags    8
 

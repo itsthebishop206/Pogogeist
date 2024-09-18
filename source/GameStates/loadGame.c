@@ -9,6 +9,8 @@
 #include <rand.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <joypad.h>
+#include <subPixCalc.h>
 
 UBYTE spriteSize = 8;
 
@@ -44,7 +46,6 @@ void smallDelay(uint8_t numloops){
     }
 }
 
-
 void gameFirstLoad(void){
     
     NR52_REG = 0x80;
@@ -73,3 +74,4 @@ void gameFirstLoad(void){
     setGhosty();
     setBone();
 }
+
