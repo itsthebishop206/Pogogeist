@@ -31,7 +31,6 @@ void setBone(void){
   
   set_sprite_data(4,2,boneTile);
   set_sprite_prop(4,0x00);
-  move_metasprite_ex(boneMS,4,0,4,120,120);
 }
 
 void gameFirstLoad(void){

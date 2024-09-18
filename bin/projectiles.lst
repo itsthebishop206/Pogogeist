@@ -1,0 +1,123 @@
+                                      1 ;--------------------------------------------------------
+                                      2 ; File Created by SDCC : free open source ISO C Compiler 
+                                      3 ; Version 4.4.1 #14650 (MINGW64)
+                                      4 ;--------------------------------------------------------
+                                      5 	.module projectiles
+                                      6 	.optsdcc -msm83
+                                      7 	
+                                      8 ;--------------------------------------------------------
+                                      9 ; Public variables in this module
+                                     10 ;--------------------------------------------------------
+                                     11 	.globl _pSpd
+                                     12 	.globl _pSpawn
+                                     13 	.globl _pYValue
+                                     14 	.globl _pXValue
+                                     15 	.globl _bones
+                                     16 	.globl _initBoneTable
+                                     17 ;--------------------------------------------------------
+                                     18 ; special function registers
+                                     19 ;--------------------------------------------------------
+                                     20 ;--------------------------------------------------------
+                                     21 ; ram data
+                                     22 ;--------------------------------------------------------
+                                     23 	.area _DATA
+    00000000                         24 _bones::
+    00000000                         25 	.ds 36
+                                     26 ;--------------------------------------------------------
+                                     27 ; ram data
+                                     28 ;--------------------------------------------------------
+                                     29 	.area _INITIALIZED
+    00000000                         30 _pXValue::
+    00000000                         31 	.ds 1
+    00000001                         32 _pYValue::
+    00000001                         33 	.ds 1
+    00000002                         34 _pSpawn::
+    00000002                         35 	.ds 1
+    00000003                         36 _pSpd::
+    00000003                         37 	.ds 1
+                                     38 ;--------------------------------------------------------
+                                     39 ; absolute external ram data
+                                     40 ;--------------------------------------------------------
+                                     41 	.area _DABS (ABS)
+                                     42 ;--------------------------------------------------------
+                                     43 ; global & static initialisations
+                                     44 ;--------------------------------------------------------
+                                     45 	.area _HOME
+                                     46 	.area _GSINIT
+                                     47 	.area _GSFINAL
+                                     48 	.area _GSINIT
+                                     49 ;--------------------------------------------------------
+                                     50 ; Home
+                                     51 ;--------------------------------------------------------
+                                     52 	.area _HOME
+                                     53 	.area _HOME
+                                     54 ;--------------------------------------------------------
+                                     55 ; code
+                                     56 ;--------------------------------------------------------
+                                     57 	.area _CODE
+                                     58 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:41: void initBoneTable(void){
+                                     59 ;	---------------------------------
+                                     60 ; Function initBoneTable
+                                     61 ; ---------------------------------
+    00000000                         62 _initBoneTable::
+    00000000 0E 00            [ 8]   63 	ld	c, #0x00
+    00000002                         64 00103$:
+                                     65 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:45: for(uint8_t b; b < MAX_BONE; b++){
+    00000002 79               [ 4]   66 	ld	a, c
+    00000003 D6 06            [ 8]   67 	sub	a, #0x06
+    00000005 D0               [20]   68 	ret	NC
+                                     69 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:47: bones[b].metasprite = boneMS;
+    00000006 06 00            [ 8]   70 	ld	b, #0x00
+    00000008 69               [ 4]   71 	ld	l, c
+    00000009 60               [ 4]   72 	ld	h, b
+    0000000A 29               [ 8]   73 	add	hl, hl
+    0000000B 09               [ 8]   74 	add	hl, bc
+    0000000C 29               [ 8]   75 	add	hl, hl
+    0000000D 7D               [ 4]   76 	ld	a, l
+    0000000E C6r00            [ 8]   77 	add	a, #<(_bones)
+    00000010 5F               [ 4]   78 	ld	e, a
+    00000011 7C               [ 4]   79 	ld	a, h
+    00000012 CEs00            [ 8]   80 	adc	a, #>(_bones)
+    00000014 57               [ 4]   81 	ld	d, a
+    00000015 21 04 00         [12]   82 	ld	hl, #0x0004
+    00000018 19               [ 8]   83 	add	hl, de
+    00000019 3Er00            [ 8]   84 	ld	a, #<(_boneMS)
+    0000001B 22               [ 8]   85 	ld	(hl+), a
+    0000001C 36s00            [12]   86 	ld	(hl), #>(_boneMS)
+                                     87 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:48: bones[b].active = 1;
+    0000001E 6B               [ 4]   88 	ld	l, e
+                                     89 ;	spillPairReg hl
+                                     90 ;	spillPairReg hl
+    0000001F 62               [ 4]   91 	ld	h, d
+                                     92 ;	spillPairReg hl
+                                     93 ;	spillPairReg hl
+    00000020 23               [ 8]   94 	inc	hl
+    00000021 23               [ 8]   95 	inc	hl
+    00000022 23               [ 8]   96 	inc	hl
+    00000023 36 01            [12]   97 	ld	(hl), #0x01
+                                     98 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:49: bones[b].x = pXValue;
+    00000025 FAr00r00         [16]   99 	ld	a, (#_pXValue)
+    00000028 12               [ 8]  100 	ld	(de), a
+                                    101 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:50: bones[b].x = pYValue;
+    00000029 FAr01r00         [16]  102 	ld	a, (#_pYValue)
+    0000002C 12               [ 8]  103 	ld	(de), a
+                                    104 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:51: bones[b].speed = pSpd;
+    0000002D 13               [ 8]  105 	inc	de
+    0000002E 13               [ 8]  106 	inc	de
+    0000002F FAr03r00         [16]  107 	ld	a, (#_pSpd)
+    00000032 12               [ 8]  108 	ld	(de), a
+                                    109 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:45: for(uint8_t b; b < MAX_BONE; b++){
+    00000033 0C               [ 4]  110 	inc	c
+                                    111 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:54: }
+    00000034 18 CC            [12]  112 	jr	00103$
+                                    113 	.area _CODE
+                                    114 	.area _INITIALIZER
+    00000000                        115 __xinit__pXValue:
+    00000000 00                     116 	.db #0x00	; 0
+    00000001                        117 __xinit__pYValue:
+    00000001 00                     118 	.db #0x00	; 0
+    00000002                        119 __xinit__pSpawn:
+    00000002 00                     120 	.db #0x00	; 0
+    00000003                        121 __xinit__pSpd:
+    00000003 00                     122 	.db #0x00	; 0
+                                    123 	.area _CABS (ABS)

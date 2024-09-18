@@ -10,60 +10,57 @@
                                      10 ;--------------------------------------------------------
                                      11 	.globl _main
                                      12 	.globl _scrollBkg
-                                     13 	.globl _throwBone
-                                     14 	.globl _joypadMgr
-                                     15 	.globl _gameFirstLoad
-                                     16 	.globl _wait_vbl_done
-                                     17 ;--------------------------------------------------------
-                                     18 ; special function registers
+                                     13 	.globl _joypadMgr
+                                     14 	.globl _gameFirstLoad
+                                     15 	.globl _wait_vbl_done
+                                     16 ;--------------------------------------------------------
+                                     17 ; special function registers
+                                     18 ;--------------------------------------------------------
                                      19 ;--------------------------------------------------------
-                                     20 ;--------------------------------------------------------
-                                     21 ; ram data
-                                     22 ;--------------------------------------------------------
-                                     23 	.area _DATA
-                                     24 ;--------------------------------------------------------
-                                     25 ; ram data
-                                     26 ;--------------------------------------------------------
-                                     27 	.area _INITIALIZED
-                                     28 ;--------------------------------------------------------
-                                     29 ; absolute external ram data
-                                     30 ;--------------------------------------------------------
-                                     31 	.area _DABS (ABS)
-                                     32 ;--------------------------------------------------------
-                                     33 ; global & static initialisations
-                                     34 ;--------------------------------------------------------
-                                     35 	.area _HOME
-                                     36 	.area _GSINIT
-                                     37 	.area _GSFINAL
-                                     38 	.area _GSINIT
-                                     39 ;--------------------------------------------------------
-                                     40 ; Home
-                                     41 ;--------------------------------------------------------
+                                     20 ; ram data
+                                     21 ;--------------------------------------------------------
+                                     22 	.area _DATA
+                                     23 ;--------------------------------------------------------
+                                     24 ; ram data
+                                     25 ;--------------------------------------------------------
+                                     26 	.area _INITIALIZED
+                                     27 ;--------------------------------------------------------
+                                     28 ; absolute external ram data
+                                     29 ;--------------------------------------------------------
+                                     30 	.area _DABS (ABS)
+                                     31 ;--------------------------------------------------------
+                                     32 ; global & static initialisations
+                                     33 ;--------------------------------------------------------
+                                     34 	.area _HOME
+                                     35 	.area _GSINIT
+                                     36 	.area _GSFINAL
+                                     37 	.area _GSINIT
+                                     38 ;--------------------------------------------------------
+                                     39 ; Home
+                                     40 ;--------------------------------------------------------
+                                     41 	.area _HOME
                                      42 	.area _HOME
-                                     43 	.area _HOME
-                                     44 ;--------------------------------------------------------
-                                     45 ; code
-                                     46 ;--------------------------------------------------------
-                                     47 	.area _CODE
-                                     48 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:11: void main(void)
-                                     49 ;	---------------------------------
-                                     50 ; Function main
-                                     51 ; ---------------------------------
-    00000000                         52 _main::
-                                     53 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:13: gameFirstLoad();
-    00000000 CDr00r00         [24]   54 	call	_gameFirstLoad
-                                     55 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:16: while(1) {        
-    00000003                         56 00102$:
-                                     57 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:18: joypadMgr();
-    00000003 CDr00r00         [24]   58 	call	_joypadMgr
-                                     59 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:19: scrollBkg();
-    00000006 CDr00r00         [24]   60 	call	_scrollBkg
-                                     61 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:20: throwBone();
-    00000009 CDr00r00         [24]   62 	call	_throwBone
-                                     63 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: wait_vbl_done();
-    0000000C CDr00r00         [24]   64 	call	_wait_vbl_done
-                                     65 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:24: }
-    0000000F 18 F2            [12]   66 	jr	00102$
-                                     67 	.area _CODE
-                                     68 	.area _INITIALIZER
-                                     69 	.area _CABS (ABS)
+                                     43 ;--------------------------------------------------------
+                                     44 ; code
+                                     45 ;--------------------------------------------------------
+                                     46 	.area _CODE
+                                     47 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:11: void main(void)
+                                     48 ;	---------------------------------
+                                     49 ; Function main
+                                     50 ; ---------------------------------
+    00000000                         51 _main::
+                                     52 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:13: gameFirstLoad();
+    00000000 CDr00r00         [24]   53 	call	_gameFirstLoad
+                                     54 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:16: while(1) {        
+    00000003                         55 00102$:
+                                     56 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:18: joypadMgr();
+    00000003 CDr00r00         [24]   57 	call	_joypadMgr
+                                     58 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:19: scrollBkg();
+    00000006 CDr00r00         [24]   59 	call	_scrollBkg
+                                     60 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:21: wait_vbl_done();
+    00000009 CDr00r00         [24]   61 	call	_wait_vbl_done
+                                     62 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:23: }
+    0000000C 18 F5            [12]   63 	jr	00102$
+                                     64 	.area _CODE
+                                     65 	.area _INITIALIZER
+                                     66 	.area _CABS (ABS)

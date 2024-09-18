@@ -8,165 +8,87 @@
                                       8 ;--------------------------------------------------------
                                       9 ; Public variables in this module
                                      10 ;--------------------------------------------------------
-                                     11 	.globl _boneTile
-                                     12 	.globl _boneY
-                                     13 	.globl _boneX
-                                     14 	.globl _frameSpawnCount
-                                     15 	.globl _frameMoveCount
-                                     16 	.globl _boneTable
-                                     17 	.globl _boneMS
-                                     18 	.globl _throwBone
-                                     19 ;--------------------------------------------------------
-                                     20 ; special function registers
-                                     21 ;--------------------------------------------------------
+                                     11 	.globl _boneMS
+                                     12 	.globl _boneTile
+                                     13 ;--------------------------------------------------------
+                                     14 ; special function registers
+                                     15 ;--------------------------------------------------------
+                                     16 ;--------------------------------------------------------
+                                     17 ; ram data
+                                     18 ;--------------------------------------------------------
+                                     19 	.area _DATA
+                                     20 ;--------------------------------------------------------
+                                     21 ; ram data
                                      22 ;--------------------------------------------------------
-                                     23 ; ram data
-                                     24 ;--------------------------------------------------------
-                                     25 	.area _DATA
-    00000000                         26 _boneTable::
-    00000000                         27 	.ds 12
+                                     23 	.area _INITIALIZED
+    00000000                         24 _boneTile::
+    00000000                         25 	.ds 32
+                                     26 ;--------------------------------------------------------
+                                     27 ; absolute external ram data
                                      28 ;--------------------------------------------------------
-                                     29 ; ram data
+                                     29 	.area _DABS (ABS)
                                      30 ;--------------------------------------------------------
-                                     31 	.area _INITIALIZED
-    00000000                         32 _frameMoveCount::
-    00000000                         33 	.ds 1
-    00000001                         34 _frameSpawnCount::
-    00000001                         35 	.ds 1
-    00000002                         36 _boneX::
-    00000002                         37 	.ds 1
-    00000003                         38 _boneY::
-    00000003                         39 	.ds 1
-    00000004                         40 _boneTile::
-    00000004                         41 	.ds 32
+                                     31 ; global & static initialisations
+                                     32 ;--------------------------------------------------------
+                                     33 	.area _HOME
+                                     34 	.area _GSINIT
+                                     35 	.area _GSFINAL
+                                     36 	.area _GSINIT
+                                     37 ;--------------------------------------------------------
+                                     38 ; Home
+                                     39 ;--------------------------------------------------------
+                                     40 	.area _HOME
+                                     41 	.area _HOME
                                      42 ;--------------------------------------------------------
-                                     43 ; absolute external ram data
+                                     43 ; code
                                      44 ;--------------------------------------------------------
-                                     45 	.area _DABS (ABS)
-                                     46 ;--------------------------------------------------------
-                                     47 ; global & static initialisations
-                                     48 ;--------------------------------------------------------
-                                     49 	.area _HOME
-                                     50 	.area _GSINIT
-                                     51 	.area _GSFINAL
-                                     52 	.area _GSINIT
-                                     53 ;--------------------------------------------------------
-                                     54 ; Home
-                                     55 ;--------------------------------------------------------
-                                     56 	.area _HOME
-                                     57 	.area _HOME
-                                     58 ;--------------------------------------------------------
-                                     59 ; code
-                                     60 ;--------------------------------------------------------
-                                     61 	.area _CODE
-                                     62 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:35: void throwBone(void){
-                                     63 ;	---------------------------------
-                                     64 ; Function throwBone
-                                     65 ; ---------------------------------
-    00000000                         66 _throwBone::
-                                     67 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:37: frameMoveCount++;
-    00000000 21r00r00         [12]   68 	ld	hl, #_frameMoveCount
-    00000003 34               [12]   69 	inc	(hl)
-                                     70 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:38: frameSpawnCount++;
-    00000004 21r01r00         [12]   71 	ld	hl, #_frameSpawnCount
-    00000007 34               [12]   72 	inc	(hl)
-                                     73 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:40: if(frameSpawnCount > FRAME_PER_SPAWN){
-    00000008 3E 05            [ 8]   74 	ld	a, #0x05
-    0000000A 96               [ 8]   75 	sub	a, (hl)
-    0000000B 30 02            [12]   76 	jr	NC, 00102$
-                                     77 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:42: frameSpawnCount = 0;
-    0000000D 36 00            [12]   78 	ld	(hl), #0x00
-    0000000F                         79 00102$:
-                                     80 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:45: if(frameMoveCount > FRAME_PER_MOVE){
-    0000000F 3E 02            [ 8]   81 	ld	a, #0x02
-    00000011 21r00r00         [12]   82 	ld	hl, #_frameMoveCount
-    00000014 96               [ 8]   83 	sub	a, (hl)
-    00000015 30 09            [12]   84 	jr	NC, 00104$
-                                     85 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:47: boneX--;
-    00000017 21r02r00         [12]   86 	ld	hl, #_boneX
-    0000001A 35               [12]   87 	dec	(hl)
-                                     88 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:48: frameMoveCount = 0;
-    0000001B 21r00r00         [12]   89 	ld	hl, #_frameMoveCount
-    0000001E 36 00            [12]   90 	ld	(hl), #0x00
-    00000020                         91 00104$:
-                                     92 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:52: move_metasprite_ex(boneMS,4,0,4,boneX,boneY);
-    00000020 21r03r00         [12]   93 	ld	hl, #_boneY
-    00000023 4E               [ 8]   94 	ld	c, (hl)
-    00000024 21r02r00         [12]   95 	ld	hl, #_boneX
-    00000027 5E               [ 8]   96 	ld	e, (hl)
-                                     97 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:160: __current_metasprite = metasprite;
-    00000028 21r00r00         [12]   98 	ld	hl, #___current_metasprite
-    0000002B 3Er42            [ 8]   99 	ld	a, #<(_boneMS)
-    0000002D 22               [ 8]  100 	ld	(hl+), a
-    0000002E 36s00            [12]  101 	ld	(hl), #>(_boneMS)
-                                    102 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:161: __current_base_tile = base_tile;
-    00000030 21r00r00         [12]  103 	ld	hl, #___current_base_tile
-    00000033 36 04            [12]  104 	ld	(hl), #0x04
-                                    105 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:162: __current_base_prop = base_prop;
-    00000035 21r00r00         [12]  106 	ld	hl, #___current_base_prop
-    00000038 36 00            [12]  107 	ld	(hl), #0x00
-                                    108 ;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:163: return __move_metasprite(base_sprite, (y << 8) | (uint8_t)x);
-    0000003A 41               [ 4]  109 	ld	b, c
-    0000003B AF               [ 4]  110 	xor	a, a
-    0000003C 50               [ 4]  111 	ld	d, b
-    0000003D 3E 04            [ 8]  112 	ld	a, #0x04
-                                    113 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:52: move_metasprite_ex(boneMS,4,0,4,boneX,boneY);
-                                    114 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Graphics\bone.c:54: }
-    0000003F C3r00r00         [16]  115 	jp	___move_metasprite
-    00000042                        116 _boneMS:
-    00000042 00                     117 	.db #0x00	;  0
-    00000043 00                     118 	.db #0x00	;  0
-    00000044 00                     119 	.db #0x00	; 0
-    00000045 00                     120 	.db #0x00	; 0
-    00000046 08                     121 	.db #0x08	;  8
-    00000047 00                     122 	.db #0x00	;  0
-    00000048 01                     123 	.db #0x01	; 1
-    00000049 00                     124 	.db #0x00	; 0
-    0000004A 80                     125 	.db #0x80	; -128
-    0000004B 00                     126 	.db #0x00	;  0
-    0000004C 00                     127 	.db #0x00	; 0
-    0000004D 00                     128 	.db #0x00	; 0
-                                    129 	.area _CODE
-                                    130 	.area _INITIALIZER
-    00000000                        131 __xinit__frameMoveCount:
-    00000000 00                     132 	.db #0x00	; 0
-    00000001                        133 __xinit__frameSpawnCount:
-    00000001 00                     134 	.db #0x00	; 0
-    00000002                        135 __xinit__boneX:
-    00000002 96                     136 	.db #0x96	; 150
-    00000003                        137 __xinit__boneY:
-    00000003 78                     138 	.db #0x78	; 120	'x'
-    00000004                        139 __xinit__boneTile:
-    00000004 00                     140 	.db #0x00	; 0
-    00000005 66                     141 	.db #0x66	; 102	'f'
-    00000006 66                     142 	.db #0x66	; 102	'f'
-    00000007 FF                     143 	.db #0xff	; 255
-    00000008 7E                     144 	.db #0x7e	; 126
-    00000009 FF                     145 	.db #0xff	; 255
-    0000000A 18                     146 	.db #0x18	; 24
-    0000000B 7E                     147 	.db #0x7e	; 126
-    0000000C 00                     148 	.db #0x00	; 0
-    0000000D 18                     149 	.db #0x18	; 24
-    0000000E 18                     150 	.db #0x18	; 24
-    0000000F 3C                     151 	.db #0x3c	; 60
-    00000010 18                     152 	.db #0x18	; 24
-    00000011 3C                     153 	.db #0x3c	; 60
-    00000012 18                     154 	.db #0x18	; 24
-    00000013 3C                     155 	.db #0x3c	; 60
-    00000014 18                     156 	.db #0x18	; 24
-    00000015 3C                     157 	.db #0x3c	; 60
-    00000016 18                     158 	.db #0x18	; 24
-    00000017 3C                     159 	.db #0x3c	; 60
-    00000018 18                     160 	.db #0x18	; 24
-    00000019 3C                     161 	.db #0x3c	; 60
-    0000001A 00                     162 	.db #0x00	; 0
-    0000001B 18                     163 	.db #0x18	; 24
-    0000001C 18                     164 	.db #0x18	; 24
-    0000001D 7E                     165 	.db #0x7e	; 126
-    0000001E 7E                     166 	.db #0x7e	; 126
-    0000001F FF                     167 	.db #0xff	; 255
-    00000020 66                     168 	.db #0x66	; 102	'f'
-    00000021 FF                     169 	.db #0xff	; 255
-    00000022 00                     170 	.db #0x00	; 0
-    00000023 66                     171 	.db #0x66	; 102	'f'
-                                    172 	.area _CABS (ABS)
+                                     45 	.area _CODE
+                                     46 	.area _CODE
+    00000000                         47 _boneMS:
+    00000000 00                      48 	.db #0x00	;  0
+    00000001 00                      49 	.db #0x00	;  0
+    00000002 00                      50 	.db #0x00	; 0
+    00000003 00                      51 	.db #0x00	; 0
+    00000004 08                      52 	.db #0x08	;  8
+    00000005 00                      53 	.db #0x00	;  0
+    00000006 01                      54 	.db #0x01	; 1
+    00000007 00                      55 	.db #0x00	; 0
+    00000008 80                      56 	.db #0x80	; -128
+    00000009 00                      57 	.db #0x00	;  0
+    0000000A 00                      58 	.db #0x00	; 0
+    0000000B 00                      59 	.db #0x00	; 0
+                                     60 	.area _INITIALIZER
+    00000000                         61 __xinit__boneTile:
+    00000000 00                      62 	.db #0x00	; 0
+    00000001 66                      63 	.db #0x66	; 102	'f'
+    00000002 66                      64 	.db #0x66	; 102	'f'
+    00000003 FF                      65 	.db #0xff	; 255
+    00000004 7E                      66 	.db #0x7e	; 126
+    00000005 FF                      67 	.db #0xff	; 255
+    00000006 18                      68 	.db #0x18	; 24
+    00000007 7E                      69 	.db #0x7e	; 126
+    00000008 00                      70 	.db #0x00	; 0
+    00000009 18                      71 	.db #0x18	; 24
+    0000000A 18                      72 	.db #0x18	; 24
+    0000000B 3C                      73 	.db #0x3c	; 60
+    0000000C 18                      74 	.db #0x18	; 24
+    0000000D 3C                      75 	.db #0x3c	; 60
+    0000000E 18                      76 	.db #0x18	; 24
+    0000000F 3C                      77 	.db #0x3c	; 60
+    00000010 18                      78 	.db #0x18	; 24
+    00000011 3C                      79 	.db #0x3c	; 60
+    00000012 18                      80 	.db #0x18	; 24
+    00000013 3C                      81 	.db #0x3c	; 60
+    00000014 18                      82 	.db #0x18	; 24
+    00000015 3C                      83 	.db #0x3c	; 60
+    00000016 00                      84 	.db #0x00	; 0
+    00000017 18                      85 	.db #0x18	; 24
+    00000018 18                      86 	.db #0x18	; 24
+    00000019 7E                      87 	.db #0x7e	; 126
+    0000001A 7E                      88 	.db #0x7e	; 126
+    0000001B FF                      89 	.db #0xff	; 255
+    0000001C 66                      90 	.db #0x66	; 102	'f'
+    0000001D FF                      91 	.db #0xff	; 255
+    0000001E 00                      92 	.db #0x00	; 0
+    0000001F 66                      93 	.db #0x66	; 102	'f'
+                                     94 	.area _CABS (ABS)

@@ -10,7 +10,6 @@
 ;--------------------------------------------------------
 	.globl _main
 	.globl _scrollBkg
-	.globl _throwBone
 	.globl _joypadMgr
 	.globl _gameFirstLoad
 	.globl _wait_vbl_done
@@ -58,11 +57,9 @@ _main::
 	call	_joypadMgr
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:19: scrollBkg();
 	call	_scrollBkg
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:20: throwBone();
-	call	_throwBone
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: wait_vbl_done();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:21: wait_vbl_done();
 	call	_wait_vbl_done
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:24: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:23: }
 	jr	00102$
 	.area _CODE
 	.area _INITIALIZER
