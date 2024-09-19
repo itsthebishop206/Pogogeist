@@ -13,6 +13,11 @@
 // then i want subPixCalc() to return valueX and valueY
 // then, i want to set the sprite's X and Y values to the returned variables valueX and valueY
 // i want to be able to call this each frame, so i want valueX, valueY, speedX and speedY to keep their value between function calls
+
+// simply put, the way this function works is:
+// it is passed pointers to x and y coords
+// it is passed speed values that are being updated every frame
+// the function updates the x and y coords that are being pointed to
 #pragma endregion
 
 void subPixCalc(int16_t *valueX, int16_t *valueY, int16_t speedX, int16_t speedY){

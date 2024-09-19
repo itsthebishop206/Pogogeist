@@ -1,5 +1,7 @@
 #include <gb/gb.h>
+#include <gb/cgb.h>
 #include <stdint.h>
+#include <gbdk/platform.h>
 #include <gb/metasprites.h>
 #include <bone.h>
 #include <projectile.h>
@@ -10,6 +12,7 @@
 #include <joypad.h>
 #include <ghosty.h>
 #include <playArea.h>
+#include <subPixCalc.h>
 
 #pragma disable_warning 115
 
@@ -39,15 +42,27 @@
 // how do we calculate directional speed?
 // im assuming it's bone(X,Y)/ghosty(X,Y)
 
+// if there are fewer than MAX bones on the screen
+// and if frameCounter is over spawnrate limit
+// aim at the ghost, then incrementally increase X/Y in that direction
+// so we need to find whether the bones X/Y are < or > ghostyX/Y, and adjust accordingly
+// but really, the speed by which we increment is the important thing
+// we're going to need subpixels again (this led to me working on mvmt again to make x never == 0)
+// we will need to set the speed, then 
+
 #pragma endregion
 
 #pragma region definitions
 
-uint8_t prX = 0;
-uint8_t prY = 0;
+uint8_t prX = 1;
+uint8_t prY = 1;
 uint8_t prSpd = 0;
 uint8_t boneCounter = 0;
+uint8_t frameCounter = 5;
 // do we need prSpawn or prActive or whatever
+
+// we need pointers if we are to use subpixcalc
+// i need to point to the address of the x/y coords for bones on the bone table
 
 typedef struct{ // typedef lets you define your own identifiers. i am defining "Projectile"
 
@@ -60,6 +75,7 @@ typedef struct{ // typedef lets you define your own identifiers. i am defining "
 } Projectile;
 
 Projectile bones[MAX_BONE];
+
 #pragma endregion
 
 void initBoneTable(void){
@@ -67,52 +83,95 @@ void initBoneTable(void){
     // for loops repeat code a set number of times
     // for each index in this array:
     for(uint8_t b = 0; b < MAX_BONE; b++){
-        
-        bones[b].active = 0;
 
         uint8_t r = ((uint8_t)rand()) % (uint8_t)4;
         if(r==0){
-            prX = 0;
-            prY = 0;
+            prX = 1;
+            prY = 1;
         } else if(r==1){
             prX = 160;
-            prY = 0;
+            prY = 1;
         } else if(r==2){
             prX = 160;
             prY = 144;
         } else if(r==3){
-            prX = 0;
+            prX = 1;
             prY = 144;
         }
 
+        bones[b].active = 0;
         bones[b].metasprite = boneMS;
         bones[b].x = prX;
         bones[b].y = prY;
         bones[b].speed = prSpd;
-
     }
 }
 
 void throwBone(void){
-
-    uint8_t frameCounter = 5;
-    frameCounter++;
-
-    // if there are fewer than MAX bones on the screen
-    // and if frameCounter is over spawnrate limit
-    // aim at the ghost, then incrementally increase X/Y in that direction
-    // so we need to find whether the bones X/Y are < or > ghostyX/Y, and adjust accordingly
-    // but really, the speed by which we increment is the important thing
-    // we're going to need subpixels again (this led to me working on mvmt again to make x never == 0)
-
-    if((boneCounter < MAX_BONE) & (frameCounter==6)){
-            
-        frameCounter = 0;
-
-        if(bones[boneCounter].x < ghostyX){
-
-        }
-        
-    }
-
+    
+    // so we know the boneTable works
+    // now:
+    // i need a way to track how many bones are on the screen
+    // ideally, once we hit max bones on screen it stops checking until a bone dies. idk if thats possible though
+    
 }
+
+
+#pragma region graveyard
+
+// void throwBone(void){
+
+//     if((boneCounter < MAX_BONE)){
+        
+//         frameCounter++;
+//         // int16_t bSpeedX = (uint16_t) bones[boneCounter].x / (uint16_t) ghostyX;
+//         // int16_t bSpeedY = (uint16_t) bones[boneCounter].y / (uint16_t) ghostyY;
+
+//         // Print debug information
+//         printf("frameCounter: %d\n", frameCounter);
+//         printf("boneCounter: %d\n", boneCounter);
+//         printf("boneX: %d\n", bones[boneCounter].x);
+//         printf("boneY: %d\n", bones[boneCounter].y);
+//         // printf("bSpeedX: %d\n", bSpeedX);
+//         // printf("bSpeedY: %d\n", bSpeedY);
+
+//         // subPixCalc(&bones[boneCounter].x,&bones[boneCounter].y,bSpeedX, bSpeedY);
+
+//         // if(bones[boneCounter].x < ghostyX){
+            
+//         //     bones[boneCounter].x += bSpeedX;
+
+//         // } else if(bones[boneCounter].x > ghostyX){
+            
+//         //     bones[boneCounter].x -= bSpeedX;
+
+//         // }
+
+//         // if(bones[boneCounter].y < ghostyY){
+            
+//         //     bones[boneCounter].y += bSpeedY;
+
+//         // } else if(bones[boneCounter].y > ghostyY){
+            
+//         //     bones[boneCounter].y -= bSpeedY;
+
+//         // }
+
+//         //if(!(frameCounter%FRAME_PER_MOVE)){
+        
+//         //move_metasprite_ex(bones[boneCounter].metasprite, 4, 0, 4, ghostyX, ghostyY);
+        
+//         //}
+
+//         if(frameCounter < FRAME_PER_SPAWN){
+//         } else{
+//             frameCounter = 1;
+//         }
+
+//         boneCounter++;
+
+//     } else if(boneCounter >= MAX_BONE){
+//         boneCounter = 0;
+//     }
+// }
+#pragma endregion

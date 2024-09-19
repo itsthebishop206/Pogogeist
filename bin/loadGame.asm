@@ -8,8 +8,10 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
+	.globl _initBoneTable
 	.globl _initrand
 	.globl _bkgInterrupts
+	.globl _set_default_palette
 	.globl _set_sprite_palette
 	.globl _set_bkg_palette
 	.globl _set_sprite_data
@@ -58,19 +60,19 @@ _spriteSize::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:17: void setBkgd(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:20: void setBkgd(void){
 ;	---------------------------------
 ; Function setBkgd
 ; ---------------------------------
 _setBkgd::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:19: set_bkg_data(0, bkgd_TILE_COUNT, bkgd_tiles);    
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:22: set_bkg_data(0, bkgd_TILE_COUNT, bkgd_tiles);    
 	ld	de, #_bkgd_tiles
 	push	de
 	ld	hl, #0x600
 	push	hl
 	call	_set_bkg_data
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:20: set_bkg_palette(0,1,bkgd_palettes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:23: set_bkg_palette(0,1,bkgd_palettes);
 	ld	de, #_bkgd_palettes
 	push	de
 	xor	a, a
@@ -78,7 +80,7 @@ _setBkgd::
 	push	af
 	call	_set_bkg_palette
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:22: set_bkg_tiles(0, 0, 32, 18, bkgd_map_attributes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:25: set_bkg_tiles(0, 0, 32, 18, bkgd_map_attributes);
 	ld	bc, #_bkgd_map+0
 	push	bc
 	ld	hl, #0x1220
@@ -88,7 +90,7 @@ _setBkgd::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:24: set_bkg_tiles(0,0,32,18,bkgd_map);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:27: set_bkg_tiles(0,0,32,18,bkgd_map);
 	push	bc
 	ld	hl, #0x1220
 	push	hl
@@ -97,21 +99,21 @@ _setBkgd::
 	push	af
 	call	_set_bkg_tiles
 	add	sp, #6
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:25: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:28: }
 	ret
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:27: void setGhosty(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:30: void setGhosty(void){
 ;	---------------------------------
 ; Function setGhosty
 ; ---------------------------------
 _setGhosty::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:29: set_sprite_data(0, 4, ghostyTiles);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:32: set_sprite_data(0, 4, ghostyTiles);
 	ld	de, #_ghostyTiles
 	push	de
 	ld	hl, #0x400
 	push	hl
 	call	_set_sprite_data
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:30: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:33: move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
 	ld	hl, #_ghostyY
 	ld	c, (hl)
 	ld	hl, #_ghostyX
@@ -131,17 +133,17 @@ _setGhosty::
 	ld	d, c
 	xor	a, a
 	call	___move_metasprite
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:32: OBP0_REG=DMG_PALETTE(DMG_BLACK, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_WHITE);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:35: OBP0_REG=DMG_PALETTE(DMG_BLACK, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_WHITE);
 	ld	a, #0x1b
 	ldh	(_OBP0_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:33: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:36: }
 	ret
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:35: void setBone(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:38: void setBone(void){
 ;	---------------------------------
 ; Function setBone
 ; ---------------------------------
 _setBone::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:37: set_sprite_data(4,2,boneTile);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:40: set_sprite_data(4,2,boneTile);
 	ld	de, #_boneTile
 	push	de
 	ld	hl, #0x204
@@ -151,80 +153,82 @@ _setBone::
 ;c:\users\wsajj\gbdev\gbdk\include\gb\gb.h:1934: shadow_OAM[nb].prop=prop;
 	ld	hl, #(_shadow_OAM + 19)
 	ld	(hl), #0x00
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:38: set_sprite_prop(4,0x00);
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:39: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:41: set_sprite_prop(4,0x00);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:42: }
 	ret
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:41: void smallDelay(uint8_t numloops){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:44: void smallDelay(uint8_t numloops){
 ;	---------------------------------
 ; Function smallDelay
 ; ---------------------------------
 _smallDelay::
 	ld	c, a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:44: for(i = 0; i < numloops; i++){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:47: for(i = 0; i < numloops; i++){
 	ld	b, #0x00
 00103$:
 	ld	a, b
 	sub	a, c
 	ret	NC
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:45: vsync();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:48: vsync();
 	call	_vsync
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:44: for(i = 0; i < numloops; i++){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:47: for(i = 0; i < numloops; i++){
 	inc	b
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:47: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:50: }
 	jr	00103$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:49: void gameFirstLoad(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:52: void gameFirstLoad(void){
 ;	---------------------------------
 ; Function gameFirstLoad
 ; ---------------------------------
 _gameFirstLoad::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:51: NR52_REG = 0x80;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:54: NR52_REG = 0x80;
 	ld	a, #0x80
 	ldh	(_NR52_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:52: NR50_REG = 0x77; 
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:55: NR50_REG = 0x77; 
 	ld	a, #0x77
 	ldh	(_NR50_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:53: NR51_REG = 0xFF;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:56: NR51_REG = 0xFF;
 	ld	a, #0xff
 	ldh	(_NR51_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:55: SHOW_BKG;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:58: SHOW_BKG;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x01
 	ldh	(_LCDC_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:56: SHOW_SPRITES;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:59: SHOW_SPRITES;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x02
 	ldh	(_LCDC_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:57: DISPLAY_ON;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:60: DISPLAY_ON;
 	ldh	a, (_LCDC_REG + 0)
 	or	a, #0x80
 	ldh	(_LCDC_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:59: STAT_REG |= 0x40;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:62: STAT_REG |= 0x40;
 	ldh	a, (_STAT_REG + 0)
 	or	a, #0x40
 	ldh	(_STAT_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:60: LYC_REG=0;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:63: LYC_REG=0;
 	xor	a, a
 	ldh	(_LYC_REG + 0), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:62: add_LCD(bkgInterrupts);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:65: add_LCD(bkgInterrupts);
 	ld	de, #_bkgInterrupts
 	call	_add_LCD
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:63: set_interrupts(LCD_IFLAG | VBL_IFLAG);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:66: set_interrupts(LCD_IFLAG | VBL_IFLAG);
 	ld	a, #0x03
 	call	_set_interrupts
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:66: waitpad(J_START);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:69: waitpad(J_START);
 	ld	a, #0x80
 	call	_waitpad
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:67: uint16_t seed = LY_REG;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:70: uint16_t seed = LY_REG;
 	ldh	a, (_LY_REG + 0)
 	ld	c, a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:68: seed |= (uint16_t)DIV_REG << 8;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:71: seed |= (uint16_t)DIV_REG << 8;
 	ldh	a, (_DIV_REG + 0)
 	ld	b, a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:69: initrand(seed);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:72: initrand(seed);
 	push	bc
 	call	_initrand
 	pop	hl
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:71: set_sprite_palette(0,1,ghosty_palettes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:74: set_default_palette();
+	call	_set_default_palette
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:75: set_sprite_palette(0,1,ghosty_palettes);
 	ld	de, #_ghosty_palettes
 	push	de
 	xor	a, a
@@ -232,7 +236,7 @@ _gameFirstLoad::
 	push	af
 	call	_set_sprite_palette
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:72: set_bkg_palette(0,1,bkgd_palettes);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:76: set_bkg_palette(0,1,bkgd_palettes);
 	ld	de, #_bkgd_palettes
 	push	de
 	ld	a, #0x01
@@ -243,13 +247,15 @@ _gameFirstLoad::
 	inc	sp
 	call	_set_bkg_palette
 	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:73: setBkgd();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:77: setBkgd();
 	call	_setBkgd
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:74: setGhosty();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:78: setGhosty();
 	call	_setGhosty
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:75: setBone();
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:76: }
-	jp	_setBone
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:79: setBone();
+	call	_setBone
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:80: initBoneTable();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\GameStates\loadGame.c:81: }
+	jp	_initBoneTable
 	.area _CODE
 	.area _INITIALIZER
 __xinit__spriteSize:

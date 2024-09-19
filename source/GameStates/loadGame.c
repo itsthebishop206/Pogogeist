@@ -1,8 +1,10 @@
 #include <gb/gb.h>
+#include <gb/cgb.h>
 #include <bkgd.h>
 #include <loadGame.h>
 #include <palette.h>
 #include <stdint.h>
+#include <gbdk/platform.h>
 #include <gb/metasprites.h>
 #include <ghosty.h>
 #include <bone.h>
@@ -11,6 +13,7 @@
 #include <stdio.h>
 #include <joypad.h>
 #include <subPixCalc.h>
+#include <projectile.h>
 
 UBYTE spriteSize = 8;
 
@@ -68,10 +71,12 @@ void gameFirstLoad(void){
     seed |= (uint16_t)DIV_REG << 8;
     initrand(seed);
 
+    set_default_palette();
     set_sprite_palette(0,1,ghosty_palettes);
     set_bkg_palette(0,1,bkgd_palettes);
     setBkgd();
     setGhosty();
     setBone();
+    initBoneTable();
 }
 

@@ -9,7 +9,6 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _main
-	.globl _scrollBkg
 	.globl _joypadMgr
 	.globl _gameFirstLoad
 	.globl _vsync
@@ -53,13 +52,11 @@ _main::
 	call	_gameFirstLoad
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:15: while(1) {        
 00102$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:17: joypadMgr();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:18: joypadMgr();
 	call	_joypadMgr
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:18: scrollBkg();
-	call	_scrollBkg
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:20: vsync();
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: vsync();
 	call	_vsync
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:24: }
 	jr	00102$
 	.area _CODE
 	.area _INITIALIZER

@@ -1,8 +1,10 @@
 #pragma disable_warning 115
 #include <stdint.h>
 #include <gb/gb.h>
+#include <gb/cgb.h>
 #include <joypad.h>
 #include <ghosty.h>
+#include <gbdk/platform.h>
 #include <gb/metasprites.h>
 #include <loadGame.h>
 #include <stdlib.h>

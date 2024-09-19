@@ -14,8 +14,10 @@ void main(void)
 
     while(1) {        
         
+        //set_default_palette();
         joypadMgr();
-        scrollBkg();
+        //scrollBkg();
+        //throwBone();
         // Done processing, yield CPU and wait for start of next frame
         vsync();
     }
