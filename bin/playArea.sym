@@ -7,13 +7,7 @@ Symbol Table
     .__.ABS.                                                    =   00000000 G
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
-    __divuint                                                       ******** GX
-    __mulint                                                        ******** GX
-  0 _newton                                                         000000FE GR
-  0 _projSPC                                                        0000012C GR
-  0 _subPixCalc                                                     00000000 GR
-  1 _subPixCalc_fractionX_10000_186                                 00000000 R
-  1 _subPixCalc_fractionY_10000_186                                 00000002 R
+  0 _isActive                                                       00000000 GR
 
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
@@ -21,12 +15,12 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      1A5   flags    0
-   1 _DATA                                      size        4   flags    0
+   0 _CODE                                      size       59   flags    0
+   1 _DATA                                      size        0   flags    0
    2 _INITIALIZED                               size        0   flags    0
    3 _DABS                                      size        0   flags    8
    4 _HOME                                      size        0   flags    0
-   5 _GSINIT                                    size        6   flags    0
+   5 _GSINIT                                    size        0   flags    0
    6 _GSFINAL                                   size        0   flags    0
    7 _INITIALIZER                               size        0   flags    0
    8 _CABS                                      size        0   flags    8

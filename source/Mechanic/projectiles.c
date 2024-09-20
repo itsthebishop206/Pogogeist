@@ -54,124 +54,79 @@
 
 #pragma region definitions
 
-uint8_t prX = 1;
-uint8_t prY = 1;
-uint8_t prSpd = 0;
 uint8_t boneCounter = 0;
+uint8_t activeBones = 0;
+Projectile bones[MAX_BONE];
 uint8_t frameCounter = 5;
-// do we need prSpawn or prActive or whatever
-
+int16_t* deltas;
 // we need pointers if we are to use subpixcalc
 // i need to point to the address of the x/y coords for bones on the bone table
 
-typedef struct{ // typedef lets you define your own identifiers. i am defining "Projectile"
-
-    uint8_t x;
-    uint8_t y;
-    uint8_t speed;
-    uint8_t active;
-    const metasprite_t* metasprite;
-
-} Projectile;
-
-Projectile bones[MAX_BONE];
-
 #pragma endregion
+
+void initRandXY(int16_t* prX, int16_t* prY){
+
+    uint8_t r = ((uint8_t)rand()) % (uint8_t)4;
+        if(r==0){
+            *prX = -1;
+            *prY = -1;
+        } else if(r==1){
+            *prX = 161;
+            *prY = -1;
+        } else if(r==2){
+            *prX = 161;
+            *prY = 145;
+        } else if(r==3){
+            *prX = 1;
+            *prY = 145;
+        }
+}
 
 void initBoneTable(void){
     // INITIALIZE BONE TABLE...
     // for loops repeat code a set number of times
     // for each index in this array:
+
     for(uint8_t b = 0; b < MAX_BONE; b++){
 
-        uint8_t r = ((uint8_t)rand()) % (uint8_t)4;
-        if(r==0){
-            prX = 1;
-            prY = 1;
-        } else if(r==1){
-            prX = 160;
-            prY = 1;
-        } else if(r==2){
-            prX = 160;
-            prY = 144;
-        } else if(r==3){
-            prX = 1;
-            prY = 144;
-        }
-
-        bones[b].active = 0;
+        bones[b].x = 0;
+        bones[b].y = 0;
+        bones[b].prActive = 0;
         bones[b].metasprite = boneMS;
-        bones[b].x = prX;
-        bones[b].y = prY;
-        bones[b].speed = prSpd;
-    }
+        bones[b].speed = 0;
+        initRandXY(&bones[b].x, &bones[b].y);
+    }    
 }
 
 void throwBone(void){
-    
-    // so we know the boneTable works
-    // now:
-    // i need a way to track how many bones are on the screen
-    // ideally, once we hit max bones on screen it stops checking until a bone dies. idk if thats possible though
-    
+
+// --- SIMPLE TEST VERSION ---
+    uint16_t boneX = 100;
+    uint16_t boneY = 30;
+    // int16_t* deltas = projSPC(boneX,ghostyX,boneY,ghostyY);
+// --- ------ ---- ------- ---
+
+    // if(activeBones < MAX_BONE){
+    //     // check ghostXY coords
+    //     // calculate deltaXY values based of the coords of bone[boneCounter].XY values
+    //     // save those values to an array of deltaXY values
+    //     // int16_t* deltas = projSPC(bones[boneCounter].x, ghostyX, bones[boneCounter].y, ghostyY);
+    //     activeBones++;
+    //     boneCounter++;        
+    // } else{
+
+    // }
+
+    // smallDelay(500);
 }
 
-
-#pragma region graveyard
-
-// void throwBone(void){
-
-//     if((boneCounter < MAX_BONE)){
-        
-//         frameCounter++;
-//         // int16_t bSpeedX = (uint16_t) bones[boneCounter].x / (uint16_t) ghostyX;
-//         // int16_t bSpeedY = (uint16_t) bones[boneCounter].y / (uint16_t) ghostyY;
-
-//         // Print debug information
-//         printf("frameCounter: %d\n", frameCounter);
-//         printf("boneCounter: %d\n", boneCounter);
-//         printf("boneX: %d\n", bones[boneCounter].x);
-//         printf("boneY: %d\n", bones[boneCounter].y);
-//         // printf("bSpeedX: %d\n", bSpeedX);
-//         // printf("bSpeedY: %d\n", bSpeedY);
-
-//         // subPixCalc(&bones[boneCounter].x,&bones[boneCounter].y,bSpeedX, bSpeedY);
-
-//         // if(bones[boneCounter].x < ghostyX){
-            
-//         //     bones[boneCounter].x += bSpeedX;
-
-//         // } else if(bones[boneCounter].x > ghostyX){
-            
-//         //     bones[boneCounter].x -= bSpeedX;
-
-//         // }
-
-//         // if(bones[boneCounter].y < ghostyY){
-            
-//         //     bones[boneCounter].y += bSpeedY;
-
-//         // } else if(bones[boneCounter].y > ghostyY){
-            
-//         //     bones[boneCounter].y -= bSpeedY;
-
-//         // }
-
-//         //if(!(frameCounter%FRAME_PER_MOVE)){
-        
-//         //move_metasprite_ex(bones[boneCounter].metasprite, 4, 0, 4, ghostyX, ghostyY);
-        
-//         //}
-
-//         if(frameCounter < FRAME_PER_SPAWN){
-//         } else{
-//             frameCounter = 1;
-//         }
-
-//         boneCounter++;
-
-//     } else if(boneCounter >= MAX_BONE){
-//         boneCounter = 0;
-//     }
-// }
-#pragma endregion
+void updateBone(void){
+    
+    // if !active, set initial xy values
+    // set these to the result of snapshot function
+    static int16_t newX = 0;
+    static int16_t newY = 0;
+    newX += deltas[0];
+    newY += deltas[1];
+    move_metasprite_ex(bones[boneCounter].metasprite,4,0,4,newX,newY);
+}

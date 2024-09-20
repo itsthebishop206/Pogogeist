@@ -4,4 +4,4 @@
 #define FLOOR 132
 #define SCREEN_BOT_BOUND 144
 
-uint8_t isActive(uint8_t x, uint8_t y);
+extern uint8_t isActive(int16_t x, int16_t y);

@@ -1,12 +1,14 @@
 XL4
-H 9 areas 5 global symbols
+H 9 areas 7 global symbols
 M main
 O -msm83
 S _gameFirstLoad Ref00000000
+S _scrollBkg Ref00000000
 S _joypadMgr Ref00000000
 S _vsync Ref00000000
+S _throwBone Ref00000000
 S .__.ABS. Def00000000
-A _CODE size B flags 0 addr 0
+A _CODE size 11 flags 0 addr 0
 S _main Def00000000
 A _DATA size 0 flags 0 addr 0
 A _INITIALIZED size 0 flags 0 addr 0
@@ -22,5 +24,7 @@ T 00 00 00 00 CD 00 00
 R 00 00 00 00 02 05 00 00
 T 03 00 00 00
 R 00 00 00 00
-T 03 00 00 00 CD 00 00 CD 00 00 18 F8
-R 00 00 00 00 02 05 01 00 02 08 02 00
+T 03 00 00 00 CD 00 00 CD 00 00 CD 00 00 CD
+R 00 00 00 00 02 05 02 00 02 08 01 00 02 0B 04 00
+T 0D 00 00 00 00 00 18 F2
+R 00 00 00 00 02 04 03 00

@@ -8,16 +8,16 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _printf
+	.globl _initRandXY
 	.globl _rand
 	.globl _frameCounter
+	.globl _activeBones
 	.globl _boneCounter
-	.globl _prSpd
-	.globl _prY
-	.globl _prX
+	.globl _deltas
 	.globl _bones
 	.globl _initBoneTable
 	.globl _throwBone
+	.globl _updateBone
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -26,18 +26,20 @@
 ;--------------------------------------------------------
 	.area _DATA
 _bones::
-	.ds 36
+	.ds 54
+_deltas::
+	.ds 2
+_updateBone_newX_10000_218:
+	.ds 2
+_updateBone_newY_10000_218:
+	.ds 2
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
 	.area _INITIALIZED
-_prX::
-	.ds 1
-_prY::
-	.ds 1
-_prSpd::
-	.ds 1
 _boneCounter::
+	.ds 1
+_activeBones::
 	.ds 1
 _frameCounter::
 	.ds 1
@@ -52,6 +54,16 @@ _frameCounter::
 	.area _GSINIT
 	.area _GSFINAL
 	.area _GSINIT
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:127: static int16_t newX = 0;
+	xor	a, a
+	ld	hl, #_updateBone_newX_10000_218
+	ld	(hl+), a
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:128: static int16_t newY = 0;
+	xor	a, a
+	ld	hl, #_updateBone_newY_10000_218
+	ld	(hl+), a
+	ld	(hl), a
 ;--------------------------------------------------------
 ; Home
 ;--------------------------------------------------------
@@ -61,235 +73,257 @@ _frameCounter::
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:81: void initBoneTable(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:67: void initRandXY(int16_t* prX, int16_t* prY){
+;	---------------------------------
+; Function initRandXY
+; ---------------------------------
+_initRandXY::
+;	spillPairReg hl
+;	spillPairReg hl
+;	spillPairReg hl
+;	spillPairReg hl
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:69: uint8_t r = ((uint8_t)rand()) % (uint8_t)4;
+	push	de
+	push	bc
+	call	_rand
+	ld	a, e
+	pop	bc
+	pop	hl
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:70: if(r==0){
+	and	a,#0x03
+	jr	NZ, 00110$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:71: *prX = -1;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:72: *prY = -1;
+	ld	a,#0xff
+	ld	(hl+),a
+	ld	(hl),a
+	ld	(bc), a
+	inc	bc
+	ld	a, #0xff
+	ld	(bc), a
+	ret
+00110$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:73: } else if(r==1){
+	cp	a, #0x01
+	jr	NZ, 00107$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:74: *prX = 161;
+	ld	a, #0xa1
+	ld	(hl+), a
+	ld	(hl), #0x00
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:75: *prY = -1;
+	ld	a, #0xff
+	ld	(bc), a
+	inc	bc
+	ld	a, #0xff
+	ld	(bc), a
+	ret
+00107$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:76: } else if(r==2){
+	cp	a, #0x02
+	jr	NZ, 00104$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:77: *prX = 161;
+	ld	a, #0xa1
+	ld	(hl+), a
+	ld	(hl), #0x00
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:78: *prY = 145;
+	ld	a, #0x91
+	ld	(bc), a
+	inc	bc
+	xor	a, a
+	ld	(bc), a
+	ret
+00104$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:79: } else if(r==3){
+	sub	a, #0x03
+	ret	NZ
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:80: *prX = 1;
+	ld	a, #0x01
+	ld	(hl+), a
+	ld	(hl), #0x00
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:81: *prY = 145;
+	ld	a, #0x91
+	ld	(bc), a
+	inc	bc
+	xor	a, a
+	ld	(bc), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:83: }
+	ret
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:85: void initBoneTable(void){
 ;	---------------------------------
 ; Function initBoneTable
 ; ---------------------------------
 _initBoneTable::
 	dec	sp
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:85: for(uint8_t b = 0; b < MAX_BONE; b++){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:90: for(uint8_t b = 0; b < MAX_BONE; b++){
 	ldhl	sp,	#0
 	ld	(hl), #0x00
-00114$:
+00103$:
 	ldhl	sp,	#0
 	ld	a, (hl)
 	sub	a, #0x06
-	jr	NC, 00116$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:87: uint8_t r = ((uint8_t)rand()) % (uint8_t)4;
-	call	_rand
-	ld	a, e
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:88: if(r==0){
-	and	a,#0x03
-	jr	NZ, 00110$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:89: prX = 1;
-	ld	hl, #_prX
-	ld	(hl), #0x01
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:90: prY = 1;
-	ld	hl, #_prY
-	ld	(hl), #0x01
-	jr	00111$
-00110$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:91: } else if(r==1){
-	cp	a, #0x01
-	jr	NZ, 00107$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:92: prX = 160;
-	ld	hl, #_prX
-	ld	(hl), #0xa0
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:93: prY = 1;
-	ld	hl, #_prY
-	ld	(hl), #0x01
-	jr	00111$
-00107$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:94: } else if(r==2){
-	cp	a, #0x02
-	jr	NZ, 00104$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:95: prX = 160;
-	ld	hl, #_prX
-	ld	(hl), #0xa0
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:96: prY = 144;
-	ld	hl, #_prY
-	ld	(hl), #0x90
-	jr	00111$
-00104$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:97: } else if(r==3){
-	sub	a, #0x03
-	jr	NZ, 00111$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:98: prX = 1;
-	ld	hl, #_prX
-	ld	(hl), #0x01
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:99: prY = 144;
-	ld	hl, #_prY
-	ld	(hl), #0x90
-00111$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:102: bones[b].active = 0;
-	ldhl	sp,	#0
+	jr	NC, 00105$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:92: bones[b].x = 0;
 	ld	c, (hl)
 	ld	b, #0x00
 	ld	l, c
 	ld	h, b
 	add	hl, hl
-	add	hl, bc
 	add	hl, hl
+	add	hl, hl
+	add	hl, bc
 	ld	a, l
 	add	a, #<(_bones)
-	ld	c, a
+	ld	e, a
 	ld	a, h
 	adc	a, #>(_bones)
-	ld	b, a
+	ld	d, a
+	ld	l, e
+	ld	h, d
+	xor	a, a
+	ld	(hl+), a
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:93: bones[b].y = 0;
+	ld	c, e
+	ld	b, d
+	inc	bc
+	inc	bc
 	ld	l, c
-;	spillPairReg hl
-;	spillPairReg hl
 	ld	h, b
-;	spillPairReg hl
-;	spillPairReg hl
-	inc	hl
-	inc	hl
-	inc	hl
+	xor	a, a
+	ld	(hl+), a
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:94: bones[b].prActive = 0;
+	ld	hl, #0x0006
+	add	hl, de
 	ld	(hl), #0x00
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:103: bones[b].metasprite = boneMS;
-	ld	hl, #0x0004
-	add	hl, bc
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:95: bones[b].metasprite = boneMS;
+	ld	hl, #0x0007
+	add	hl, de
 	ld	a, #<(_boneMS)
 	ld	(hl+), a
 	ld	(hl), #>(_boneMS)
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:104: bones[b].x = prX;
-	ld	a, (#_prX)
-	ld	(bc), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:105: bones[b].y = prY;
-	ld	e, c
-	ld	d, b
-	inc	de
-	ld	a, (#_prY)
-	ld	(de), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:106: bones[b].speed = prSpd;
-	inc	bc
-	inc	bc
-	ld	a, (#_prSpd)
-	ld	(bc), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:85: for(uint8_t b = 0; b < MAX_BONE; b++){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:96: bones[b].speed = 0;
+	ld	hl, #0x0004
+	add	hl, de
+	xor	a, a
+	ld	(hl+), a
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:97: initRandXY(&bones[b].x, &bones[b].y);
+	call	_initRandXY
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:90: for(uint8_t b = 0; b < MAX_BONE; b++){
 	ldhl	sp,	#0
 	inc	(hl)
-	jp	00114$
-00116$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:108: }
+	jr	00103$
+00105$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:99: }
 	inc	sp
 	ret
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:110: void throwBone(void){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:101: void throwBone(void){
 ;	---------------------------------
 ; Function throwBone
 ; ---------------------------------
 _throwBone::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:112: if((boneCounter < MAX_BONE)){
-	ld	a, (#_boneCounter)
-	sub	a, #0x06
-	ld	a, #0x00
-	rla
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:105: uint16_t boneY = 30;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:121: }
+	ret
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:123: void updateBone(void){
+;	---------------------------------
+; Function updateBone
+; ---------------------------------
+_updateBone::
+	dec	sp
+	dec	sp
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:129: newX += deltas[0];
+	ld	hl, #_deltas
+	ld	l, (hl)
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	a, (_deltas + 1)
+	ld	h, a
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	a, (hl+)
 	ld	c, a
-	or	a, a
-	jr	Z, 00107$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:114: frameCounter++;
-	ld	hl, #_frameCounter
-	inc	(hl)
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:119: printf("frameCounter: %d\n", frameCounter);
-	ld	c, (hl)
-	ld	b, #0x00
-	push	bc
-	ld	de, #___str_0
-	push	de
-	call	_printf
-	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:120: printf("boneCounter: %d\n", boneCounter);
-	ld	hl, #_boneCounter
-	ld	c, (hl)
-	ld	b, #0x00
-	push	bc
-	ld	de, #___str_1
-	push	de
-	call	_printf
-	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:121: printf("boneX: %d\n", bones[boneCounter].x);
-	ld	hl, #_boneCounter
-	ld	c, (hl)
-	ld	b, #0x00
-	ld	l, c
-	ld	h, b
-	add	hl, hl
-	add	hl, bc
-	add	hl, hl
-	ld	bc,#_bones
-	add	hl,bc
-	ld	c, (hl)
-	ld	b, #0x00
-	push	bc
-	ld	de, #___str_2
-	push	de
-	call	_printf
-	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:122: printf("boneY: %d\n", bones[boneCounter].y);
-	ld	hl, #_boneCounter
-	ld	c, (hl)
-	ld	b, #0x00
-	ld	l, c
-	ld	h, b
-	add	hl, hl
-	add	hl, bc
-	add	hl, hl
-	ld	bc,#_bones
-	add	hl,bc
-	inc	hl
-	ld	c, (hl)
-	ld	b, #0x00
-	push	bc
-	ld	de, #___str_3
-	push	de
-	call	_printf
-	add	sp, #4
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:154: if(frameCounter < FRAME_PER_SPAWN){
-	ld	hl, #_frameCounter
+	ld	b, (hl)
+	ld	hl, #_updateBone_newX_10000_218
 	ld	a, (hl)
-	sub	a, #0x06
-	jr	C, 00103$
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:156: frameCounter = 1;
-	ld	(hl), #0x01
-00103$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:159: boneCounter++;
+	add	a, c
+	ld	(hl+), a
+	ld	a, (hl)
+	adc	a, b
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:130: newY += deltas[1];
+	ld	hl, #_deltas
+	ld	a, (hl+)
+	ld	c, a
+	ld	b, (hl)
+	ld	l, c
+	ld	h, b
+	inc	hl
+	inc	hl
+	ld	a, (hl+)
+	ld	c, a
+	ld	b, (hl)
+	ld	hl, #_updateBone_newY_10000_218
+	ld	a, (hl)
+	add	a, c
+	ld	(hl+), a
+	ld	a, (hl)
+	adc	a, b
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:131: move_metasprite_ex(bones[boneCounter].metasprite,4,0,4,newX,newY);
+	ld	(hl-), a
+	ld	a, (hl)
+	ldhl	sp,	#0
+	ld	(hl), a
+	ld	a, (#_updateBone_newX_10000_218)
+	ldhl	sp,	#1
+	ld	(hl), a
 	ld	hl, #_boneCounter
-	inc	(hl)
-	ret
-00107$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:161: } else if(boneCounter >= MAX_BONE){
-	bit	0, c
-	ret	NZ
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:162: boneCounter = 0;
-	ld	hl, #_boneCounter
+	ld	c, (hl)
+	ld	b, #0x00
+	ld	l, c
+	ld	h, b
+	add	hl, hl
+	add	hl, hl
+	add	hl, hl
+	add	hl, bc
+	ld	bc,#_bones
+	add	hl,bc
+	ld	bc, #0x0007
+	add	hl, bc
+	ld	a, (hl+)
+	ld	c, (hl)
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:160: __current_metasprite = metasprite;
+	ld	hl, #___current_metasprite
+	ld	(hl+), a
+	ld	(hl), c
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:161: __current_base_tile = base_tile;
+	ld	hl, #___current_base_tile
+	ld	(hl), #0x04
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:162: __current_base_prop = base_prop;
+	ld	hl, #___current_base_prop
 	ld	(hl), #0x00
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:164: }
+;c:\users\wsajj\gbdev\gbdk\include\gb\metasprites.h:163: return __move_metasprite(base_sprite, (y << 8) | (uint8_t)x);
+	ldhl	sp,	#0
+	ld	a, (hl+)
+	ld	b, a
+	ld	e, (hl)
+	xor	a, a
+	ld	d, b
+	ld	a, #0x04
+	inc	sp
+	inc	sp
+	jp	___move_metasprite
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:131: move_metasprite_ex(bones[boneCounter].metasprite,4,0,4,newX,newY);
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\projectiles.c:132: }
+	inc	sp
+	inc	sp
 	ret
-___str_0:
-	.ascii "frameCounter: %d"
-	.db 0x0a
-	.db 0x00
-___str_1:
-	.ascii "boneCounter: %d"
-	.db 0x0a
-	.db 0x00
-___str_2:
-	.ascii "boneX: %d"
-	.db 0x0a
-	.db 0x00
-___str_3:
-	.ascii "boneY: %d"
-	.db 0x0a
-	.db 0x00
 	.area _CODE
 	.area _INITIALIZER
-__xinit__prX:
-	.db #0x01	; 1
-__xinit__prY:
-	.db #0x01	; 1
-__xinit__prSpd:
-	.db #0x00	; 0
 __xinit__boneCounter:
+	.db #0x00	; 0
+__xinit__activeBones:
 	.db #0x00	; 0
 __xinit__frameCounter:
 	.db #0x05	; 5

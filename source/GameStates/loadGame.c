@@ -37,8 +37,10 @@ void setGhosty(void){
 
 void setBone(void){
   
-  set_sprite_data(4,2,boneTile);
-  set_sprite_prop(4,0x00);
+    set_sprite_data(4,2,boneTile);
+    set_sprite_prop(4,0x00);
+    move_metasprite_ex(boneMS,4,0,4,100,130);
+    initBoneTable();
 }
 
 void smallDelay(uint8_t numloops){
@@ -77,6 +79,5 @@ void gameFirstLoad(void){
     setBkgd();
     setGhosty();
     setBone();
-    initBoneTable();
 }
 

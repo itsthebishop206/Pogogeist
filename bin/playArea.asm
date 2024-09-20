@@ -2,18 +2,13 @@
 ; File Created by SDCC : free open source ISO C Compiler 
 ; Version 4.4.1 #14650 (MINGW64)
 ;--------------------------------------------------------
-	.module main
+	.module playArea
 	.optsdcc -msm83
 	
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
-	.globl _main
-	.globl _throwBone
-	.globl _scrollBkg
-	.globl _joypadMgr
-	.globl _gameFirstLoad
-	.globl _vsync
+	.globl _isActive
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -45,25 +40,81 @@
 ; code
 ;--------------------------------------------------------
 	.area _CODE
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:14: void main(void)
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\playArea.c:5: uint8_t isActive(int16_t x, int16_t y){
 ;	---------------------------------
-; Function main
+; Function isActive
 ; ---------------------------------
-_main::
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:16: gameFirstLoad();
-	call	_gameFirstLoad
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:18: while(1) {        
+_isActive::
+	push	bc
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\playArea.c:9: if((x > SCREEN_LEFT_BOUND) && (x < SCREEN_RIGHT_BOUND) && (y > CEILING) && (y < FLOOR)){
+	ld	c, e
+	ld	b, d
+	ld	e, b
+	ld	d, #0x00
+	ld	a, #0x0f
+	cp	a, c
+	ld	a, #0x00
+	sbc	a, b
+	bit	7, e
+	jr	Z, 00137$
+	bit	7, d
+	jr	NZ, 00138$
+	cp	a, a
+	jr	00138$
+00137$:
+	bit	7, d
+	jr	Z, 00138$
+	scf
+00138$:
+	jr	NC, 00102$
+	ld	a, c
+	sub	a, #0xa0
+	ld	a, b
+	rla
+	ccf
+	rra
+	sbc	a, #0x80
+	jr	NC, 00102$
+	pop	bc
+	push	bc
+	ld	e, b
+	ld	d, #0x00
+	ld	a, #0x17
+	cp	a, c
+	ld	a, #0x00
+	sbc	a, b
+	bit	7, e
+	jr	Z, 00139$
+	bit	7, d
+	jr	NZ, 00140$
+	cp	a, a
+	jr	00140$
+00139$:
+	bit	7, d
+	jr	Z, 00140$
+	scf
+00140$:
+	jr	NC, 00102$
+	ld	a, c
+	sub	a, #0x84
+	ld	a, b
+	rla
+	ccf
+	rra
+	sbc	a, #0x80
+	jr	NC, 00102$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\playArea.c:11: active = 1;
+	ld	a, #0x01
+	jr	00103$
 00102$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:21: joypadMgr();
-	call	_joypadMgr
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: scrollBkg();
-	call	_scrollBkg
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:23: throwBone();
-	call	_throwBone
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:27: vsync();
-	call	_vsync
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:29: }
-	jr	00102$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\playArea.c:15: active = 0;
+	xor	a, a
+00103$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\playArea.c:19: return active;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\playArea.c:20: }
+	inc	sp
+	inc	sp
+	ret
 	.area _CODE
 	.area _INITIALIZER
 	.area _CABS (ABS)

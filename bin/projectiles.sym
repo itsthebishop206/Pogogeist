@@ -7,39 +7,39 @@ Symbol Table
     .__.ABS.                                                    =   00000000 G
     .__.CPU.                                                    =   00000000 L
     .__.H$L.                                                    =   00000000 L
-  0 ___str_0                                                        00000107 R
-  0 ___str_1                                                        00000119 R
-  0 ___str_2                                                        0000012A R
-  0 ___str_3                                                        00000135 R
-  7 __xinit__boneCounter                                            00000003 R
-  7 __xinit__frameCounter                                           00000004 R
-  7 __xinit__prSpd                                                  00000002 R
-  7 __xinit__prX                                                    00000000 R
-  7 __xinit__prY                                                    00000001 R
-  2 _boneCounter                                                    00000003 GR
+    ___current_base_prop                                            ******** GX
+    ___current_base_tile                                            ******** GX
+    ___current_metasprite                                           ******** GX
+    ___move_metasprite                                              ******** GX
+  7 __xinit__activeBones                                            00000001 R
+  7 __xinit__boneCounter                                            00000000 R
+  7 __xinit__frameCounter                                           00000002 R
+  2 _activeBones                                                    00000001 GR
+  2 _boneCounter                                                    00000000 GR
     _boneMS                                                         ******** GX
   1 _bones                                                          00000000 GR
-  2 _frameCounter                                                   00000004 GR
-  0 _initBoneTable                                                  00000000 GR
-  2 _prSpd                                                          00000002 GR
-  2 _prX                                                            00000000 GR
-  2 _prY                                                            00000001 GR
-    _printf                                                         ******** GX
+  1 _deltas                                                         00000036 GR
+  2 _frameCounter                                                   00000002 GR
+  0 _initBoneTable                                                  00000046 GR
+  0 _initRandXY                                                     00000000 GR
     _rand                                                           ******** GX
-  0 _throwBone                                                      00000089 GR
+  0 _throwBone                                                      00000091 GR
+  0 _updateBone                                                     00000092 GR
+  1 _updateBone_newX_10000_218                                      00000038 R
+  1 _updateBone_newY_10000_218                                      0000003A R
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      140   flags    0
-   1 _DATA                                      size       24   flags    0
-   2 _INITIALIZED                               size        5   flags    0
+   0 _CODE                                      size       FE   flags    0
+   1 _DATA                                      size       3C   flags    0
+   2 _INITIALIZED                               size        3   flags    0
    3 _DABS                                      size        0   flags    8
    4 _HOME                                      size        0   flags    0
-   5 _GSINIT                                    size        0   flags    0
+   5 _GSINIT                                    size        C   flags    0
    6 _GSFINAL                                   size        0   flags    0
-   7 _INITIALIZER                               size        5   flags    0
+   7 _INITIALIZER                               size        3   flags    0
    8 _CABS                                      size        0   flags    8
 
