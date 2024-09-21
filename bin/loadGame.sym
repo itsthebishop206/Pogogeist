@@ -21,14 +21,16 @@ Symbol Table
     ___current_metasprite                                           ******** GX
     ___move_metasprite                                              ******** GX
   7 __xinit__spriteSize                                             00000000 R
+  1 _activeBones                                                    00000000 R
     _add_LCD                                                        ******** GX
     _bkgInterrupts                                                  ******** GX
     _bkgd_map                                                       ******** GX
     _bkgd_palettes                                                  ******** GX
     _bkgd_tiles                                                     ******** GX
-    _boneMS                                                         ******** GX
+  1 _boneCounter                                                    00000001 R
     _boneTile                                                       ******** GX
-  0 _gameFirstLoad                                                  000000A3 GR
+  1 _frameCounter                                                   00000002 R
+  0 _gameFirstLoad                                                  0000008D GR
     _ghostyMS                                                       ******** GX
     _ghostyTiles                                                    ******** GX
     _ghostyX                                                        ******** GX
@@ -47,18 +49,19 @@ Symbol Table
     _set_sprite_data                                                ******** GX
     _set_sprite_palette                                             ******** GX
     _shadow_OAM                                                     ******** GX
-  0 _smallDelay                                                     00000097 GR
+  0 _smallDelay                                                     00000081 GR
   2 _spriteSize                                                     00000000 GR
     _vsync                                                          ******** GX
     _waitpad                                                        ******** GX
+
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      10D   flags    0
-   1 _DATA                                      size        0   flags    0
+   0 _CODE                                      size       F7   flags    0
+   1 _DATA                                      size        3   flags    0
    2 _INITIALIZED                               size        1   flags    0
    3 _DABS                                      size        0   flags    8
    4 _HOME                                      size        0   flags    0

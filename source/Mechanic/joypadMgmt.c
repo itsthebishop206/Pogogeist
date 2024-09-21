@@ -11,6 +11,8 @@
 #include <playArea.h>
 #include <subPixCalc.h>
 #include <stdio.h>
+#include <collision.h>
+#include <projectile.h>
 
 #pragma region definitions
 
@@ -19,13 +21,15 @@
 #define MAX_SPD_UP -1000
 #define MAX_SPD_LEFT -1000
 #define MAX_SPD_RIGHT 1000
+#define MAX_GRAVITY 500
+#define MIN_GRAVITY 10
 
 int16_t ghostySpeedX = 0;
 int16_t ghostySpeedY = 0;
 int16_t ghostyY = 80;
 int16_t ghostyX = 80;
 uint8_t pcFacing = 1;
-uint16_t gravity = 1;
+uint16_t gravityGhost = 1;
 
 int16_t *pghostyX = &ghostyX;
 int16_t *pghostyY = &ghostyY;
@@ -33,6 +37,14 @@ int16_t *pghostyY = &ghostyY;
 #pragma endregion
 
 void joypadMgr(void){
+
+    if(ghostySpeedY < MAX_SPD_DOWN){
+        
+        ghostySpeedY += gravityGhost;
+
+        if(gravityGhost < MAX_GRAVITY){            
+            gravityGhost++;
+    }
 
     uint8_t joypadCurrent = 0;
     joypadCurrent = joypad();
@@ -48,6 +60,13 @@ void joypadMgr(void){
 
     if(joypadCurrent & J_UP){
         
+        gravityGhost = 0;
+        // if(gravityGhost > MIN_GRAVITY){
+
+
+        // } else if(gravityGhost <= MIN_GRAVITY){
+        //     gravityGhost++;
+        // }
         if(ghostySpeedY > MAX_SPD_UP){            
             ghostySpeedY -= SPD_CHANGE;
         }
@@ -121,17 +140,21 @@ void joypadMgr(void){
     subPixCalc(pghostyX,pghostyY,ghostySpeedX,ghostySpeedY);
 
     if(ghostyY <= CEILING){
-        
-        if(ghostySpeedY < 0){
 
+        if(ghostySpeedY < 0){
+            
+            //gravity -= SPD_CHANGE;
             ghostyY = CEILING;
             ghostySpeedY = ghostySpeedY >> 1;
             ghostySpeedY = -ghostySpeedY;
         }
     } else if (ghostyY >= FLOOR){
         
-        ghostySpeedY = 0;
+        //ghostySpeedY = 0;
         ghostyY = FLOOR;
+        //gravity = 0;
+        ghostySpeedY = ghostySpeedY >> 1;
+        ghostySpeedY = -ghostySpeedY;
     }
     
     if(ghostyX <= SCREEN_LEFT_BOUND){
@@ -157,9 +180,11 @@ void joypadMgr(void){
         }
     }
 
-    if(pcFacing==0){
-        move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
-    } else if(pcFacing==1){
-        move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+        if(pcFacing==0){
+            move_metasprite_flipx(ghostyMS,0,0,0,ghostyX,ghostyY);
+        } else if(pcFacing==1){
+            move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
+        }
+    
     }
 }

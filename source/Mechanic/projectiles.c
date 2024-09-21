@@ -54,10 +54,10 @@
 
 #pragma region definitions
 
-uint8_t boneCounter = 0;
-uint8_t activeBones = 0;
+static uint8_t boneCounter = 0;
+static uint8_t activeBones = 0;
 Projectile bones[MAX_BONE];
-uint8_t frameCounter = 5;
+static uint8_t frameCounter = 0;
 int16_t* deltas;
 // we need pointers if we are to use subpixcalc
 // i need to point to the address of the x/y coords for bones on the bone table
@@ -68,17 +68,17 @@ void initRandXY(int16_t* prX, int16_t* prY){
 
     uint8_t r = ((uint8_t)rand()) % (uint8_t)4;
         if(r==0){
-            *prX = -1;
-            *prY = -1;
+            *prX = 20;
+            *prY = 20;
         } else if(r==1){
-            *prX = 161;
-            *prY = -1;
+            *prX = 130;
+            *prY = 20;
         } else if(r==2){
-            *prX = 161;
-            *prY = 145;
+            *prX = 130;
+            *prY = 125;
         } else if(r==3){
-            *prX = 1;
-            *prY = 145;
+            *prX = 20;
+            *prY = 125;
         }
 }
 
@@ -86,6 +86,8 @@ void initBoneTable(void){
     // INITIALIZE BONE TABLE...
     // for loops repeat code a set number of times
     // for each index in this array:
+
+    uint8_t oambt = 4;
 
     for(uint8_t b = 0; b < MAX_BONE; b++){
 
@@ -95,29 +97,25 @@ void initBoneTable(void){
         bones[b].metasprite = boneMS;
         bones[b].speed = 0;
         initRandXY(&bones[b].x, &bones[b].y);
+        move_metasprite_ex(bones[b].metasprite,4,0,oambt,bones[b].x,bones[b].y);
+        oambt += 2;
     }    
 }
 
 void throwBone(void){
 
-// --- SIMPLE TEST VERSION ---
-    uint16_t boneX = 100;
-    uint16_t boneY = 30;
-    // int16_t* deltas = projSPC(boneX,ghostyX,boneY,ghostyY);
-// --- ------ ---- ------- ---
+    if(activeBones < MAX_BONE){
+        // check ghostXY coords
+        // calculate deltaXY values based of the coords of bone[boneCounter].XY values
+        // save those values to an array of deltaXY values
+        if(frameCounter < FRAME_PER_SPAWN){
+            int16_t* deltas = projSPC(bones[boneCounter].x, ghostyX, bones[boneCounter].y, ghostyY);
+            activeBones++;
+        }
 
-    // if(activeBones < MAX_BONE){
-    //     // check ghostXY coords
-    //     // calculate deltaXY values based of the coords of bone[boneCounter].XY values
-    //     // save those values to an array of deltaXY values
-    //     // int16_t* deltas = projSPC(bones[boneCounter].x, ghostyX, bones[boneCounter].y, ghostyY);
-    //     activeBones++;
-    //     boneCounter++;        
-    // } else{
-
-    // }
-
-    // smallDelay(500);
+    } else{
+        activeBones = 0;
+    }
 }
 
 void updateBone(void){
@@ -126,7 +124,16 @@ void updateBone(void){
     // set these to the result of snapshot function
     static int16_t newX = 0;
     static int16_t newY = 0;
-    newX += deltas[0];
-    newY += deltas[1];
+    // int16_t deltaX = deltas[0];
+    // int16_t deltaY = deltas[1];
+    // free(deltas);
+    newX += deltas[1];
+    newY += deltas[0];
     move_metasprite_ex(bones[boneCounter].metasprite,4,0,4,newX,newY);
+
+    if(boneCounter < MAX_BONE){
+        boneCounter = 0;
+    } else{
+        boneCounter++;
+    }
 }

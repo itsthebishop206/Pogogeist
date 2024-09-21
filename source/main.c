@@ -20,7 +20,7 @@ void main(void)
         //set_default_palette();
         joypadMgr();
         scrollBkg();
-        throwBone();
+        //throwBone();
         //updateBone();
         
         // Done processing, yield CPU and wait for start of next frame

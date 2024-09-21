@@ -39,7 +39,7 @@ void setBone(void){
   
     set_sprite_data(4,2,boneTile);
     set_sprite_prop(4,0x00);
-    move_metasprite_ex(boneMS,4,0,4,100,130);
+    //move_metasprite_ex(boneMS,4,0,4,100,30);
     initBoneTable();
 }
 
@@ -58,6 +58,7 @@ void gameFirstLoad(void){
     NR51_REG = 0xFF;
 
     SHOW_BKG;
+    //SPRITES_8x16;
     SHOW_SPRITES;
     DISPLAY_ON;
 

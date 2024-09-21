@@ -18,6 +18,12 @@
 ; ram data
 ;--------------------------------------------------------
 	.area _DATA
+_activeBones:
+	.ds 1
+_boneCounter:
+	.ds 1
+_frameCounter:
+	.ds 1
 _subPixCalc_fractionX_10000_186:
 	.ds 2
 _subPixCalc_fractionY_10000_186:

@@ -16,9 +16,10 @@ typedef struct{ // typedef lets you define your own identifiers. i am defining "
 
 extern Projectile bones[];
 // this is set to zero in gameFirstLoad
-extern uint8_t activeBones;
+static uint8_t activeBones;
 // this is set to zero in gameFirstLoad
-extern uint8_t boneCounter;
+static uint8_t boneCounter;
+static uint8_t frameCounter;
 
 extern int16_t prX, prY;
 extern int16_t prSpeed;
@@ -28,5 +29,4 @@ void throwBone(void);
 void updateBone(void);
 
 #define FRAME_PER_SPAWN 6
-#define FRAME_PER_MOVE 2
 #define MAX_BONE 6

@@ -74,21 +74,21 @@ Area                                    Addr        Size        Decimal Bytes (A
      00000008  l__HEADER3                      
      0000001E  l__GSINIT                       
      00000030  l__HEADER7                      
-     0000005F  l__DATA                         
      00000060  l__HEADER4                      
+     0000006B  l__DATA                         
      00000078  l__INITIALIZED                  
      00000078  l__INITIALIZER                  
      000000AB  l__HEADER11                     
      0000019C  l__HOME                         
      00000200  s__CODE                         
-     00000CC0  l__CODE                         
-     00000EC0  s__HOME                         
-     0000105C  s__BASE                         
-     0000105C  s__CODE_0                       
-     0000105C  s__INITIALIZER                  
-     0000105C  s__LIT                          
-     000010D4  s__GSINIT                       
-     000010F2  s__GSFINAL                      
+     00000EBC  l__CODE                         
+     000010BC  s__HOME                         
+     00001258  s__BASE                         
+     00001258  s__CODE_0                       
+     00001258  s__INITIALIZER                  
+     00001258  s__LIT                          
+     000012D0  s__GSINIT                       
+     000012EE  s__GSFINAL                      
      00002000  _rROMB0                            
      00003000  _rROMB1                            
      00004000  _rRAMB                             
@@ -102,10 +102,10 @@ Area                                    Addr        Size        Decimal Bytes (A
      0000C000  __RAM                              
      0000C000  _shadow_OAM                     
      0000C0A0  s__DATA                         
-     0000C0FF  s__BSS                          
-     0000C0FF  s__INITIALIZED                  
-     0000C177  s__HEAP                         
-     0000C177  s__HEAP_END                     
+     0000C10B  s__BSS                          
+     0000C10B  s__INITIALIZED                  
+     0000C183  s__HEAP                         
+     0000C183  s__HEAP_END                     
      0000D000  __RAMBANK                          
      0000E000  .STACK                          
      0000FE00  __OAMRAM                           
@@ -195,7 +195,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00000200    00000CC0 =        3264. bytes (REL,CON)
+_CODE                               00000200    00000EBC =        3772. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -203,74 +203,76 @@ _CODE                               00000200    00000CC0 =        3264. bytes (R
      000002FE  _newton                            subPixCalc
      0000032C  _projSPC                           subPixCalc
      000003A5  _initRandXY                        projectiles
-     000003EB  _initBoneTable                     projectiles
-     00000436  _throwBone                         projectiles
-     00000437  _updateBone                        projectiles
-     000004A3  _isActive                          playArea
-     000004FC  _joypadMgr                         joypadMgmt
-     00000804  _bkgd_palettes                     palette
-     0000080C  _ghosty_palettes                   palette
-     00000814  _ghostyMS                          ghosty
-     00000828  _boneMS                            bone
-     00000834  _scrollBkg                         bkgd
-     0000084C  _bkgInterrupts                     bkgd
-     00000870  _bkgd_tiles                        bkgd
-     000008D0  _bkgd_map                          bkgd
-     00000B10  _setBkgd                           loadGame
-     00000B47  _setGhosty                         loadGame
-     00000B78  _setBone                           loadGame
-     00000BA7  _smallDelay                        loadGame
-     00000BB3  _gameFirstLoad                     loadGame
-     00000C1D  _main                              main
-     00000C2E  __divsuchar                        divmod
-     00000C34  __modsuchar                        divmod
-     00000C3D  __divuschar                        divmod
-     00000C46  __moduschar                        divmod
-     00000C52  __divschar                         divmod
-     00000C57  __modschar                         divmod
-     00000C5E  __divsint                          divmod
-     00000C67  __modsint                          divmod
-     00000C73  __divuchar                         divmod
-     00000C78  __moduchar                         divmod
-     00000C7F  __divuint                          divmod
-     00000C88  __moduint                          divmod
-     00000C94  .div8                              divmod
-     00000C94  .mod8                              divmod
-     00000C9C  .div16                             divmod
-     00000C9C  .mod16                             divmod
-     00000CD2  .divu8                             divmod
-     00000CD2  .modu8                             divmod
-     00000CD5  .divu16                            divmod
-     00000CD5  .modu16                            divmod
-     00000D15  _set_sprite_palette                CGB
-     00000D1A  _set_bkg_palette                   CGB
-     00000D1D  .set_palette                       CGB
-     00000D3C  _set_sprite_palette_entry          CGB
-     00000D41  _set_bkg_palette_entry             CGB
-     00000D44  .set_palette_entry                 CGB
-     00000D60  __mulsuchar                        mul
+     000003EC  _initBoneTable                     projectiles
+     000004BD  _throwBone                         projectiles
+     0000051C  _updateBone                        projectiles
+     00000597  _isActive                          playArea
+     000005F0  _joypadMgr                         joypadMgmt
+     00000954  _collisionCheck                    collision
+     00000A19  _bkgd_palettes                     palette
+     00000A21  _ghosty_palettes                   palette
+     00000A29  _ghostyMS                          ghosty
+     00000A3D  _boneMS                            bone
+     00000A49  _scrollBkg                         bkgd
+     00000A61  _bkgInterrupts                     bkgd
+     00000A85  _bkgd_tiles                        bkgd
+     00000AE5  _bkgd_map                          bkgd
+     00000D25  _setBkgd                           loadGame
+     00000D5C  _setGhosty                         loadGame
+     00000D8D  _setBone                           loadGame
+     00000DA6  _smallDelay                        loadGame
+     00000DB2  _gameFirstLoad                     loadGame
+     00000E1C  _main                              main
+     00000E2A  __divsuchar                        divmod
+     00000E30  __modsuchar                        divmod
+     00000E39  __divuschar                        divmod
+     00000E42  __moduschar                        divmod
+     00000E4E  __divschar                         divmod
+     00000E53  __modschar                         divmod
+     00000E5A  __divsint                          divmod
+     00000E63  __modsint                          divmod
+     00000E6F  __divuchar                         divmod
+     00000E74  __moduchar                         divmod
+     00000E7B  __divuint                          divmod
+     00000E84  __moduint                          divmod
+     00000E90  .div8                              divmod
+     00000E90  .mod8                              divmod
+     00000E98  .div16                             divmod
+     00000E98  .mod16                             divmod
+     00000ECE  .divu8                             divmod
+     00000ECE  .modu8                             divmod
+     00000ED1  .divu16                            divmod
+     00000ED1  .modu16                            divmod
+     00000F11  _set_sprite_palette                CGB
+     00000F16  _set_bkg_palette                   CGB
+     00000F19  .set_palette                       CGB
+     00000F38  _set_sprite_palette_entry          CGB
+     00000F3D  _set_bkg_palette_entry             CGB
+     00000F40  .set_palette_entry                 CGB
 ASxxxx Linker V03.00/V05.40 + sdld,  page 6.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_CODE                               00000200    00000CC0 =        3264. bytes (REL,CON)
+_CODE                               00000200    00000EBC =        3772. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00000D63  __muluschar                        mul
-     00000D6C  __mulschar                         mul
-     00000D74  __mulint                           mul
-     00000D93  __muluchar                         mul
-     00000DA5  ___move_metasprite                 Metasprites
-     00000DE2  ___move_metasprite_flipy           Metasprites
-     00000DE2  ___move_metasprite_hflip           Metasprites
-     00000E23  ___move_metasprite_flipx           Metasprites
-     00000E23  ___move_metasprite_vflip           Metasprites
-     00000E64  ___move_metasprite_flipxy          Metasprites
-     00000E64  ___move_metasprite_hvflip          Metasprites
-     00000EA7  _cgb_compatibility                 CGB
-     00000EA7  _set_default_palette               CGB
+     00000F5C  __mulsuchar                        mul
+     00000F5F  __muluschar                        mul
+     00000F68  __mulschar                         mul
+     00000F70  __mulint                           mul
+     00000F8F  __muluchar                         mul
+     00000FA1  ___move_metasprite                 Metasprites
+     00000FDE  ___move_metasprite_flipy           Metasprites
+     00000FDE  ___move_metasprite_hflip           Metasprites
+     0000101F  ___move_metasprite_flipx           Metasprites
+     0000101F  ___move_metasprite_vflip           Metasprites
+     00001060  ___move_metasprite_flipxy          Metasprites
+     00001060  ___move_metasprite_hvflip          Metasprites
+     000010A3  _cgb_compatibility                 CGB
+     000010A3  _set_default_palette               CGB
+
 ASxxxx Linker V03.00/V05.40 + sdld,  page 7.
 Hexadecimal  [32-Bits]
 
@@ -464,43 +466,43 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_HOME                               00000EC0    0000019C =         412. bytes (REL,CON)
+_HOME                               000010BC    0000019C =         412. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     00000EC0  .memset_simple                     Runtime
-     00000EC9  .memcpy_simple                     Runtime
-     00000EE6  .display_off                       Runtime
-     00000EE6  _display_off                       Runtime
-     00000EFE  _rand                              
-     00000EFE  _randw                             
-     00000F29  _initrand                          
-     00000F2B  .initrand                          
-     00000F34  .padup                             
-     00000F34  _waitpadup                         
-     00000F44  .jpad                              
-     00000F44  _joypad                            
-     00000F6C  _waitpad                           
-     00000F6D  .wait_pad                          
-     00000F74  _set_tile_data                     
-     00000F79  _set_bkg_data                      
-     00000F79  _set_win_data                      
-     00000F81  _set_sprite_data                   
-     00000FE0  .add_LCD                           
-     00000FE0  _add_LCD                           
-     00000FE6  .remove_LCD                        
-     00000FE6  _remove_LCD                        
-     00000FEC  _set_bkg_tiles                     
-     00001000  .set_xy_wtt                        SetTileMap
-     00001009  .set_xy_btt                        SetTileMap
-     00001018  .set_xy_tt                         SetTileMap
+     000010BC  .memset_simple                     Runtime
+     000010C5  .memcpy_simple                     Runtime
+     000010E2  .display_off                       Runtime
+     000010E2  _display_off                       Runtime
+     000010FA  _rand                              
+     000010FA  _randw                             
+     00001125  _initrand                          
+     00001127  .initrand                          
+     00001130  .padup                             
+     00001130  _waitpadup                         
+     00001140  .jpad                              
+     00001140  _joypad                            
+     00001168  _waitpad                           
+     00001169  .wait_pad                          
+     00001170  _set_tile_data                     
+     00001175  _set_bkg_data                      
+     00001175  _set_win_data                      
+     0000117D  _set_sprite_data                   
+     000011DC  .add_LCD                           
+     000011DC  _add_LCD                           
+     000011E2  .remove_LCD                        
+     000011E2  _remove_LCD                        
+     000011E8  _set_bkg_tiles                     
+     000011FC  .set_xy_wtt                        SetTileMap
+     00001205  .set_xy_btt                        SetTileMap
+     00001214  .set_xy_tt                         SetTileMap
 
 ASxxxx Linker V03.00/V05.40 + sdld,  page 26.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_INITIALIZER                        0000105C    00000078 =         120. bytes (REL,CON)
+_INITIALIZER                        00001258    00000078 =         120. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -509,18 +511,18 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_GSINIT                             000010D4    0000001E =          30. bytes (REL,CON)
+_GSINIT                             000012D0    0000001E =          30. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     000010D4  gsinit                             Runtime
+     000012D0  gsinit                             Runtime
 
 ASxxxx Linker V03.00/V05.40 + sdld,  page 28.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_GSFINAL                            000010F2    00000001 =           1. bytes (REL,CON)
+_GSFINAL                            000012EE    00000001 =           1. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -529,7 +531,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_DATA                               0000C0A0    0000005F =          95. bytes (REL,CON)
+_DATA                               0000C0A0    0000006B =         107. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -539,42 +541,39 @@ _DATA                               0000C0A0    0000005F =          95. bytes (R
      0000C0A3  .sys_time                          Runtime
      0000C0A3  _sys_time                          Runtime
      0000C0A5  .int_0x40                          Runtime
-     0000C0B5  _bones                             projectiles
-     0000C0EB  _deltas                            projectiles
-     0000C0F1  ___rand_seed                       
-     0000C0F3  ___current_metasprite              Metasprites
-     0000C0F5  ___current_base_tile               Metasprites
-     0000C0F6  ___current_base_prop               Metasprites
-     0000C0F7  .int_0x48                          
+     0000C0B8  _bones                             projectiles
+     0000C0EE  _deltas                            projectiles
+     0000C0FD  ___rand_seed                       
+     0000C0FF  ___current_metasprite              Metasprites
+     0000C101  ___current_base_tile               Metasprites
+     0000C102  ___current_base_prop               Metasprites
+     0000C103  .int_0x48                          
 
 ASxxxx Linker V03.00/V05.40 + sdld,  page 30.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-_INITIALIZED                        0000C0FF    00000078 =         120. bytes (REL,CON)
+_INITIALIZED                        0000C10B    00000078 =         120. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     0000C0FF  _boneCounter                       projectiles
-     0000C100  _activeBones                       projectiles
-     0000C101  _frameCounter                      projectiles
-     0000C102  _ghostySpeedX                      joypadMgmt
-     0000C104  _ghostySpeedY                      joypadMgmt
-     0000C106  _ghostyY                           joypadMgmt
-     0000C108  _ghostyX                           joypadMgmt
-     0000C10A  _pcFacing                          joypadMgmt
-     0000C10B  _gravity                           joypadMgmt
-     0000C10D  _pghostyX                          joypadMgmt
-     0000C10F  _pghostyY                          joypadMgmt
-     0000C111  _ghostyTiles                       ghosty
-     0000C151  _boneTile                          bone
-     0000C171  _bkgScrollCount                    bkgd
-     0000C172  _floorScroll                       bkgd
-     0000C173  _skyScroll                         bkgd
-     0000C174  _spriteSize                        loadGame
-     0000C175  ___render_shadow_OAM               Metasprites
-     0000C176  __map_tile_offset                  SetTileMap
+     0000C10E  _ghostySpeedX                      joypadMgmt
+     0000C110  _ghostySpeedY                      joypadMgmt
+     0000C112  _ghostyY                           joypadMgmt
+     0000C114  _ghostyX                           joypadMgmt
+     0000C116  _pcFacing                          joypadMgmt
+     0000C117  _gravityGhost                      joypadMgmt
+     0000C119  _pghostyX                          joypadMgmt
+     0000C11B  _pghostyY                          joypadMgmt
+     0000C11D  _ghostyTiles                       ghosty
+     0000C15D  _boneTile                          bone
+     0000C17D  _bkgScrollCount                    bkgd
+     0000C17E  _floorScroll                       bkgd
+     0000C17F  _skyScroll                         bkgd
+     0000C180  _spriteSize                        loadGame
+     0000C181  ___render_shadow_OAM               Metasprites
+     0000C182  __map_tile_offset                  SetTileMap
 
 ASxxxx Linker V03.00/V05.40 + sdld,  page 31.
 Hexadecimal  [32-Bits]
@@ -606,6 +605,7 @@ bin/subPixCalc.o                          [ subPixCalc ]
 bin/projectiles.o                         [ projectiles ]
 bin/playArea.o                            [ playArea ]
 bin/joypadMgmt.o                          [ joypadMgmt ]
+bin/collision.o                           [ collision ]
 bin/palette.o                             [ palette ]
 bin/ghosty.o                              [ ghosty ]
 bin/bone.o                                [ bone ]

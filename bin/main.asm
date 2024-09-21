@@ -9,7 +9,6 @@
 ; Public variables in this module
 ;--------------------------------------------------------
 	.globl _main
-	.globl _throwBone
 	.globl _scrollBkg
 	.globl _joypadMgr
 	.globl _gameFirstLoad
@@ -21,6 +20,12 @@
 ; ram data
 ;--------------------------------------------------------
 	.area _DATA
+_activeBones:
+	.ds 1
+_boneCounter:
+	.ds 1
+_frameCounter:
+	.ds 1
 ;--------------------------------------------------------
 ; ram data
 ;--------------------------------------------------------
@@ -58,8 +63,6 @@ _main::
 	call	_joypadMgr
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: scrollBkg();
 	call	_scrollBkg
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:23: throwBone();
-	call	_throwBone
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:27: vsync();
 	call	_vsync
 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:29: }
