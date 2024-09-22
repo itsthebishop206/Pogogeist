@@ -9,64 +9,79 @@
                                       9 ; Public variables in this module
                                      10 ;--------------------------------------------------------
                                      11 	.globl _main
-                                     12 	.globl _scrollBkg
-                                     13 	.globl _joypadMgr
-                                     14 	.globl _gameFirstLoad
-                                     15 	.globl _vsync
-                                     16 ;--------------------------------------------------------
-                                     17 ; special function registers
-                                     18 ;--------------------------------------------------------
+                                     12 	.globl _updateBone
+                                     13 	.globl _scrollBkg
+                                     14 	.globl _joypadMgr
+                                     15 	.globl _gameFirstLoad
+                                     16 	.globl _vsync
+                                     17 ;--------------------------------------------------------
+                                     18 ; special function registers
                                      19 ;--------------------------------------------------------
-                                     20 ; ram data
-                                     21 ;--------------------------------------------------------
-                                     22 	.area _DATA
-    00000000                         23 _activeBones:
-    00000000                         24 	.ds 1
-    00000001                         25 _boneCounter:
-    00000001                         26 	.ds 1
-    00000002                         27 _frameCounter:
-    00000002                         28 	.ds 1
-                                     29 ;--------------------------------------------------------
-                                     30 ; ram data
-                                     31 ;--------------------------------------------------------
-                                     32 	.area _INITIALIZED
-                                     33 ;--------------------------------------------------------
-                                     34 ; absolute external ram data
-                                     35 ;--------------------------------------------------------
-                                     36 	.area _DABS (ABS)
-                                     37 ;--------------------------------------------------------
-                                     38 ; global & static initialisations
-                                     39 ;--------------------------------------------------------
-                                     40 	.area _HOME
-                                     41 	.area _GSINIT
-                                     42 	.area _GSFINAL
-                                     43 	.area _GSINIT
+                                     20 ;--------------------------------------------------------
+                                     21 ; ram data
+                                     22 ;--------------------------------------------------------
+                                     23 	.area _DATA
+    00000000                         24 _activeBones:
+    00000000                         25 	.ds 1
+    00000001                         26 _boneCounter:
+    00000001                         27 	.ds 1
+    00000002                         28 _frameCounter:
+    00000002                         29 	.ds 1
+    00000003                         30 _ghostyX:
+    00000003                         31 	.ds 2
+    00000005                         32 _ghostyY:
+    00000005                         33 	.ds 2
+    00000007                         34 _ghostySpeedX:
+    00000007                         35 	.ds 2
+    00000009                         36 _ghostySpeedY:
+    00000009                         37 	.ds 2
+    0000000B                         38 _pghostyX:
+    0000000B                         39 	.ds 2
+    0000000D                         40 _pghostyY:
+    0000000D                         41 	.ds 2
+                                     42 ;--------------------------------------------------------
+                                     43 ; ram data
                                      44 ;--------------------------------------------------------
-                                     45 ; Home
+                                     45 	.area _INITIALIZED
                                      46 ;--------------------------------------------------------
-                                     47 	.area _HOME
-                                     48 	.area _HOME
-                                     49 ;--------------------------------------------------------
-                                     50 ; code
-                                     51 ;--------------------------------------------------------
-                                     52 	.area _CODE
-                                     53 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:14: void main(void)
-                                     54 ;	---------------------------------
-                                     55 ; Function main
-                                     56 ; ---------------------------------
-    00000000                         57 _main::
-                                     58 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:16: gameFirstLoad();
-    00000000 CDr00r00         [24]   59 	call	_gameFirstLoad
-                                     60 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:18: while(1) {        
-    00000003                         61 00102$:
-                                     62 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:21: joypadMgr();
-    00000003 CDr00r00         [24]   63 	call	_joypadMgr
-                                     64 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: scrollBkg();
-    00000006 CDr00r00         [24]   65 	call	_scrollBkg
-                                     66 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:27: vsync();
-    00000009 CDr00r00         [24]   67 	call	_vsync
-                                     68 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:29: }
-    0000000C 18 F5            [12]   69 	jr	00102$
-                                     70 	.area _CODE
-                                     71 	.area _INITIALIZER
-                                     72 	.area _CABS (ABS)
+                                     47 ; absolute external ram data
+                                     48 ;--------------------------------------------------------
+                                     49 	.area _DABS (ABS)
+                                     50 ;--------------------------------------------------------
+                                     51 ; global & static initialisations
+                                     52 ;--------------------------------------------------------
+                                     53 	.area _HOME
+                                     54 	.area _GSINIT
+                                     55 	.area _GSFINAL
+                                     56 	.area _GSINIT
+                                     57 ;--------------------------------------------------------
+                                     58 ; Home
+                                     59 ;--------------------------------------------------------
+                                     60 	.area _HOME
+                                     61 	.area _HOME
+                                     62 ;--------------------------------------------------------
+                                     63 ; code
+                                     64 ;--------------------------------------------------------
+                                     65 	.area _CODE
+                                     66 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:14: void main(void)
+                                     67 ;	---------------------------------
+                                     68 ; Function main
+                                     69 ; ---------------------------------
+    00000000                         70 _main::
+                                     71 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:16: gameFirstLoad();
+    00000000 CDr00r00         [24]   72 	call	_gameFirstLoad
+                                     73 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:18: while(1) {        
+    00000003                         74 00102$:
+                                     75 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:21: joypadMgr();
+    00000003 CDr00r00         [24]   76 	call	_joypadMgr
+                                     77 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:22: scrollBkg();
+    00000006 CDr00r00         [24]   78 	call	_scrollBkg
+                                     79 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:23: updateBone();
+    00000009 CDr00r00         [24]   80 	call	_updateBone
+                                     81 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:26: vsync();
+    0000000C CDr00r00         [24]   82 	call	_vsync
+                                     83 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\main.c:28: }
+    0000000F 18 F2            [12]   84 	jr	00102$
+                                     85 	.area _CODE
+                                     86 	.area _INITIALIZER
+                                     87 	.area _CABS (ABS)

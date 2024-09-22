@@ -4,7 +4,7 @@
 #include <joypad.h>
 #include <subPixCalc.h>
 #include <stdio.h>
-#include <projectile.h>
+#include <projectiles.h>
 #include <bone.h>
 #include <gb/metasprites.h>
 
@@ -92,28 +92,75 @@ uint16_t newton(uint16_t n){
 #pragma endregion
 }
 
+int16_t* createDeltasArray(int size)
+{
+    // Allocate memory for the array
+    int* deltas = (int*)malloc(size * sizeof(int));
+
+    // Check if memory allocation was successful
+    if (deltas == NULL) {
+        printf("Memory allocation failed!\n");
+        exit(1); // Exit the program if allocation fails
+    }
+
+    // Initialize the array with example values
+    for (int i = 0; i < size; i++) {
+        deltas[i] = i * 2;
+    }
+
+    // Return the pointer to the allocated array
+    return deltas;
+}
+
 // this one is for constant speed values
-int16_t* projSPC(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2){
+//bones, ghost, bones, ghost
+void projSPC(uint16_t* x1, uint16_t x2, uint16_t* y1, uint16_t y2, int16_t* delX, int16_t* delY){
 
     int16_t pPPF = 1;
     int16_t slp = 0;
-    int16_t fslp = 0;
+    *delX = 1;
+    *delY = 1;
 
     // make sure we can't divide by zero
-        if(x1 != x2){
+        if(*x1 != x2){
             // y = mx+b
-            // m = (y2-y1)/(x2-x1)
-            slp =  (y1-y2) / (x1-x2) >> PIXEL_SHIFT;
-            fslp = (y1-y2) % (x1-x2) >> PIXEL_SHIFT;
+            // m = (*y2-y1)/(*x2-x1)
+            slp =  (*y1 - (y2)) / (*x1 - (x2)) << PIXEL_SHIFT;
+            //fslp = (y1 - (*y2)) % (x1 - (*x2)) >> PIXEL_SHIFT;
         } else{
-            x1 += 1;
+            *x1 += 1;
+        }
+
+    // "^" is a bitwise operation in C. does not work for exponents
+    // calculate xy deltas pPPF = projectile pixel per frame
+    *delX = (pPPF / newton(1+slp*slp));
+    *delY = slp*(*delX);
+
+    // // increment bone xy values by delta
+    // x1 += deltaX;
+    // y1 += deltaY;
+    // for now im ignoring fslp. im tired boss
+}
+
+int16_t* projSPCAlpha(uint16_t* x1, uint16_t x2, uint16_t* y1, uint16_t y2){
+
+    int16_t pPPF = 1;
+    int16_t slp = 0;
+
+    // make sure we can't divide by zero
+        if(*x1 != x2){
+            // y = mx+b
+            // m = (*y2-y1)/(*x2-x1)
+            slp =  (*y1 - (y2)) / (*x1 - (x2)) << PIXEL_SHIFT;
+            //fslp = (y1 - (*y2)) % (x1 - (*x2)) >> PIXEL_SHIFT;
+        } else{
+            *x1 += 1;
         }
 
     // "^" is a bitwise operation in C. does not work for exponents
     // calculate xy deltas pPPF = projectile pixel per frame
     int16_t deltaX = (pPPF / newton(1+slp*slp));
-    int16_t deltaY = slp*deltaX;
-    
+    int16_t deltaY = slp*(deltaX);
     int16_t deltas[2] = {deltaX,deltaY};
     return deltas;
 

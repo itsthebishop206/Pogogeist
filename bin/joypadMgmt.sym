@@ -24,16 +24,16 @@ Symbol Table
   1 _boneCounter                                                    00000001 R
   1 _frameCounter                                                   00000002 R
     _ghostyMS                                                       ******** GX
-  2 _ghostySpeedX                                                   00000000 GR
-  2 _ghostySpeedY                                                   00000002 GR
-  2 _ghostyX                                                        00000006 GR
-  2 _ghostyY                                                        00000004 GR
+  2 _ghostySpeedX                                                   00000000 R
+  2 _ghostySpeedY                                                   00000002 R
+  2 _ghostyX                                                        00000006 R
+  2 _ghostyY                                                        00000004 R
   2 _gravityGhost                                                   00000009 GR
     _joypad                                                         ******** GX
   0 _joypadMgr                                                      00000000 GR
   2 _pcFacing                                                       00000008 GR
-  2 _pghostyX                                                       0000000B GR
-  2 _pghostyY                                                       0000000D GR
+  2 _pghostyX                                                       0000000B R
+  2 _pghostyY                                                       0000000D R
     _subPixCalc                                                     ******** GX
 
 
@@ -42,7 +42,7 @@ Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      364   flags    0
+   0 _CODE                                      size      32B   flags    0
    1 _DATA                                      size        3   flags    0
    2 _INITIALIZED                               size        F   flags    0
    3 _DABS                                      size        0   flags    8

@@ -17,27 +17,32 @@ Symbol Table
   2 _activeBones                                                    00000001 R
   2 _boneCounter                                                    00000000 R
     _boneMS                                                         ******** GX
-  1 _bones                                                          00000000 GR
-  1 _deltas                                                         00000036 GR
+  1 _bones                                                          0000000C GR
+  1 _deltas                                                         00000078 GR
   2 _frameCounter                                                   00000002 R
-    _ghostyX                                                        ******** GX
-    _ghostyY                                                        ******** GX
+  1 _ghostySpeedX                                                   00000004 R
+  1 _ghostySpeedY                                                   00000006 R
+  1 _ghostyX                                                        00000000 R
+  1 _ghostyY                                                        00000002 R
   0 _initBoneTable                                                  00000047 GR
   0 _initRandXY                                                     00000000 GR
-    _projSPC                                                        ******** GX
+  1 _pghostyX                                                       00000008 R
+  1 _pghostyY                                                       0000000A R
+    _projSPCAlpha                                                   ******** GX
     _rand                                                           ******** GX
-  0 _throwBone                                                      00000118 GR
-  0 _updateBone                                                     00000177 GR
-  1 _updateBone_newX_10000_224                                      00000038 R
-  1 _updateBone_newY_10000_224                                      0000003A R
+  0 _throwBone                                                      000001B2 GR
+  0 _updateBone                                                     000001D7 GR
+  1 _updateBone_accumX_10001_223                                    0000007A R
+  1 _updateBone_accumY_10001_223                                    0000007C R
+
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (GameBoy)                  Page 2
 Hexadecimal [32-Bits]
 
 Area Table
 
-   0 _CODE                                      size      1F2   flags    0
-   1 _DATA                                      size       3C   flags    0
+   0 _CODE                                      size      347   flags    0
+   1 _DATA                                      size       7E   flags    0
    2 _INITIALIZED                               size        3   flags    0
    3 _DABS                                      size        0   flags    8
    4 _HOME                                      size        0   flags    0

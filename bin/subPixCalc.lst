@@ -8,437 +8,753 @@
                                       8 ;--------------------------------------------------------
                                       9 ; Public variables in this module
                                      10 ;--------------------------------------------------------
-                                     11 	.globl _newton
-                                     12 	.globl _subPixCalc
-                                     13 	.globl _projSPC
-                                     14 ;--------------------------------------------------------
-                                     15 ; special function registers
-                                     16 ;--------------------------------------------------------
-                                     17 ;--------------------------------------------------------
-                                     18 ; ram data
+                                     11 	.globl _createDeltasArray
+                                     12 	.globl _newton
+                                     13 	.globl _puts
+                                     14 	.globl _malloc
+                                     15 	.globl _exit
+                                     16 	.globl _subPixCalc
+                                     17 	.globl _projSPC
+                                     18 	.globl _projSPCAlpha
                                      19 ;--------------------------------------------------------
-                                     20 	.area _DATA
-    00000000                         21 _activeBones:
-    00000000                         22 	.ds 1
-    00000001                         23 _boneCounter:
-    00000001                         24 	.ds 1
-    00000002                         25 _frameCounter:
-    00000002                         26 	.ds 1
-    00000003                         27 _subPixCalc_fractionX_10000_186:
-    00000003                         28 	.ds 2
-    00000005                         29 _subPixCalc_fractionY_10000_186:
-    00000005                         30 	.ds 2
-                                     31 ;--------------------------------------------------------
-                                     32 ; ram data
-                                     33 ;--------------------------------------------------------
-                                     34 	.area _INITIALIZED
-                                     35 ;--------------------------------------------------------
-                                     36 ; absolute external ram data
-                                     37 ;--------------------------------------------------------
-                                     38 	.area _DABS (ABS)
-                                     39 ;--------------------------------------------------------
-                                     40 ; global & static initialisations
-                                     41 ;--------------------------------------------------------
-                                     42 	.area _HOME
-                                     43 	.area _GSINIT
-                                     44 	.area _GSFINAL
-                                     45 	.area _GSINIT
-                                     46 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:30: static int16_t fractionX, fractionY = 0;
-    00000000 AF               [ 4]   47 	xor	a, a
-    00000001 21r05r00         [12]   48 	ld	hl, #_subPixCalc_fractionY_10000_186
-    00000004 22               [ 8]   49 	ld	(hl+), a
-    00000005 77               [ 8]   50 	ld	(hl), a
-                                     51 ;--------------------------------------------------------
-                                     52 ; Home
-                                     53 ;--------------------------------------------------------
-                                     54 	.area _HOME
-                                     55 	.area _HOME
+                                     20 ; special function registers
+                                     21 ;--------------------------------------------------------
+                                     22 ;--------------------------------------------------------
+                                     23 ; ram data
+                                     24 ;--------------------------------------------------------
+                                     25 	.area _DATA
+    00000000                         26 _activeBones:
+    00000000                         27 	.ds 1
+    00000001                         28 _boneCounter:
+    00000001                         29 	.ds 1
+    00000002                         30 _frameCounter:
+    00000002                         31 	.ds 1
+    00000003                         32 _subPixCalc_fractionX_10000_186:
+    00000003                         33 	.ds 2
+    00000005                         34 _subPixCalc_fractionY_10000_186:
+    00000005                         35 	.ds 2
+                                     36 ;--------------------------------------------------------
+                                     37 ; ram data
+                                     38 ;--------------------------------------------------------
+                                     39 	.area _INITIALIZED
+                                     40 ;--------------------------------------------------------
+                                     41 ; absolute external ram data
+                                     42 ;--------------------------------------------------------
+                                     43 	.area _DABS (ABS)
+                                     44 ;--------------------------------------------------------
+                                     45 ; global & static initialisations
+                                     46 ;--------------------------------------------------------
+                                     47 	.area _HOME
+                                     48 	.area _GSINIT
+                                     49 	.area _GSFINAL
+                                     50 	.area _GSINIT
+                                     51 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:30: static int16_t fractionX, fractionY = 0;
+    00000000 AF               [ 4]   52 	xor	a, a
+    00000001 21r05r00         [12]   53 	ld	hl, #_subPixCalc_fractionY_10000_186
+    00000004 22               [ 8]   54 	ld	(hl+), a
+    00000005 77               [ 8]   55 	ld	(hl), a
                                      56 ;--------------------------------------------------------
-                                     57 ; code
+                                     57 ; Home
                                      58 ;--------------------------------------------------------
-                                     59 	.area _CODE
-                                     60 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:28: void subPixCalc(int16_t *valueX, int16_t *valueY, int16_t speedX, int16_t speedY){
-                                     61 ;	---------------------------------
-                                     62 ; Function subPixCalc
-                                     63 ; ---------------------------------
-    00000000                         64 _subPixCalc::
-    00000000 E8 FC            [16]   65 	add	sp, #-4
-    00000002 F8 02            [12]   66 	ldhl	sp,	#2
-    00000004 7B               [ 4]   67 	ld	a, e
-    00000005 22               [ 8]   68 	ld	(hl+), a
-    00000006 72               [ 8]   69 	ld	(hl), d
-    00000007 33               [ 8]   70 	inc	sp
-    00000008 33               [ 8]   71 	inc	sp
-    00000009 C5               [16]   72 	push	bc
-                                     73 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:31: fractionX += speedX; // adds speed (which we have as 8 or -8) to the fractional value each frame. we are gaining "8" speed a frame, which becomes 0.03 pixels per frame
-    0000000A 21r03r00         [12]   74 	ld	hl, #_subPixCalc_fractionX_10000_186
-    0000000D 2A               [ 8]   75 	ld	a, (hl+)
-    0000000E 5F               [ 4]   76 	ld	e, a
-    0000000F 56               [ 8]   77 	ld	d, (hl)
-    00000010 F8 06            [12]   78 	ldhl	sp,	#6
-    00000012 2A               [ 8]   79 	ld	a,	(hl+)
-    00000013 66               [ 8]   80 	ld	h, (hl)
-    00000014 6F               [ 4]   81 	ld	l, a
-    00000015 19               [ 8]   82 	add	hl, de
-    00000016 5D               [ 4]   83 	ld	e, l
-    00000017 54               [ 4]   84 	ld	d, h
-    00000018 21r03r00         [12]   85 	ld	hl, #_subPixCalc_fractionX_10000_186
-    0000001B 7B               [ 4]   86 	ld	a, e
-    0000001C 22               [ 8]   87 	ld	(hl+), a
-    0000001D 72               [ 8]   88 	ld	(hl), d
-                                     89 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:32: fractionY += speedY;
-    0000001E 21r05r00         [12]   90 	ld	hl, #_subPixCalc_fractionY_10000_186
-    00000021 2A               [ 8]   91 	ld	a, (hl+)
-    00000022 5F               [ 4]   92 	ld	e, a
-    00000023 56               [ 8]   93 	ld	d, (hl)
-    00000024 F8 08            [12]   94 	ldhl	sp,	#8
-    00000026 2A               [ 8]   95 	ld	a,	(hl+)
-    00000027 66               [ 8]   96 	ld	h, (hl)
-    00000028 6F               [ 4]   97 	ld	l, a
-    00000029 19               [ 8]   98 	add	hl, de
-    0000002A 5D               [ 4]   99 	ld	e, l
-    0000002B 54               [ 4]  100 	ld	d, h
-    0000002C 21r05r00         [12]  101 	ld	hl, #_subPixCalc_fractionY_10000_186
-    0000002F 7B               [ 4]  102 	ld	a, e
-    00000030 22               [ 8]  103 	ld	(hl+), a
-    00000031 72               [ 8]  104 	ld	(hl), d
-                                    105 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:34: while(fractionX >= (1<<PIXEL_SHIFT)){
-    00000032                        106 00101$:
-    00000032 21r03r00         [12]  107 	ld	hl, #_subPixCalc_fractionX_10000_186
-    00000035 2A               [ 8]  108 	ld	a, (hl+)
-    00000036 7E               [ 8]  109 	ld	a, (hl)
-    00000037 EE 80            [ 8]  110 	xor	a, #0x80
-    00000039 D6 81            [ 8]  111 	sub	a, #0x81
-    0000003B 38 1F            [12]  112 	jr	C, 00104$
-                                    113 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:37: *valueX += 1;
-    0000003D F8 02            [12]  114 	ldhl	sp,#2
-    0000003F 2A               [ 8]  115 	ld	a, (hl+)
-    00000040 5F               [ 4]  116 	ld	e, a
-    00000041 56               [ 8]  117 	ld	d, (hl)
-    00000042 1A               [ 8]  118 	ld	a, (de)
-    00000043 4F               [ 4]  119 	ld	c, a
-    00000044 13               [ 8]  120 	inc	de
-    00000045 1A               [ 8]  121 	ld	a, (de)
-    00000046 47               [ 4]  122 	ld	b, a
-    00000047 03               [ 8]  123 	inc	bc
-    00000048 3A               [ 8]  124 	ld	a, (hl-)
-    00000049 6E               [ 8]  125 	ld	l, (hl)
-    0000004A 67               [ 4]  126 	ld	h, a
-    0000004B 79               [ 4]  127 	ld	a, c
-    0000004C 22               [ 8]  128 	ld	(hl+), a
-    0000004D 70               [ 8]  129 	ld	(hl), b
-                                    130 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:38: fractionX -= (1<<PIXEL_SHIFT); // subtracts 256, which resets the fractional part to 0
-    0000004E 21r03r00         [12]  131 	ld	hl, #_subPixCalc_fractionX_10000_186
-    00000051 2A               [ 8]  132 	ld	a, (hl+)
-    00000052 46               [ 8]  133 	ld	b, (hl)
-    00000053 2B               [ 8]  134 	dec	hl
-    00000054 4F               [ 4]  135 	ld	c,a
-    00000055 78               [ 4]  136 	ld	a,b
-    00000056 3D               [ 4]  137 	dec	a
-    00000057 71               [ 8]  138 	ld	(hl), c
-    00000058 23               [ 8]  139 	inc	hl
-    00000059 77               [ 8]  140 	ld	(hl), a
-    0000005A 18 D6            [12]  141 	jr	00101$
-                                    142 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:41: while(fractionX <= -(1<<PIXEL_SHIFT)){
-    0000005C                        143 00104$:
-    0000005C 21r03r00         [12]  144 	ld	hl, #_subPixCalc_fractionX_10000_186
-    0000005F 2A               [ 8]  145 	ld	a, (hl+)
-    00000060 4F               [ 4]  146 	ld	c, a
-    00000061 46               [ 8]  147 	ld	b, (hl)
-    00000062 58               [ 4]  148 	ld	e, b
-    00000063 16 FF            [ 8]  149 	ld	d, #0xff
-    00000065 AF               [ 4]  150 	xor	a, a
-    00000066 B9               [ 4]  151 	cp	a, c
-    00000067 3E FF            [ 8]  152 	ld	a, #0xff
-    00000069 98               [ 4]  153 	sbc	a, b
-    0000006A CB 7B            [ 8]  154 	bit	7, e
-    0000006C 28 07            [12]  155 	jr	Z, 00171$
-    0000006E CB 7A            [ 8]  156 	bit	7, d
-    00000070 20 08            [12]  157 	jr	NZ, 00172$
-    00000072 BF               [ 4]  158 	cp	a, a
-    00000073 18 05            [12]  159 	jr	00172$
-    00000075                        160 00171$:
-    00000075 CB 7A            [ 8]  161 	bit	7, d
-    00000077 28 01            [12]  162 	jr	Z, 00172$
-    00000079 37               [ 4]  163 	scf
-    0000007A                        164 00172$:
-    0000007A 38 1D            [12]  165 	jr	C, 00107$
-                                    166 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:42: *valueX -=1;
-    0000007C F8 02            [12]  167 	ldhl	sp,#2
-    0000007E 2A               [ 8]  168 	ld	a, (hl+)
-    0000007F 5F               [ 4]  169 	ld	e, a
-    00000080 56               [ 8]  170 	ld	d, (hl)
-    00000081 1A               [ 8]  171 	ld	a, (de)
-    00000082 4F               [ 4]  172 	ld	c, a
-    00000083 13               [ 8]  173 	inc	de
-    00000084 1A               [ 8]  174 	ld	a, (de)
-    00000085 47               [ 4]  175 	ld	b, a
-    00000086 0B               [ 8]  176 	dec	bc
-    00000087 3A               [ 8]  177 	ld	a, (hl-)
-    00000088 6E               [ 8]  178 	ld	l, (hl)
-    00000089 67               [ 4]  179 	ld	h, a
-    0000008A 79               [ 4]  180 	ld	a, c
-    0000008B 22               [ 8]  181 	ld	(hl+), a
-    0000008C 70               [ 8]  182 	ld	(hl), b
-                                    183 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:43: fractionX += (1<<PIXEL_SHIFT);
-    0000008D 21r03r00         [12]  184 	ld	hl, #_subPixCalc_fractionX_10000_186
-    00000090 2A               [ 8]  185 	ld	a, (hl+)
-    00000091 4F               [ 4]  186 	ld	c, a
-    00000092 3A               [ 8]  187 	ld	a, (hl-)
-    00000093 3C               [ 4]  188 	inc	a
-    00000094 71               [ 8]  189 	ld	(hl), c
-    00000095 23               [ 8]  190 	inc	hl
-    00000096 77               [ 8]  191 	ld	(hl), a
-    00000097 18 C3            [12]  192 	jr	00104$
-                                    193 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:46: while(fractionY >= (1<<PIXEL_SHIFT)){
-    00000099                        194 00107$:
-    00000099 21r05r00         [12]  195 	ld	hl, #_subPixCalc_fractionY_10000_186
-    0000009C 2A               [ 8]  196 	ld	a, (hl+)
-    0000009D 7E               [ 8]  197 	ld	a, (hl)
-    0000009E EE 80            [ 8]  198 	xor	a, #0x80
-    000000A0 D6 81            [ 8]  199 	sub	a, #0x81
-    000000A2 38 1B            [12]  200 	jr	C, 00110$
-                                    201 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:47: *valueY += 1;
-    000000A4 D1               [12]  202 	pop	de
-    000000A5 D5               [16]  203 	push	de
-    000000A6 1A               [ 8]  204 	ld	a, (de)
-    000000A7 4F               [ 4]  205 	ld	c, a
-    000000A8 13               [ 8]  206 	inc	de
-    000000A9 1A               [ 8]  207 	ld	a, (de)
-    000000AA 47               [ 4]  208 	ld	b, a
-    000000AB 03               [ 8]  209 	inc	bc
-    000000AC E1               [12]  210 	pop	hl
-    000000AD E5               [16]  211 	push	hl
-    000000AE 79               [ 4]  212 	ld	a, c
-    000000AF 22               [ 8]  213 	ld	(hl+), a
-    000000B0 70               [ 8]  214 	ld	(hl), b
-                                    215 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:48: fractionY -= (1<<PIXEL_SHIFT);
-    000000B1 21r05r00         [12]  216 	ld	hl, #_subPixCalc_fractionY_10000_186
-    000000B4 2A               [ 8]  217 	ld	a, (hl+)
-    000000B5 46               [ 8]  218 	ld	b, (hl)
-    000000B6 2B               [ 8]  219 	dec	hl
-    000000B7 4F               [ 4]  220 	ld	c,a
-    000000B8 78               [ 4]  221 	ld	a,b
-    000000B9 3D               [ 4]  222 	dec	a
-    000000BA 71               [ 8]  223 	ld	(hl), c
-    000000BB 23               [ 8]  224 	inc	hl
-    000000BC 77               [ 8]  225 	ld	(hl), a
-    000000BD 18 DA            [12]  226 	jr	00107$
-                                    227 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:51: while(fractionY <= -(1<<PIXEL_SHIFT)){
-    000000BF                        228 00110$:
-    000000BF 21r05r00         [12]  229 	ld	hl, #_subPixCalc_fractionY_10000_186
-    000000C2 2A               [ 8]  230 	ld	a, (hl+)
-    000000C3 4F               [ 4]  231 	ld	c, a
-    000000C4 46               [ 8]  232 	ld	b, (hl)
-    000000C5 58               [ 4]  233 	ld	e, b
-    000000C6 16 FF            [ 8]  234 	ld	d, #0xff
-    000000C8 AF               [ 4]  235 	xor	a, a
-    000000C9 B9               [ 4]  236 	cp	a, c
-    000000CA 3E FF            [ 8]  237 	ld	a, #0xff
-    000000CC 98               [ 4]  238 	sbc	a, b
-    000000CD CB 7B            [ 8]  239 	bit	7, e
-    000000CF 28 07            [12]  240 	jr	Z, 00173$
-    000000D1 CB 7A            [ 8]  241 	bit	7, d
-    000000D3 20 08            [12]  242 	jr	NZ, 00174$
-    000000D5 BF               [ 4]  243 	cp	a, a
-    000000D6 18 05            [12]  244 	jr	00174$
-    000000D8                        245 00173$:
-    000000D8 CB 7A            [ 8]  246 	bit	7, d
-    000000DA 28 01            [12]  247 	jr	Z, 00174$
-    000000DC 37               [ 4]  248 	scf
-    000000DD                        249 00174$:
-    000000DD 38 19            [12]  250 	jr	C, 00113$
-                                    251 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:52: *valueY -=1;
-    000000DF D1               [12]  252 	pop	de
-    000000E0 D5               [16]  253 	push	de
-    000000E1 1A               [ 8]  254 	ld	a, (de)
-    000000E2 4F               [ 4]  255 	ld	c, a
-    000000E3 13               [ 8]  256 	inc	de
-    000000E4 1A               [ 8]  257 	ld	a, (de)
-    000000E5 47               [ 4]  258 	ld	b, a
-    000000E6 0B               [ 8]  259 	dec	bc
-    000000E7 E1               [12]  260 	pop	hl
-    000000E8 E5               [16]  261 	push	hl
-    000000E9 79               [ 4]  262 	ld	a, c
-    000000EA 22               [ 8]  263 	ld	(hl+), a
-    000000EB 70               [ 8]  264 	ld	(hl), b
-                                    265 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:53: fractionY += (1<<PIXEL_SHIFT);
-    000000EC 21r05r00         [12]  266 	ld	hl, #_subPixCalc_fractionY_10000_186
-    000000EF 2A               [ 8]  267 	ld	a, (hl+)
-    000000F0 4F               [ 4]  268 	ld	c, a
-    000000F1 3A               [ 8]  269 	ld	a, (hl-)
-    000000F2 3C               [ 4]  270 	inc	a
-    000000F3 71               [ 8]  271 	ld	(hl), c
-    000000F4 23               [ 8]  272 	inc	hl
-    000000F5 77               [ 8]  273 	ld	(hl), a
-    000000F6 18 C7            [12]  274 	jr	00110$
-    000000F8                        275 00113$:
-                                    276 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:55: }
-    000000F8 E8 04            [16]  277 	add	sp, #4
-    000000FA E1               [12]  278 	pop	hl
-    000000FB E8 04            [16]  279 	add	sp, #4
-    000000FD E9               [ 4]  280 	jp	(hl)
-                                    281 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:57: uint16_t newton(uint16_t n){
-                                    282 ;	---------------------------------
-                                    283 ; Function newton
-                                    284 ; ---------------------------------
-    000000FE                        285 _newton::
-    000000FE 3B               [ 8]  286 	dec	sp
-    000000FF 3B               [ 8]  287 	dec	sp
-                                    288 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:59: int16_t result = n;
-    00000100 4B               [ 4]  289 	ld	c, e
-    00000101 42               [ 4]  290 	ld	b, d
-                                    291 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:60: int16_t last = 0;
-    00000102 AF               [ 4]  292 	xor	a, a
-    00000103 F8 00            [12]  293 	ldhl	sp,	#0
-    00000105 22               [ 8]  294 	ld	(hl+), a
-    00000106 77               [ 8]  295 	ld	(hl), a
-                                    296 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:62: while(result != last){
-    00000107                        297 00101$:
-    00000107 F8 00            [12]  298 	ldhl	sp,	#0
-    00000109 7E               [ 8]  299 	ld	a, (hl)
-    0000010A 91               [ 4]  300 	sub	a, c
-    0000010B 20 05            [12]  301 	jr	NZ, 00120$
-    0000010D 23               [ 8]  302 	inc	hl
-    0000010E 7E               [ 8]  303 	ld	a, (hl)
-    0000010F 90               [ 4]  304 	sub	a, b
-    00000110 28 17            [12]  305 	jr	Z, 00103$
-    00000112                        306 00120$:
-                                    307 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:66: last = result;
-    00000112 33               [ 8]  308 	inc	sp
-    00000113 33               [ 8]  309 	inc	sp
-    00000114 C5               [16]  310 	push	bc
-                                    311 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:67: result = (last+(n/last))/2;
-    00000115 69               [ 4]  312 	ld	l, c
-                                    313 ;	spillPairReg hl
-                                    314 ;	spillPairReg hl
-    00000116 60               [ 4]  315 	ld	h, b
-                                    316 ;	spillPairReg hl
-                                    317 ;	spillPairReg hl
-    00000117 E5               [16]  318 	push	hl
-    00000118 D5               [16]  319 	push	de
-    00000119 4D               [ 4]  320 	ld	c, l
-    0000011A 44               [ 4]  321 	ld	b, h
-    0000011B CDr00r00         [24]  322 	call	__divuint
-    0000011E D1               [12]  323 	pop	de
-    0000011F E1               [12]  324 	pop	hl
-    00000120 09               [ 8]  325 	add	hl, bc
-    00000121 4D               [ 4]  326 	ld	c, l
-    00000122 44               [ 4]  327 	ld	b, h
-    00000123 CB 38            [ 8]  328 	srl	b
-    00000125 CB 19            [ 8]  329 	rr	c
-    00000127 18 DE            [12]  330 	jr	00101$
-    00000129                        331 00103$:
-                                    332 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:70: return result;
-                                    333 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:93: }
-    00000129 33               [ 8]  334 	inc	sp
-    0000012A 33               [ 8]  335 	inc	sp
-    0000012B C9               [16]  336 	ret
-                                    337 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:96: int16_t* projSPC(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2){
-                                    338 ;	---------------------------------
-                                    339 ; Function projSPC
-                                    340 ; ---------------------------------
-    0000012C                        341 _projSPC::
-    0000012C E8 F8            [16]  342 	add	sp, #-8
-    0000012E F8 06            [12]  343 	ldhl	sp,	#6
-    00000130 7B               [ 4]  344 	ld	a, e
-    00000131 22               [ 8]  345 	ld	(hl+), a
-                                    346 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:99: int16_t slp = 0;
-                                    347 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:103: if(x1 != x2){
-    00000132 7A               [ 4]  348 	ld	a, d
-    00000133 32               [ 8]  349 	ld	(hl-), a
-    00000134 11 00 00         [12]  350 	ld	de, #0x0000
-    00000137 7E               [ 8]  351 	ld	a, (hl)
-    00000138 91               [ 4]  352 	sub	a, c
-    00000139 20 05            [12]  353 	jr	NZ, 00113$
-    0000013B 23               [ 8]  354 	inc	hl
-    0000013C 7E               [ 8]  355 	ld	a, (hl)
-    0000013D 90               [ 4]  356 	sub	a, b
-    0000013E 28 29            [12]  357 	jr	Z, 00103$
-    00000140                        358 00113$:
-                                    359 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:106: slp =  (y1-y2) / (x1-x2) >> PIXEL_SHIFT;
-    00000140 F8 0A            [12]  360 	ldhl	sp,#10
-    00000142 2A               [ 8]  361 	ld	a, (hl+)
-    00000143 5F               [ 4]  362 	ld	e, a
-    00000144 2A               [ 8]  363 	ld	a, (hl+)
-    00000145 57               [ 4]  364 	ld	d, a
-    00000146 2A               [ 8]  365 	ld	a,	(hl+)
-    00000147 66               [ 8]  366 	ld	h, (hl)
-    00000148 6F               [ 4]  367 	ld	l, a
-    00000149 7B               [ 4]  368 	ld	a, e
-    0000014A 95               [ 4]  369 	sub	a, l
-    0000014B 5F               [ 4]  370 	ld	e, a
-    0000014C 7A               [ 4]  371 	ld	a, d
-    0000014D 9C               [ 4]  372 	sbc	a, h
-    0000014E F8 05            [12]  373 	ldhl	sp,	#5
-    00000150 32               [ 8]  374 	ld	(hl-), a
-    00000151 73               [ 8]  375 	ld	(hl), e
-    00000152 F8 06            [12]  376 	ldhl	sp,#6
-    00000154 2A               [ 8]  377 	ld	a, (hl+)
-    00000155 5F               [ 4]  378 	ld	e, a
-    00000156 56               [ 8]  379 	ld	d, (hl)
-    00000157 7B               [ 4]  380 	ld	a, e
-    00000158 91               [ 4]  381 	sub	a, c
-    00000159 5F               [ 4]  382 	ld	e, a
-    0000015A 7A               [ 4]  383 	ld	a, d
-    0000015B 98               [ 4]  384 	sbc	a, b
-    0000015C 47               [ 4]  385 	ld	b, a
-    0000015D 4B               [ 4]  386 	ld	c, e
-    0000015E F8 04            [12]  387 	ldhl	sp,	#4
-    00000160 2A               [ 8]  388 	ld	a, (hl+)
-    00000161 5F               [ 4]  389 	ld	e, a
-    00000162 56               [ 8]  390 	ld	d, (hl)
-    00000163 CDr00r00         [24]  391 	call	__divuint
-    00000166 58               [ 4]  392 	ld	e, b
-    00000167 16 00            [ 8]  393 	ld	d, #0x00
-                                    394 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:109: x1 += 1;
-    00000169                        395 00103$:
-                                    396 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:114: int16_t deltaX = (pPPF / newton(1+slp*slp));
-    00000169 D5               [16]  397 	push	de
-    0000016A 4B               [ 4]  398 	ld	c, e
-    0000016B 42               [ 4]  399 	ld	b, d
-    0000016C CDr00r00         [24]  400 	call	__mulint
-    0000016F D1               [12]  401 	pop	de
-    00000170 03               [ 8]  402 	inc	bc
-    00000171 D5               [16]  403 	push	de
-    00000172 59               [ 4]  404 	ld	e, c
-    00000173 50               [ 4]  405 	ld	d, b
-    00000174 CDrFEr00         [24]  406 	call	_newton
-    00000177 11 01 00         [12]  407 	ld	de, #0x0001
-    0000017A CDr00r00         [24]  408 	call	__divuint
-    0000017D D1               [12]  409 	pop	de
-    0000017E F8 04            [12]  410 	ldhl	sp,	#4
-    00000180 79               [ 4]  411 	ld	a, c
-    00000181 22               [ 8]  412 	ld	(hl+), a
-                                    413 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:115: int16_t deltaY = slp*deltaX;
-    00000182 78               [ 4]  414 	ld	a, b
-    00000183 32               [ 8]  415 	ld	(hl-), a
-    00000184 2A               [ 8]  416 	ld	a, (hl+)
-    00000185 4F               [ 4]  417 	ld	c, a
-    00000186 46               [ 8]  418 	ld	b, (hl)
-                                    419 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:117: int16_t deltas[2] = {deltaX,deltaY};
-    00000187 CDr00r00         [24]  420 	call	__mulint
-    0000018A F8 04            [12]  421 	ldhl	sp,	#4
-    0000018C 7E               [ 8]  422 	ld	a, (hl)
-    0000018D F8 00            [12]  423 	ldhl	sp,	#0
-    0000018F 77               [ 8]  424 	ld	(hl), a
-    00000190 F8 05            [12]  425 	ldhl	sp,	#5
-    00000192 7E               [ 8]  426 	ld	a, (hl)
-    00000193 F8 01            [12]  427 	ldhl	sp,	#1
-    00000195 22               [ 8]  428 	ld	(hl+), a
-    00000196 71               [ 8]  429 	ld	(hl), c
-    00000197 23               [ 8]  430 	inc	hl
-    00000198 70               [ 8]  431 	ld	(hl), b
-                                    432 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:118: return deltas;
-    00000199 21 00 00         [12]  433 	ld	hl, #0
-    0000019C 39               [ 8]  434 	add	hl, sp
-    0000019D 4D               [ 4]  435 	ld	c, l
-    0000019E 44               [ 4]  436 	ld	b, h
-                                    437 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:124: }
-    0000019F E8 08            [16]  438 	add	sp, #8
-    000001A1 E1               [12]  439 	pop	hl
-    000001A2 E8 04            [16]  440 	add	sp, #4
-    000001A4 E9               [ 4]  441 	jp	(hl)
-                                    442 	.area _CODE
-                                    443 	.area _INITIALIZER
-                                    444 	.area _CABS (ABS)
+                                     59 	.area _HOME
+                                     60 	.area _HOME
+                                     61 ;--------------------------------------------------------
+                                     62 ; code
+                                     63 ;--------------------------------------------------------
+                                     64 	.area _CODE
+                                     65 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:28: void subPixCalc(int16_t *valueX, int16_t *valueY, int16_t speedX, int16_t speedY){
+                                     66 ;	---------------------------------
+                                     67 ; Function subPixCalc
+                                     68 ; ---------------------------------
+    00000000                         69 _subPixCalc::
+    00000000 E8 FC            [16]   70 	add	sp, #-4
+    00000002 F8 02            [12]   71 	ldhl	sp,	#2
+    00000004 7B               [ 4]   72 	ld	a, e
+    00000005 22               [ 8]   73 	ld	(hl+), a
+    00000006 72               [ 8]   74 	ld	(hl), d
+    00000007 33               [ 8]   75 	inc	sp
+    00000008 33               [ 8]   76 	inc	sp
+    00000009 C5               [16]   77 	push	bc
+                                     78 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:31: fractionX += speedX; // adds speed (which we have as 8 or -8) to the fractional value each frame. we are gaining "8" speed a frame, which becomes 0.03 pixels per frame
+    0000000A 21r03r00         [12]   79 	ld	hl, #_subPixCalc_fractionX_10000_186
+    0000000D 2A               [ 8]   80 	ld	a, (hl+)
+    0000000E 5F               [ 4]   81 	ld	e, a
+    0000000F 56               [ 8]   82 	ld	d, (hl)
+    00000010 F8 06            [12]   83 	ldhl	sp,	#6
+    00000012 2A               [ 8]   84 	ld	a,	(hl+)
+    00000013 66               [ 8]   85 	ld	h, (hl)
+    00000014 6F               [ 4]   86 	ld	l, a
+    00000015 19               [ 8]   87 	add	hl, de
+    00000016 5D               [ 4]   88 	ld	e, l
+    00000017 54               [ 4]   89 	ld	d, h
+    00000018 21r03r00         [12]   90 	ld	hl, #_subPixCalc_fractionX_10000_186
+    0000001B 7B               [ 4]   91 	ld	a, e
+    0000001C 22               [ 8]   92 	ld	(hl+), a
+    0000001D 72               [ 8]   93 	ld	(hl), d
+                                     94 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:32: fractionY += speedY;
+    0000001E 21r05r00         [12]   95 	ld	hl, #_subPixCalc_fractionY_10000_186
+    00000021 2A               [ 8]   96 	ld	a, (hl+)
+    00000022 5F               [ 4]   97 	ld	e, a
+    00000023 56               [ 8]   98 	ld	d, (hl)
+    00000024 F8 08            [12]   99 	ldhl	sp,	#8
+    00000026 2A               [ 8]  100 	ld	a,	(hl+)
+    00000027 66               [ 8]  101 	ld	h, (hl)
+    00000028 6F               [ 4]  102 	ld	l, a
+    00000029 19               [ 8]  103 	add	hl, de
+    0000002A 5D               [ 4]  104 	ld	e, l
+    0000002B 54               [ 4]  105 	ld	d, h
+    0000002C 21r05r00         [12]  106 	ld	hl, #_subPixCalc_fractionY_10000_186
+    0000002F 7B               [ 4]  107 	ld	a, e
+    00000030 22               [ 8]  108 	ld	(hl+), a
+    00000031 72               [ 8]  109 	ld	(hl), d
+                                    110 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:34: while(fractionX >= (1<<PIXEL_SHIFT)){
+    00000032                        111 00101$:
+    00000032 21r03r00         [12]  112 	ld	hl, #_subPixCalc_fractionX_10000_186
+    00000035 2A               [ 8]  113 	ld	a, (hl+)
+    00000036 7E               [ 8]  114 	ld	a, (hl)
+    00000037 EE 80            [ 8]  115 	xor	a, #0x80
+    00000039 D6 81            [ 8]  116 	sub	a, #0x81
+    0000003B 38 1F            [12]  117 	jr	C, 00104$
+                                    118 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:37: *valueX += 1;
+    0000003D F8 02            [12]  119 	ldhl	sp,#2
+    0000003F 2A               [ 8]  120 	ld	a, (hl+)
+    00000040 5F               [ 4]  121 	ld	e, a
+    00000041 56               [ 8]  122 	ld	d, (hl)
+    00000042 1A               [ 8]  123 	ld	a, (de)
+    00000043 4F               [ 4]  124 	ld	c, a
+    00000044 13               [ 8]  125 	inc	de
+    00000045 1A               [ 8]  126 	ld	a, (de)
+    00000046 47               [ 4]  127 	ld	b, a
+    00000047 03               [ 8]  128 	inc	bc
+    00000048 3A               [ 8]  129 	ld	a, (hl-)
+    00000049 6E               [ 8]  130 	ld	l, (hl)
+    0000004A 67               [ 4]  131 	ld	h, a
+    0000004B 79               [ 4]  132 	ld	a, c
+    0000004C 22               [ 8]  133 	ld	(hl+), a
+    0000004D 70               [ 8]  134 	ld	(hl), b
+                                    135 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:38: fractionX -= (1<<PIXEL_SHIFT); // subtracts 256, which resets the fractional part to 0
+    0000004E 21r03r00         [12]  136 	ld	hl, #_subPixCalc_fractionX_10000_186
+    00000051 2A               [ 8]  137 	ld	a, (hl+)
+    00000052 46               [ 8]  138 	ld	b, (hl)
+    00000053 2B               [ 8]  139 	dec	hl
+    00000054 4F               [ 4]  140 	ld	c,a
+    00000055 78               [ 4]  141 	ld	a,b
+    00000056 3D               [ 4]  142 	dec	a
+    00000057 71               [ 8]  143 	ld	(hl), c
+    00000058 23               [ 8]  144 	inc	hl
+    00000059 77               [ 8]  145 	ld	(hl), a
+    0000005A 18 D6            [12]  146 	jr	00101$
+                                    147 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:41: while(fractionX <= -(1<<PIXEL_SHIFT)){
+    0000005C                        148 00104$:
+    0000005C 21r03r00         [12]  149 	ld	hl, #_subPixCalc_fractionX_10000_186
+    0000005F 2A               [ 8]  150 	ld	a, (hl+)
+    00000060 4F               [ 4]  151 	ld	c, a
+    00000061 46               [ 8]  152 	ld	b, (hl)
+    00000062 58               [ 4]  153 	ld	e, b
+    00000063 16 FF            [ 8]  154 	ld	d, #0xff
+    00000065 AF               [ 4]  155 	xor	a, a
+    00000066 B9               [ 4]  156 	cp	a, c
+    00000067 3E FF            [ 8]  157 	ld	a, #0xff
+    00000069 98               [ 4]  158 	sbc	a, b
+    0000006A CB 7B            [ 8]  159 	bit	7, e
+    0000006C 28 07            [12]  160 	jr	Z, 00171$
+    0000006E CB 7A            [ 8]  161 	bit	7, d
+    00000070 20 08            [12]  162 	jr	NZ, 00172$
+    00000072 BF               [ 4]  163 	cp	a, a
+    00000073 18 05            [12]  164 	jr	00172$
+    00000075                        165 00171$:
+    00000075 CB 7A            [ 8]  166 	bit	7, d
+    00000077 28 01            [12]  167 	jr	Z, 00172$
+    00000079 37               [ 4]  168 	scf
+    0000007A                        169 00172$:
+    0000007A 38 1D            [12]  170 	jr	C, 00107$
+                                    171 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:42: *valueX -=1;
+    0000007C F8 02            [12]  172 	ldhl	sp,#2
+    0000007E 2A               [ 8]  173 	ld	a, (hl+)
+    0000007F 5F               [ 4]  174 	ld	e, a
+    00000080 56               [ 8]  175 	ld	d, (hl)
+    00000081 1A               [ 8]  176 	ld	a, (de)
+    00000082 4F               [ 4]  177 	ld	c, a
+    00000083 13               [ 8]  178 	inc	de
+    00000084 1A               [ 8]  179 	ld	a, (de)
+    00000085 47               [ 4]  180 	ld	b, a
+    00000086 0B               [ 8]  181 	dec	bc
+    00000087 3A               [ 8]  182 	ld	a, (hl-)
+    00000088 6E               [ 8]  183 	ld	l, (hl)
+    00000089 67               [ 4]  184 	ld	h, a
+    0000008A 79               [ 4]  185 	ld	a, c
+    0000008B 22               [ 8]  186 	ld	(hl+), a
+    0000008C 70               [ 8]  187 	ld	(hl), b
+                                    188 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:43: fractionX += (1<<PIXEL_SHIFT);
+    0000008D 21r03r00         [12]  189 	ld	hl, #_subPixCalc_fractionX_10000_186
+    00000090 2A               [ 8]  190 	ld	a, (hl+)
+    00000091 4F               [ 4]  191 	ld	c, a
+    00000092 3A               [ 8]  192 	ld	a, (hl-)
+    00000093 3C               [ 4]  193 	inc	a
+    00000094 71               [ 8]  194 	ld	(hl), c
+    00000095 23               [ 8]  195 	inc	hl
+    00000096 77               [ 8]  196 	ld	(hl), a
+    00000097 18 C3            [12]  197 	jr	00104$
+                                    198 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:46: while(fractionY >= (1<<PIXEL_SHIFT)){
+    00000099                        199 00107$:
+    00000099 21r05r00         [12]  200 	ld	hl, #_subPixCalc_fractionY_10000_186
+    0000009C 2A               [ 8]  201 	ld	a, (hl+)
+    0000009D 7E               [ 8]  202 	ld	a, (hl)
+    0000009E EE 80            [ 8]  203 	xor	a, #0x80
+    000000A0 D6 81            [ 8]  204 	sub	a, #0x81
+    000000A2 38 1B            [12]  205 	jr	C, 00110$
+                                    206 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:47: *valueY += 1;
+    000000A4 D1               [12]  207 	pop	de
+    000000A5 D5               [16]  208 	push	de
+    000000A6 1A               [ 8]  209 	ld	a, (de)
+    000000A7 4F               [ 4]  210 	ld	c, a
+    000000A8 13               [ 8]  211 	inc	de
+    000000A9 1A               [ 8]  212 	ld	a, (de)
+    000000AA 47               [ 4]  213 	ld	b, a
+    000000AB 03               [ 8]  214 	inc	bc
+    000000AC E1               [12]  215 	pop	hl
+    000000AD E5               [16]  216 	push	hl
+    000000AE 79               [ 4]  217 	ld	a, c
+    000000AF 22               [ 8]  218 	ld	(hl+), a
+    000000B0 70               [ 8]  219 	ld	(hl), b
+                                    220 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:48: fractionY -= (1<<PIXEL_SHIFT);
+    000000B1 21r05r00         [12]  221 	ld	hl, #_subPixCalc_fractionY_10000_186
+    000000B4 2A               [ 8]  222 	ld	a, (hl+)
+    000000B5 46               [ 8]  223 	ld	b, (hl)
+    000000B6 2B               [ 8]  224 	dec	hl
+    000000B7 4F               [ 4]  225 	ld	c,a
+    000000B8 78               [ 4]  226 	ld	a,b
+    000000B9 3D               [ 4]  227 	dec	a
+    000000BA 71               [ 8]  228 	ld	(hl), c
+    000000BB 23               [ 8]  229 	inc	hl
+    000000BC 77               [ 8]  230 	ld	(hl), a
+    000000BD 18 DA            [12]  231 	jr	00107$
+                                    232 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:51: while(fractionY <= -(1<<PIXEL_SHIFT)){
+    000000BF                        233 00110$:
+    000000BF 21r05r00         [12]  234 	ld	hl, #_subPixCalc_fractionY_10000_186
+    000000C2 2A               [ 8]  235 	ld	a, (hl+)
+    000000C3 4F               [ 4]  236 	ld	c, a
+    000000C4 46               [ 8]  237 	ld	b, (hl)
+    000000C5 58               [ 4]  238 	ld	e, b
+    000000C6 16 FF            [ 8]  239 	ld	d, #0xff
+    000000C8 AF               [ 4]  240 	xor	a, a
+    000000C9 B9               [ 4]  241 	cp	a, c
+    000000CA 3E FF            [ 8]  242 	ld	a, #0xff
+    000000CC 98               [ 4]  243 	sbc	a, b
+    000000CD CB 7B            [ 8]  244 	bit	7, e
+    000000CF 28 07            [12]  245 	jr	Z, 00173$
+    000000D1 CB 7A            [ 8]  246 	bit	7, d
+    000000D3 20 08            [12]  247 	jr	NZ, 00174$
+    000000D5 BF               [ 4]  248 	cp	a, a
+    000000D6 18 05            [12]  249 	jr	00174$
+    000000D8                        250 00173$:
+    000000D8 CB 7A            [ 8]  251 	bit	7, d
+    000000DA 28 01            [12]  252 	jr	Z, 00174$
+    000000DC 37               [ 4]  253 	scf
+    000000DD                        254 00174$:
+    000000DD 38 19            [12]  255 	jr	C, 00113$
+                                    256 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:52: *valueY -=1;
+    000000DF D1               [12]  257 	pop	de
+    000000E0 D5               [16]  258 	push	de
+    000000E1 1A               [ 8]  259 	ld	a, (de)
+    000000E2 4F               [ 4]  260 	ld	c, a
+    000000E3 13               [ 8]  261 	inc	de
+    000000E4 1A               [ 8]  262 	ld	a, (de)
+    000000E5 47               [ 4]  263 	ld	b, a
+    000000E6 0B               [ 8]  264 	dec	bc
+    000000E7 E1               [12]  265 	pop	hl
+    000000E8 E5               [16]  266 	push	hl
+    000000E9 79               [ 4]  267 	ld	a, c
+    000000EA 22               [ 8]  268 	ld	(hl+), a
+    000000EB 70               [ 8]  269 	ld	(hl), b
+                                    270 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:53: fractionY += (1<<PIXEL_SHIFT);
+    000000EC 21r05r00         [12]  271 	ld	hl, #_subPixCalc_fractionY_10000_186
+    000000EF 2A               [ 8]  272 	ld	a, (hl+)
+    000000F0 4F               [ 4]  273 	ld	c, a
+    000000F1 3A               [ 8]  274 	ld	a, (hl-)
+    000000F2 3C               [ 4]  275 	inc	a
+    000000F3 71               [ 8]  276 	ld	(hl), c
+    000000F4 23               [ 8]  277 	inc	hl
+    000000F5 77               [ 8]  278 	ld	(hl), a
+    000000F6 18 C7            [12]  279 	jr	00110$
+    000000F8                        280 00113$:
+                                    281 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:55: }
+    000000F8 E8 04            [16]  282 	add	sp, #4
+    000000FA E1               [12]  283 	pop	hl
+    000000FB E8 04            [16]  284 	add	sp, #4
+    000000FD E9               [ 4]  285 	jp	(hl)
+                                    286 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:57: uint16_t newton(uint16_t n){
+                                    287 ;	---------------------------------
+                                    288 ; Function newton
+                                    289 ; ---------------------------------
+    000000FE                        290 _newton::
+    000000FE 3B               [ 8]  291 	dec	sp
+    000000FF 3B               [ 8]  292 	dec	sp
+                                    293 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:59: int16_t result = n;
+    00000100 4B               [ 4]  294 	ld	c, e
+    00000101 42               [ 4]  295 	ld	b, d
+                                    296 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:60: int16_t last = 0;
+    00000102 AF               [ 4]  297 	xor	a, a
+    00000103 F8 00            [12]  298 	ldhl	sp,	#0
+    00000105 22               [ 8]  299 	ld	(hl+), a
+    00000106 77               [ 8]  300 	ld	(hl), a
+                                    301 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:62: while(result != last){
+    00000107                        302 00101$:
+    00000107 F8 00            [12]  303 	ldhl	sp,	#0
+    00000109 7E               [ 8]  304 	ld	a, (hl)
+    0000010A 91               [ 4]  305 	sub	a, c
+    0000010B 20 05            [12]  306 	jr	NZ, 00120$
+    0000010D 23               [ 8]  307 	inc	hl
+    0000010E 7E               [ 8]  308 	ld	a, (hl)
+    0000010F 90               [ 4]  309 	sub	a, b
+    00000110 28 17            [12]  310 	jr	Z, 00103$
+    00000112                        311 00120$:
+                                    312 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:66: last = result;
+    00000112 33               [ 8]  313 	inc	sp
+    00000113 33               [ 8]  314 	inc	sp
+    00000114 C5               [16]  315 	push	bc
+                                    316 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:67: result = (last+(n/last))/2;
+    00000115 69               [ 4]  317 	ld	l, c
+                                    318 ;	spillPairReg hl
+                                    319 ;	spillPairReg hl
+    00000116 60               [ 4]  320 	ld	h, b
+                                    321 ;	spillPairReg hl
+                                    322 ;	spillPairReg hl
+    00000117 E5               [16]  323 	push	hl
+    00000118 D5               [16]  324 	push	de
+    00000119 4D               [ 4]  325 	ld	c, l
+    0000011A 44               [ 4]  326 	ld	b, h
+    0000011B CDr00r00         [24]  327 	call	__divuint
+    0000011E D1               [12]  328 	pop	de
+    0000011F E1               [12]  329 	pop	hl
+    00000120 09               [ 8]  330 	add	hl, bc
+    00000121 4D               [ 4]  331 	ld	c, l
+    00000122 44               [ 4]  332 	ld	b, h
+    00000123 CB 38            [ 8]  333 	srl	b
+    00000125 CB 19            [ 8]  334 	rr	c
+    00000127 18 DE            [12]  335 	jr	00101$
+    00000129                        336 00103$:
+                                    337 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:70: return result;
+                                    338 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:93: }
+    00000129 33               [ 8]  339 	inc	sp
+    0000012A 33               [ 8]  340 	inc	sp
+    0000012B C9               [16]  341 	ret
+                                    342 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:95: int16_t* createDeltasArray(int size)
+                                    343 ;	---------------------------------
+                                    344 ; Function createDeltasArray
+                                    345 ; ---------------------------------
+    0000012C                        346 _createDeltasArray::
+    0000012C E8 FE            [16]  347 	add	sp, #-2
+    0000012E D5               [16]  348 	push	de
+    0000012F CB 23            [ 8]  349 	sla	e
+    00000131 CB 12            [ 8]  350 	rl	d
+    00000133 CDr00r00         [24]  351 	call	_malloc
+                                    352 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:101: if (deltas == NULL) {
+    00000136 78               [ 4]  353 	ld	a, b
+    00000137 B1               [ 4]  354 	or	a, c
+    00000138 20 10            [12]  355 	jr	NZ, 00111$
+                                    356 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:102: printf("Memory allocation failed!\n");
+    0000013A C5               [16]  357 	push	bc
+    0000013B 11r8Br01         [12]  358 	ld	de, #___str_1
+    0000013E CDr00r00         [24]  359 	call	_puts
+    00000141 11 01 00         [12]  360 	ld	de, #0x0001
+    00000144 D5               [16]  361 	push	de
+    00000145 CDr00r00         [24]  362 	call	_exit
+    00000148 E1               [12]  363 	pop	hl
+    00000149 C1               [12]  364 	pop	bc
+                                    365 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:107: for (int i = 0; i < size; i++) {
+    0000014A                        366 00111$:
+    0000014A AF               [ 4]  367 	xor	a, a
+    0000014B F8 02            [12]  368 	ldhl	sp,	#2
+    0000014D 22               [ 8]  369 	ld	(hl+), a
+    0000014E 77               [ 8]  370 	ld	(hl), a
+    0000014F                        371 00105$:
+    0000014F F8 02            [12]  372 	ldhl	sp,	#2
+    00000151 5D               [ 4]  373 	ld	e, l
+    00000152 54               [ 4]  374 	ld	d, h
+    00000153 F8 00            [12]  375 	ldhl	sp,	#0
+    00000155 1A               [ 8]  376 	ld	a, (de)
+    00000156 13               [ 8]  377 	inc	de
+    00000157 96               [ 8]  378 	sub	a, (hl)
+    00000158 23               [ 8]  379 	inc	hl
+    00000159 1A               [ 8]  380 	ld	a, (de)
+    0000015A 9E               [ 8]  381 	sbc	a, (hl)
+    0000015B 1A               [ 8]  382 	ld	a, (de)
+    0000015C 57               [ 4]  383 	ld	d, a
+    0000015D 5E               [ 8]  384 	ld	e, (hl)
+    0000015E CB 7B            [ 8]  385 	bit	7, e
+    00000160 28 07            [12]  386 	jr	Z, 00132$
+    00000162 CB 7A            [ 8]  387 	bit	7, d
+    00000164 20 08            [12]  388 	jr	NZ, 00133$
+    00000166 BF               [ 4]  389 	cp	a, a
+    00000167 18 05            [12]  390 	jr	00133$
+    00000169                        391 00132$:
+    00000169 CB 7A            [ 8]  392 	bit	7, d
+    0000016B 28 01            [12]  393 	jr	Z, 00133$
+    0000016D 37               [ 4]  394 	scf
+    0000016E                        395 00133$:
+    0000016E 30 18            [12]  396 	jr	NC, 00103$
+                                    397 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:108: deltas[i] = i * 2;
+    00000170 F8 02            [12]  398 	ldhl	sp,#2
+    00000172 2A               [ 8]  399 	ld	a, (hl+)
+    00000173 5F               [ 4]  400 	ld	e, a
+    00000174 56               [ 8]  401 	ld	d, (hl)
+    00000175 CB 23            [ 8]  402 	sla	e
+    00000177 CB 12            [ 8]  403 	rl	d
+    00000179 6B               [ 4]  404 	ld	l, e
+                                    405 ;	spillPairReg hl
+                                    406 ;	spillPairReg hl
+    0000017A 62               [ 4]  407 	ld	h, d
+                                    408 ;	spillPairReg hl
+                                    409 ;	spillPairReg hl
+    0000017B 09               [ 8]  410 	add	hl, bc
+    0000017C 7B               [ 4]  411 	ld	a, e
+    0000017D 22               [ 8]  412 	ld	(hl+), a
+    0000017E 72               [ 8]  413 	ld	(hl), d
+                                    414 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:107: for (int i = 0; i < size; i++) {
+    0000017F F8 02            [12]  415 	ldhl	sp,	#2
+    00000181 34               [12]  416 	inc	(hl)
+    00000182 20 CB            [12]  417 	jr	NZ, 00105$
+    00000184 23               [ 8]  418 	inc	hl
+    00000185 34               [12]  419 	inc	(hl)
+    00000186 18 C7            [12]  420 	jr	00105$
+    00000188                        421 00103$:
+                                    422 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:112: return deltas;
+                                    423 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:113: }
+    00000188 E8 04            [16]  424 	add	sp, #4
+    0000018A C9               [16]  425 	ret
+    0000018B                        426 ___str_1:
+    0000018B 4D 65 6D 6F 72 79 20   427 	.ascii "Memory allocation failed!"
+             61 6C 6C 6F 63 61 74
+             69 6F 6E 20 66 61 69
+             6C 65 64 21
+    000001A4 00                     428 	.db 0x00
+                                    429 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:117: void projSPC(uint16_t* x1, uint16_t x2, uint16_t* y1, uint16_t y2, int16_t* delX, int16_t* delY){
+                                    430 ;	---------------------------------
+                                    431 ; Function projSPC
+                                    432 ; ---------------------------------
+    000001A5                        433 _projSPC::
+    000001A5 E8 F4            [16]  434 	add	sp, #-12
+    000001A7 F8 0A            [12]  435 	ldhl	sp,	#10
+    000001A9 7B               [ 4]  436 	ld	a, e
+    000001AA 22               [ 8]  437 	ld	(hl+), a
+    000001AB 72               [ 8]  438 	ld	(hl), d
+    000001AC F8 08            [12]  439 	ldhl	sp,	#8
+    000001AE 79               [ 4]  440 	ld	a, c
+    000001AF 22               [ 8]  441 	ld	(hl+), a
+    000001B0 70               [ 8]  442 	ld	(hl), b
+                                    443 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:120: int16_t slp = 0;
+    000001B1 AF               [ 4]  444 	xor	a, a
+    000001B2 F8 06            [12]  445 	ldhl	sp,	#6
+    000001B4 22               [ 8]  446 	ld	(hl+), a
+    000001B5 77               [ 8]  447 	ld	(hl), a
+                                    448 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:121: *delX = 1;
+    000001B6 F8 12            [12]  449 	ldhl	sp,	#18
+    000001B8 7E               [ 8]  450 	ld	a, (hl)
+    000001B9 F8 00            [12]  451 	ldhl	sp,	#0
+    000001BB 77               [ 8]  452 	ld	(hl), a
+    000001BC F8 13            [12]  453 	ldhl	sp,	#19
+    000001BE 7E               [ 8]  454 	ld	a, (hl)
+    000001BF F8 01            [12]  455 	ldhl	sp,	#1
+    000001C1 77               [ 8]  456 	ld	(hl), a
+    000001C2 E1               [12]  457 	pop	hl
+    000001C3 E5               [16]  458 	push	hl
+    000001C4 3E 01            [ 8]  459 	ld	a, #0x01
+    000001C6 22               [ 8]  460 	ld	(hl+), a
+    000001C7 36 00            [12]  461 	ld	(hl), #0x00
+                                    462 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:122: *delY = 1;
+    000001C9 F8 14            [12]  463 	ldhl	sp,	#20
+    000001CB 7E               [ 8]  464 	ld	a, (hl)
+    000001CC F8 02            [12]  465 	ldhl	sp,	#2
+    000001CE 77               [ 8]  466 	ld	(hl), a
+    000001CF F8 15            [12]  467 	ldhl	sp,	#21
+    000001D1 7E               [ 8]  468 	ld	a, (hl)
+    000001D2 F8 03            [12]  469 	ldhl	sp,	#3
+    000001D4 32               [ 8]  470 	ld	(hl-), a
+    000001D5 2A               [ 8]  471 	ld	a,	(hl+)
+    000001D6 66               [ 8]  472 	ld	h, (hl)
+    000001D7 6F               [ 4]  473 	ld	l, a
+    000001D8 3E 01            [ 8]  474 	ld	a, #0x01
+    000001DA 22               [ 8]  475 	ld	(hl+), a
+    000001DB 36 00            [12]  476 	ld	(hl), #0x00
+                                    477 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:125: if(*x1 != x2){
+    000001DD F8 0A            [12]  478 	ldhl	sp,#10
+    000001DF 2A               [ 8]  479 	ld	a, (hl+)
+    000001E0 5F               [ 4]  480 	ld	e, a
+    000001E1 56               [ 8]  481 	ld	d, (hl)
+    000001E2 1A               [ 8]  482 	ld	a, (de)
+    000001E3 4F               [ 4]  483 	ld	c, a
+    000001E4 13               [ 8]  484 	inc	de
+    000001E5 1A               [ 8]  485 	ld	a, (de)
+    000001E6 47               [ 4]  486 	ld	b, a
+    000001E7 F8 08            [12]  487 	ldhl	sp,	#8
+    000001E9 7E               [ 8]  488 	ld	a, (hl)
+    000001EA 91               [ 4]  489 	sub	a, c
+    000001EB 20 05            [12]  490 	jr	NZ, 00113$
+    000001ED 23               [ 8]  491 	inc	hl
+    000001EE 7E               [ 8]  492 	ld	a, (hl)
+    000001EF 90               [ 4]  493 	sub	a, b
+    000001F0 28 43            [12]  494 	jr	Z, 00102$
+    000001F2                        495 00113$:
+                                    496 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:128: slp =  (*y1 - (y2)) / (*x1 - (x2)) << PIXEL_SHIFT;
+    000001F2 F8 0E            [12]  497 	ldhl	sp,	#14
+    000001F4 7E               [ 8]  498 	ld	a, (hl)
+    000001F5 F8 06            [12]  499 	ldhl	sp,	#6
+    000001F7 77               [ 8]  500 	ld	(hl), a
+    000001F8 F8 0F            [12]  501 	ldhl	sp,	#15
+    000001FA 7E               [ 8]  502 	ld	a, (hl)
+    000001FB F8 07            [12]  503 	ldhl	sp,	#7
+    000001FD 32               [ 8]  504 	ld	(hl-), a
+    000001FE 2A               [ 8]  505 	ld	a, (hl+)
+    000001FF 5F               [ 4]  506 	ld	e, a
+    00000200 56               [ 8]  507 	ld	d, (hl)
+    00000201 1A               [ 8]  508 	ld	a, (de)
+    00000202 F8 04            [12]  509 	ldhl	sp,	#4
+    00000204 22               [ 8]  510 	ld	(hl+), a
+    00000205 13               [ 8]  511 	inc	de
+    00000206 1A               [ 8]  512 	ld	a, (de)
+    00000207 32               [ 8]  513 	ld	(hl-), a
+    00000208 2A               [ 8]  514 	ld	a, (hl+)
+    00000209 5F               [ 4]  515 	ld	e, a
+    0000020A 56               [ 8]  516 	ld	d, (hl)
+    0000020B F8 10            [12]  517 	ldhl	sp,	#16
+    0000020D 2A               [ 8]  518 	ld	a,	(hl+)
+    0000020E 66               [ 8]  519 	ld	h, (hl)
+    0000020F 6F               [ 4]  520 	ld	l, a
+    00000210 7B               [ 4]  521 	ld	a, e
+    00000211 95               [ 4]  522 	sub	a, l
+    00000212 5F               [ 4]  523 	ld	e, a
+    00000213 7A               [ 4]  524 	ld	a, d
+    00000214 9C               [ 4]  525 	sbc	a, h
+    00000215 F8 07            [12]  526 	ldhl	sp,	#7
+    00000217 32               [ 8]  527 	ld	(hl-), a
+    00000218 73               [ 8]  528 	ld	(hl), e
+    00000219 F8 08            [12]  529 	ldhl	sp,#8
+    0000021B 2A               [ 8]  530 	ld	a, (hl+)
+    0000021C 5F               [ 4]  531 	ld	e, a
+    0000021D 56               [ 8]  532 	ld	d, (hl)
+    0000021E 79               [ 4]  533 	ld	a, c
+    0000021F 93               [ 4]  534 	sub	a, e
+    00000220 5F               [ 4]  535 	ld	e, a
+    00000221 78               [ 4]  536 	ld	a, b
+    00000222 9A               [ 4]  537 	sbc	a, d
+    00000223 47               [ 4]  538 	ld	b, a
+    00000224 4B               [ 4]  539 	ld	c, e
+    00000225 F8 06            [12]  540 	ldhl	sp,	#6
+    00000227 2A               [ 8]  541 	ld	a, (hl+)
+    00000228 5F               [ 4]  542 	ld	e, a
+    00000229 56               [ 8]  543 	ld	d, (hl)
+    0000022A CDr00r00         [24]  544 	call	__divuint
+    0000022D F8 07            [12]  545 	ldhl	sp,	#7
+    0000022F 79               [ 4]  546 	ld	a, c
+    00000230 32               [ 8]  547 	ld	(hl-), a
+    00000231 36 00            [12]  548 	ld	(hl), #0x00
+    00000233 18 09            [12]  549 	jr	00103$
+    00000235                        550 00102$:
+                                    551 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:131: *x1 += 1;
+    00000235 03               [ 8]  552 	inc	bc
+    00000236 F8 0A            [12]  553 	ldhl	sp,	#10
+    00000238 2A               [ 8]  554 	ld	a,	(hl+)
+    00000239 66               [ 8]  555 	ld	h, (hl)
+    0000023A 6F               [ 4]  556 	ld	l, a
+    0000023B 79               [ 4]  557 	ld	a, c
+    0000023C 22               [ 8]  558 	ld	(hl+), a
+    0000023D 70               [ 8]  559 	ld	(hl), b
+    0000023E                        560 00103$:
+                                    561 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:136: *delX = (pPPF / newton(1+slp*slp));
+    0000023E 0E 00            [ 8]  562 	ld	c, #0x00
+    00000240 F8 07            [12]  563 	ldhl	sp,	#7
+    00000242 46               [ 8]  564 	ld	b, (hl)
+    00000243 1E 00            [ 8]  565 	ld	e, #0x00
+    00000245 56               [ 8]  566 	ld	d, (hl)
+    00000246 CDr00r00         [24]  567 	call	__mulint
+    00000249 03               [ 8]  568 	inc	bc
+    0000024A 59               [ 4]  569 	ld	e, c
+    0000024B 50               [ 4]  570 	ld	d, b
+    0000024C CDrFEr00         [24]  571 	call	_newton
+    0000024F 11 01 00         [12]  572 	ld	de, #0x0001
+    00000252 CDr00r00         [24]  573 	call	__divuint
+    00000255 E1               [12]  574 	pop	hl
+    00000256 E5               [16]  575 	push	hl
+    00000257 79               [ 4]  576 	ld	a, c
+    00000258 22               [ 8]  577 	ld	(hl+), a
+    00000259 70               [ 8]  578 	ld	(hl), b
+                                    579 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:137: *delY = slp*(*delX);
+    0000025A D1               [12]  580 	pop	de
+    0000025B D5               [16]  581 	push	de
+    0000025C 1A               [ 8]  582 	ld	a, (de)
+    0000025D 4F               [ 4]  583 	ld	c, a
+    0000025E 13               [ 8]  584 	inc	de
+    0000025F 1A               [ 8]  585 	ld	a, (de)
+    00000260 47               [ 4]  586 	ld	b, a
+    00000261 1E 00            [ 8]  587 	ld	e, #0x00
+    00000263 F8 07            [12]  588 	ldhl	sp,	#7
+    00000265 56               [ 8]  589 	ld	d, (hl)
+    00000266 CDr00r00         [24]  590 	call	__mulint
+    00000269 F8 02            [12]  591 	ldhl	sp,	#2
+    0000026B 2A               [ 8]  592 	ld	a,	(hl+)
+    0000026C 66               [ 8]  593 	ld	h, (hl)
+    0000026D 6F               [ 4]  594 	ld	l, a
+    0000026E 71               [ 8]  595 	ld	(hl), c
+    0000026F 23               [ 8]  596 	inc	hl
+    00000270 70               [ 8]  597 	ld	(hl), b
+                                    598 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:143: }
+    00000271 E8 0C            [16]  599 	add	sp, #12
+    00000273 E1               [12]  600 	pop	hl
+    00000274 E8 08            [16]  601 	add	sp, #8
+    00000276 E9               [ 4]  602 	jp	(hl)
+                                    603 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:145: int16_t* projSPCAlpha(uint16_t* x1, uint16_t x2, uint16_t* y1, uint16_t y2){
+                                    604 ;	---------------------------------
+                                    605 ; Function projSPCAlpha
+                                    606 ; ---------------------------------
+    00000277                        607 _projSPCAlpha::
+    00000277 E8 F4            [16]  608 	add	sp, #-12
+    00000279 F8 0A            [12]  609 	ldhl	sp,	#10
+    0000027B 7B               [ 4]  610 	ld	a, e
+    0000027C 22               [ 8]  611 	ld	(hl+), a
+    0000027D 72               [ 8]  612 	ld	(hl), d
+    0000027E F8 08            [12]  613 	ldhl	sp,	#8
+    00000280 79               [ 4]  614 	ld	a, c
+    00000281 22               [ 8]  615 	ld	(hl+), a
+    00000282 70               [ 8]  616 	ld	(hl), b
+                                    617 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:148: int16_t slp = 0;
+    00000283 AF               [ 4]  618 	xor	a, a
+    00000284 F8 06            [12]  619 	ldhl	sp,	#6
+    00000286 22               [ 8]  620 	ld	(hl+), a
+    00000287 77               [ 8]  621 	ld	(hl), a
+                                    622 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:151: if(*x1 != x2){
+    00000288 F8 0A            [12]  623 	ldhl	sp,#10
+    0000028A 2A               [ 8]  624 	ld	a, (hl+)
+    0000028B 5F               [ 4]  625 	ld	e, a
+    0000028C 56               [ 8]  626 	ld	d, (hl)
+    0000028D 1A               [ 8]  627 	ld	a, (de)
+    0000028E 4F               [ 4]  628 	ld	c, a
+    0000028F 13               [ 8]  629 	inc	de
+    00000290 1A               [ 8]  630 	ld	a, (de)
+    00000291 47               [ 4]  631 	ld	b, a
+    00000292 F8 08            [12]  632 	ldhl	sp,	#8
+    00000294 7E               [ 8]  633 	ld	a, (hl)
+    00000295 91               [ 4]  634 	sub	a, c
+    00000296 20 05            [12]  635 	jr	NZ, 00113$
+    00000298 23               [ 8]  636 	inc	hl
+    00000299 7E               [ 8]  637 	ld	a, (hl)
+    0000029A 90               [ 4]  638 	sub	a, b
+    0000029B 28 43            [12]  639 	jr	Z, 00102$
+    0000029D                        640 00113$:
+                                    641 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:154: slp =  (*y1 - (y2)) / (*x1 - (x2)) << PIXEL_SHIFT;
+    0000029D F8 0E            [12]  642 	ldhl	sp,	#14
+    0000029F 7E               [ 8]  643 	ld	a, (hl)
+    000002A0 F8 06            [12]  644 	ldhl	sp,	#6
+    000002A2 77               [ 8]  645 	ld	(hl), a
+    000002A3 F8 0F            [12]  646 	ldhl	sp,	#15
+    000002A5 7E               [ 8]  647 	ld	a, (hl)
+    000002A6 F8 07            [12]  648 	ldhl	sp,	#7
+    000002A8 32               [ 8]  649 	ld	(hl-), a
+    000002A9 2A               [ 8]  650 	ld	a, (hl+)
+    000002AA 5F               [ 4]  651 	ld	e, a
+    000002AB 56               [ 8]  652 	ld	d, (hl)
+    000002AC 1A               [ 8]  653 	ld	a, (de)
+    000002AD F8 04            [12]  654 	ldhl	sp,	#4
+    000002AF 22               [ 8]  655 	ld	(hl+), a
+    000002B0 13               [ 8]  656 	inc	de
+    000002B1 1A               [ 8]  657 	ld	a, (de)
+    000002B2 32               [ 8]  658 	ld	(hl-), a
+    000002B3 2A               [ 8]  659 	ld	a, (hl+)
+    000002B4 5F               [ 4]  660 	ld	e, a
+    000002B5 56               [ 8]  661 	ld	d, (hl)
+    000002B6 F8 10            [12]  662 	ldhl	sp,	#16
+    000002B8 2A               [ 8]  663 	ld	a,	(hl+)
+    000002B9 66               [ 8]  664 	ld	h, (hl)
+    000002BA 6F               [ 4]  665 	ld	l, a
+    000002BB 7B               [ 4]  666 	ld	a, e
+    000002BC 95               [ 4]  667 	sub	a, l
+    000002BD 5F               [ 4]  668 	ld	e, a
+    000002BE 7A               [ 4]  669 	ld	a, d
+    000002BF 9C               [ 4]  670 	sbc	a, h
+    000002C0 F8 07            [12]  671 	ldhl	sp,	#7
+    000002C2 32               [ 8]  672 	ld	(hl-), a
+    000002C3 73               [ 8]  673 	ld	(hl), e
+    000002C4 F8 08            [12]  674 	ldhl	sp,#8
+    000002C6 2A               [ 8]  675 	ld	a, (hl+)
+    000002C7 5F               [ 4]  676 	ld	e, a
+    000002C8 56               [ 8]  677 	ld	d, (hl)
+    000002C9 79               [ 4]  678 	ld	a, c
+    000002CA 93               [ 4]  679 	sub	a, e
+    000002CB 5F               [ 4]  680 	ld	e, a
+    000002CC 78               [ 4]  681 	ld	a, b
+    000002CD 9A               [ 4]  682 	sbc	a, d
+    000002CE 47               [ 4]  683 	ld	b, a
+    000002CF 4B               [ 4]  684 	ld	c, e
+    000002D0 F8 06            [12]  685 	ldhl	sp,	#6
+    000002D2 2A               [ 8]  686 	ld	a, (hl+)
+    000002D3 5F               [ 4]  687 	ld	e, a
+    000002D4 56               [ 8]  688 	ld	d, (hl)
+    000002D5 CDr00r00         [24]  689 	call	__divuint
+    000002D8 F8 07            [12]  690 	ldhl	sp,	#7
+    000002DA 79               [ 4]  691 	ld	a, c
+    000002DB 32               [ 8]  692 	ld	(hl-), a
+    000002DC 36 00            [12]  693 	ld	(hl), #0x00
+    000002DE 18 09            [12]  694 	jr	00103$
+    000002E0                        695 00102$:
+                                    696 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:157: *x1 += 1;
+    000002E0 03               [ 8]  697 	inc	bc
+    000002E1 F8 0A            [12]  698 	ldhl	sp,	#10
+    000002E3 2A               [ 8]  699 	ld	a,	(hl+)
+    000002E4 66               [ 8]  700 	ld	h, (hl)
+    000002E5 6F               [ 4]  701 	ld	l, a
+    000002E6 79               [ 4]  702 	ld	a, c
+    000002E7 22               [ 8]  703 	ld	(hl+), a
+    000002E8 70               [ 8]  704 	ld	(hl), b
+    000002E9                        705 00103$:
+                                    706 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:162: int16_t deltaX = (pPPF / newton(1+slp*slp));
+    000002E9 0E 00            [ 8]  707 	ld	c, #0x00
+    000002EB F8 07            [12]  708 	ldhl	sp,	#7
+    000002ED 46               [ 8]  709 	ld	b, (hl)
+    000002EE 1E 00            [ 8]  710 	ld	e, #0x00
+    000002F0 56               [ 8]  711 	ld	d, (hl)
+    000002F1 CDr00r00         [24]  712 	call	__mulint
+    000002F4 03               [ 8]  713 	inc	bc
+    000002F5 59               [ 4]  714 	ld	e, c
+    000002F6 50               [ 4]  715 	ld	d, b
+    000002F7 CDrFEr00         [24]  716 	call	_newton
+    000002FA 11 01 00         [12]  717 	ld	de, #0x0001
+    000002FD CDr00r00         [24]  718 	call	__divuint
+    00000300 59               [ 4]  719 	ld	e, c
+    00000301 50               [ 4]  720 	ld	d, b
+                                    721 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:163: int16_t deltaY = slp*(deltaX);
+    00000302 D5               [16]  722 	push	de
+    00000303 4B               [ 4]  723 	ld	c, e
+    00000304 42               [ 4]  724 	ld	b, d
+    00000305 1E 00            [ 8]  725 	ld	e, #0x00
+    00000307 F8 09            [12]  726 	ldhl	sp,	#9
+    00000309 56               [ 8]  727 	ld	d, (hl)
+                                    728 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:164: int16_t deltas[2] = {deltaX,deltaY};
+    0000030A CDr00r00         [24]  729 	call	__mulint
+    0000030D F8 08            [12]  730 	ldhl	sp,	#8
+    0000030F 79               [ 4]  731 	ld	a, c
+    00000310 22               [ 8]  732 	ld	(hl+), a
+    00000311 70               [ 8]  733 	ld	(hl), b
+    00000312 D1               [12]  734 	pop	de
+    00000313 F8 00            [12]  735 	ldhl	sp,	#0
+    00000315 4D               [ 4]  736 	ld	c,l
+    00000316 44               [ 4]  737 	ld	b,h
+    00000317 7B               [ 4]  738 	ld	a, e
+    00000318 22               [ 8]  739 	ld	(hl+), a
+    00000319 72               [ 8]  740 	ld	(hl), d
+    0000031A F8 06            [12]  741 	ldhl	sp,	#6
+    0000031C 7E               [ 8]  742 	ld	a, (hl)
+    0000031D F8 02            [12]  743 	ldhl	sp,	#2
+    0000031F 77               [ 8]  744 	ld	(hl), a
+    00000320 F8 07            [12]  745 	ldhl	sp,	#7
+    00000322 7E               [ 8]  746 	ld	a, (hl)
+    00000323 F8 03            [12]  747 	ldhl	sp,	#3
+    00000325 77               [ 8]  748 	ld	(hl), a
+                                    749 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:165: return deltas;
+                                    750 ;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:171: }
+    00000326 E8 0C            [16]  751 	add	sp, #12
+    00000328 E1               [12]  752 	pop	hl
+    00000329 E8 04            [16]  753 	add	sp, #4
+    0000032B E9               [ 4]  754 	jp	(hl)
+                                    755 	.area _CODE
+                                    756 	.area _INITIALIZER
+                                    757 	.area _CABS (ABS)

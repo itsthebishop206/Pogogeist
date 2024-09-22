@@ -8,9 +8,14 @@
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
+	.globl _createDeltasArray
 	.globl _newton
+	.globl _puts
+	.globl _malloc
+	.globl _exit
 	.globl _subPixCalc
 	.globl _projSPC
+	.globl _projSPCAlpha
 ;--------------------------------------------------------
 ; special function registers
 ;--------------------------------------------------------
@@ -334,34 +339,182 @@ _newton::
 	inc	sp
 	inc	sp
 	ret
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:96: int16_t* projSPC(uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2){
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:95: int16_t* createDeltasArray(int size)
+;	---------------------------------
+; Function createDeltasArray
+; ---------------------------------
+_createDeltasArray::
+	add	sp, #-2
+	push	de
+	sla	e
+	rl	d
+	call	_malloc
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:101: if (deltas == NULL) {
+	ld	a, b
+	or	a, c
+	jr	NZ, 00111$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:102: printf("Memory allocation failed!\n");
+	push	bc
+	ld	de, #___str_1
+	call	_puts
+	ld	de, #0x0001
+	push	de
+	call	_exit
+	pop	hl
+	pop	bc
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:107: for (int i = 0; i < size; i++) {
+00111$:
+	xor	a, a
+	ldhl	sp,	#2
+	ld	(hl+), a
+	ld	(hl), a
+00105$:
+	ldhl	sp,	#2
+	ld	e, l
+	ld	d, h
+	ldhl	sp,	#0
+	ld	a, (de)
+	inc	de
+	sub	a, (hl)
+	inc	hl
+	ld	a, (de)
+	sbc	a, (hl)
+	ld	a, (de)
+	ld	d, a
+	ld	e, (hl)
+	bit	7, e
+	jr	Z, 00132$
+	bit	7, d
+	jr	NZ, 00133$
+	cp	a, a
+	jr	00133$
+00132$:
+	bit	7, d
+	jr	Z, 00133$
+	scf
+00133$:
+	jr	NC, 00103$
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:108: deltas[i] = i * 2;
+	ldhl	sp,#2
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	sla	e
+	rl	d
+	ld	l, e
+;	spillPairReg hl
+;	spillPairReg hl
+	ld	h, d
+;	spillPairReg hl
+;	spillPairReg hl
+	add	hl, bc
+	ld	a, e
+	ld	(hl+), a
+	ld	(hl), d
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:107: for (int i = 0; i < size; i++) {
+	ldhl	sp,	#2
+	inc	(hl)
+	jr	NZ, 00105$
+	inc	hl
+	inc	(hl)
+	jr	00105$
+00103$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:112: return deltas;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:113: }
+	add	sp, #4
+	ret
+___str_1:
+	.ascii "Memory allocation failed!"
+	.db 0x00
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:117: void projSPC(uint16_t* x1, uint16_t x2, uint16_t* y1, uint16_t y2, int16_t* delX, int16_t* delY){
 ;	---------------------------------
 ; Function projSPC
 ; ---------------------------------
 _projSPC::
-	add	sp, #-8
-	ldhl	sp,	#6
+	add	sp, #-12
+	ldhl	sp,	#10
 	ld	a, e
 	ld	(hl+), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:99: int16_t slp = 0;
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:103: if(x1 != x2){
-	ld	a, d
+	ld	(hl), d
+	ldhl	sp,	#8
+	ld	a, c
+	ld	(hl+), a
+	ld	(hl), b
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:120: int16_t slp = 0;
+	xor	a, a
+	ldhl	sp,	#6
+	ld	(hl+), a
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:121: *delX = 1;
+	ldhl	sp,	#18
+	ld	a, (hl)
+	ldhl	sp,	#0
+	ld	(hl), a
+	ldhl	sp,	#19
+	ld	a, (hl)
+	ldhl	sp,	#1
+	ld	(hl), a
+	pop	hl
+	push	hl
+	ld	a, #0x01
+	ld	(hl+), a
+	ld	(hl), #0x00
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:122: *delY = 1;
+	ldhl	sp,	#20
+	ld	a, (hl)
+	ldhl	sp,	#2
+	ld	(hl), a
+	ldhl	sp,	#21
+	ld	a, (hl)
+	ldhl	sp,	#3
 	ld	(hl-), a
-	ld	de, #0x0000
+	ld	a,	(hl+)
+	ld	h, (hl)
+	ld	l, a
+	ld	a, #0x01
+	ld	(hl+), a
+	ld	(hl), #0x00
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:125: if(*x1 != x2){
+	ldhl	sp,#10
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	ld	a, (de)
+	ld	c, a
+	inc	de
+	ld	a, (de)
+	ld	b, a
+	ldhl	sp,	#8
 	ld	a, (hl)
 	sub	a, c
 	jr	NZ, 00113$
 	inc	hl
 	ld	a, (hl)
 	sub	a, b
-	jr	Z, 00103$
+	jr	Z, 00102$
 00113$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:106: slp =  (y1-y2) / (x1-x2) >> PIXEL_SHIFT;
-	ldhl	sp,#10
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:128: slp =  (*y1 - (y2)) / (*x1 - (x2)) << PIXEL_SHIFT;
+	ldhl	sp,	#14
+	ld	a, (hl)
+	ldhl	sp,	#6
+	ld	(hl), a
+	ldhl	sp,	#15
+	ld	a, (hl)
+	ldhl	sp,	#7
+	ld	(hl-), a
 	ld	a, (hl+)
 	ld	e, a
+	ld	d, (hl)
+	ld	a, (de)
+	ldhl	sp,	#4
+	ld	(hl+), a
+	inc	de
+	ld	a, (de)
+	ld	(hl-), a
 	ld	a, (hl+)
-	ld	d, a
+	ld	e, a
+	ld	d, (hl)
+	ldhl	sp,	#16
 	ld	a,	(hl+)
 	ld	h, (hl)
 	ld	l, a
@@ -370,72 +523,232 @@ _projSPC::
 	ld	e, a
 	ld	a, d
 	sbc	a, h
-	ldhl	sp,	#5
+	ldhl	sp,	#7
 	ld	(hl-), a
 	ld	(hl), e
-	ldhl	sp,#6
+	ldhl	sp,#8
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
-	ld	a, e
-	sub	a, c
+	ld	a, c
+	sub	a, e
 	ld	e, a
-	ld	a, d
-	sbc	a, b
+	ld	a, b
+	sbc	a, d
 	ld	b, a
 	ld	c, e
-	ldhl	sp,	#4
+	ldhl	sp,	#6
 	ld	a, (hl+)
 	ld	e, a
 	ld	d, (hl)
 	call	__divuint
-	ld	e, b
-	ld	d, #0x00
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:109: x1 += 1;
-00103$:
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:114: int16_t deltaX = (pPPF / newton(1+slp*slp));
-	push	de
-	ld	c, e
-	ld	b, d
-	call	__mulint
-	pop	de
+	ldhl	sp,	#7
+	ld	a, c
+	ld	(hl-), a
+	ld	(hl), #0x00
+	jr	00103$
+00102$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:131: *x1 += 1;
 	inc	bc
-	push	de
+	ldhl	sp,	#10
+	ld	a,	(hl+)
+	ld	h, (hl)
+	ld	l, a
+	ld	a, c
+	ld	(hl+), a
+	ld	(hl), b
+00103$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:136: *delX = (pPPF / newton(1+slp*slp));
+	ld	c, #0x00
+	ldhl	sp,	#7
+	ld	b, (hl)
+	ld	e, #0x00
+	ld	d, (hl)
+	call	__mulint
+	inc	bc
 	ld	e, c
 	ld	d, b
 	call	_newton
 	ld	de, #0x0001
 	call	__divuint
-	pop	de
-	ldhl	sp,	#4
+	pop	hl
+	push	hl
 	ld	a, c
 	ld	(hl+), a
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:115: int16_t deltaY = slp*deltaX;
-	ld	a, b
-	ld	(hl-), a
-	ld	a, (hl+)
+	ld	(hl), b
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:137: *delY = slp*(*delX);
+	pop	de
+	push	de
+	ld	a, (de)
 	ld	c, a
-	ld	b, (hl)
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:117: int16_t deltas[2] = {deltaX,deltaY};
+	inc	de
+	ld	a, (de)
+	ld	b, a
+	ld	e, #0x00
+	ldhl	sp,	#7
+	ld	d, (hl)
 	call	__mulint
-	ldhl	sp,	#4
-	ld	a, (hl)
-	ldhl	sp,	#0
-	ld	(hl), a
-	ldhl	sp,	#5
-	ld	a, (hl)
-	ldhl	sp,	#1
-	ld	(hl+), a
+	ldhl	sp,	#2
+	ld	a,	(hl+)
+	ld	h, (hl)
+	ld	l, a
 	ld	(hl), c
 	inc	hl
 	ld	(hl), b
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:118: return deltas;
-	ld	hl, #0
-	add	hl, sp
-	ld	c, l
-	ld	b, h
-;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:124: }
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:143: }
+	add	sp, #12
+	pop	hl
 	add	sp, #8
+	jp	(hl)
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:145: int16_t* projSPCAlpha(uint16_t* x1, uint16_t x2, uint16_t* y1, uint16_t y2){
+;	---------------------------------
+; Function projSPCAlpha
+; ---------------------------------
+_projSPCAlpha::
+	add	sp, #-12
+	ldhl	sp,	#10
+	ld	a, e
+	ld	(hl+), a
+	ld	(hl), d
+	ldhl	sp,	#8
+	ld	a, c
+	ld	(hl+), a
+	ld	(hl), b
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:148: int16_t slp = 0;
+	xor	a, a
+	ldhl	sp,	#6
+	ld	(hl+), a
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:151: if(*x1 != x2){
+	ldhl	sp,#10
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	ld	a, (de)
+	ld	c, a
+	inc	de
+	ld	a, (de)
+	ld	b, a
+	ldhl	sp,	#8
+	ld	a, (hl)
+	sub	a, c
+	jr	NZ, 00113$
+	inc	hl
+	ld	a, (hl)
+	sub	a, b
+	jr	Z, 00102$
+00113$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:154: slp =  (*y1 - (y2)) / (*x1 - (x2)) << PIXEL_SHIFT;
+	ldhl	sp,	#14
+	ld	a, (hl)
+	ldhl	sp,	#6
+	ld	(hl), a
+	ldhl	sp,	#15
+	ld	a, (hl)
+	ldhl	sp,	#7
+	ld	(hl-), a
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	ld	a, (de)
+	ldhl	sp,	#4
+	ld	(hl+), a
+	inc	de
+	ld	a, (de)
+	ld	(hl-), a
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	ldhl	sp,	#16
+	ld	a,	(hl+)
+	ld	h, (hl)
+	ld	l, a
+	ld	a, e
+	sub	a, l
+	ld	e, a
+	ld	a, d
+	sbc	a, h
+	ldhl	sp,	#7
+	ld	(hl-), a
+	ld	(hl), e
+	ldhl	sp,#8
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	ld	a, c
+	sub	a, e
+	ld	e, a
+	ld	a, b
+	sbc	a, d
+	ld	b, a
+	ld	c, e
+	ldhl	sp,	#6
+	ld	a, (hl+)
+	ld	e, a
+	ld	d, (hl)
+	call	__divuint
+	ldhl	sp,	#7
+	ld	a, c
+	ld	(hl-), a
+	ld	(hl), #0x00
+	jr	00103$
+00102$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:157: *x1 += 1;
+	inc	bc
+	ldhl	sp,	#10
+	ld	a,	(hl+)
+	ld	h, (hl)
+	ld	l, a
+	ld	a, c
+	ld	(hl+), a
+	ld	(hl), b
+00103$:
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:162: int16_t deltaX = (pPPF / newton(1+slp*slp));
+	ld	c, #0x00
+	ldhl	sp,	#7
+	ld	b, (hl)
+	ld	e, #0x00
+	ld	d, (hl)
+	call	__mulint
+	inc	bc
+	ld	e, c
+	ld	d, b
+	call	_newton
+	ld	de, #0x0001
+	call	__divuint
+	ld	e, c
+	ld	d, b
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:163: int16_t deltaY = slp*(deltaX);
+	push	de
+	ld	c, e
+	ld	b, d
+	ld	e, #0x00
+	ldhl	sp,	#9
+	ld	d, (hl)
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:164: int16_t deltas[2] = {deltaX,deltaY};
+	call	__mulint
+	ldhl	sp,	#8
+	ld	a, c
+	ld	(hl+), a
+	ld	(hl), b
+	pop	de
+	ldhl	sp,	#0
+	ld	c,l
+	ld	b,h
+	ld	a, e
+	ld	(hl+), a
+	ld	(hl), d
+	ldhl	sp,	#6
+	ld	a, (hl)
+	ldhl	sp,	#2
+	ld	(hl), a
+	ldhl	sp,	#7
+	ld	a, (hl)
+	ldhl	sp,	#3
+	ld	(hl), a
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:165: return deltas;
+;C:\Users\wsajj\GBdev\gbdk\_code\gbJam24\source\Mechanic\subPixCalc.c:171: }
+	add	sp, #12
 	pop	hl
 	add	sp, #4
 	jp	(hl)

@@ -34,6 +34,18 @@
 ; ram data
 ;--------------------------------------------------------
 	.area _DATA
+_ghostyX:
+	.ds 2
+_ghostyY:
+	.ds 2
+_ghostySpeedX:
+	.ds 2
+_ghostySpeedY:
+	.ds 2
+_pghostyX:
+	.ds 2
+_pghostyY:
+	.ds 2
 _activeBones:
 	.ds 1
 _boneCounter:

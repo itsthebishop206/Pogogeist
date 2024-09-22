@@ -11,4 +11,3 @@ extern unsigned char boneTile[];
 extern const metasprite_t boneMS[];
 extern uint8_t boneX, boneY;
 void setBone(void);
-void throwBone(void);

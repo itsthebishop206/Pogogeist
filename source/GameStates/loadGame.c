@@ -13,9 +13,11 @@
 #include <stdio.h>
 #include <joypad.h>
 #include <subPixCalc.h>
-#include <projectile.h>
+#include <projectiles.h>
+#include <gamechar.h>
 
 UBYTE spriteSize = 8;
+gameChar PC;
 
 void setBkgd(void){
 
@@ -33,6 +35,11 @@ void setGhosty(void){
     move_metasprite_ex(ghostyMS,0,0,0,ghostyX,ghostyY);
     // This adjusts the DMG color palette
     OBP0_REG=DMG_PALETTE(DMG_BLACK, DMG_DARK_GRAY, DMG_LITE_GRAY, DMG_WHITE);
+    PC.w = 16;
+    PC.h = 16;
+    PC.spdX = 0;
+    PC.spdY = 0;
+    
 }
 
 void setBone(void){
